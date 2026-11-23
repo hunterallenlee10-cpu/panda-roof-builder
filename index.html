@@ -277,13 +277,13 @@ var SHAPE={simple:{name:"Simple",desc:"Two main sides",waste:.10},average:{name:
 /* Screen colours are approximations made for this tool. They are not the manufacturer's photos. */
 var COLORS=[["Charcoal","#3d3f42"],["Pewter Gray","#7d8082"],["Weathered Wood","#6f675c"],["Barkwood","#5e5045"],["Hickory","#7b5b3d"],["Shakewood","#9b805d"],["Mission Brown","#4b3b31"],["Hunter Green","#3f4c3d"],["Williamsburg Slate","#515c65"]];
 var TRIM=[["White","#f4f4f2"],["Brown","#4a3a2e"],["Black","#1d1d1d"]];
-var OVERHANG=1.06, FOOTPRINT_FROM_SIZE=1.5;
+var OVERHANG=1.06;
 var IMG="https://mdgeodata.md.gov/imagery/rest/services/SixInch/SixInchImagery2023_2024_2025/MapServer/export";
 var STEPS=["Address","Your roof","Shingles","Roof system","Your proposal","Sign"],HASH=["address","roof","shingles","system","proposal","sign"];
-var SAVE_KEYS=["step","stories","pitch","shape","layers","line","color","trim","underlay","barrier","vent","gutters","skylights","chimneys","warranty","pay","term"];
+var SAVE_KEYS=["step","stories","pitch","shape","layers","line","color","trim","underlay","barrier","vent","gutters","skylights","chimneys","warranty","pay","term","sizeMode","adj"];
 var LS="panda-roof-builder-v2";
 
-var H=null, S={step:0,max:0,home:null,manual:null,stories:2,pitch:"medium",shape:"average",layers:1,line:"hdz",color:0,trim:0,underlay:"std",barrier:"std",vent:"ridge",gutters:"none",skylights:0,chimneys:0,warranty:"silver",pay:"finance",term:120,name:"",email:"",phone:"",sig:"",agree:false,week:"",sigMode:"draw",sigData:"",sigInk:0,signed:false,order:"",call:false,callDay:"",callTime:"",booked:false};
+var H=null, S={step:0,max:0,home:null,manual:null,stories:2,pitch:"medium",shape:"average",layers:1,line:"hdz",color:0,trim:0,underlay:"std",barrier:"std",vent:"ridge",gutters:"none",skylights:0,chimneys:0,sizeMode:"auto",adj:0,warranty:"silver",pay:"finance",term:120,name:"",email:"",phone:"",sig:"",agree:false,week:"",sigMode:"draw",sigData:"",sigInk:0,signed:false,order:"",call:false,callDay:"",callTime:"",booked:false};
 var prevRoof=null, pendingRestore=null, HT=null, lastTotal=null, deltaT, gid=0, pdfT, pdfCache=null, pdfLib=null, logoData=null;
 var $=function(id){return document.getElementById(id)};
 function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
@@ -294,16 +294,28 @@ function where(){return S.home?S.home[0]+", "+CONFIG.town+" "+S.home[1]:"Your ho
 $("phone").textContent=CONFIG.phone;
 
 /* ---------- measurements ---------- */
+/* How big is the roof?  Two sources: the building outline on record, and the home's living area times the
+   typical ratio for homes with that many floors.  TYPICAL is the middle home in this list, LIMIT is the 95th
+   percentile: an outline beyond it usually includes a detached garage, carport or deck, so it is not trusted by default. */
+var TYPICAL={"1":1.31,"1.5":1.82,"2":1.60},LIMIT={"1":1.80,"1.5":2.61,"2":2.18};
+function storyClass(n){return n<=1?"1":n<2?"1.5":"2"}
+function sizing(){
+  var o={outline:0,living:0,per:0,flag:false,use:""},c;
+  if(S.home){c=storyClass(S.home[4]);o.outline=S.home[7]||0;o.per=S.home[8]||0;o.living=S.home[3]?S.home[3]/S.home[4]*TYPICAL[c]:0;
+    o.flag=!!(o.outline&&S.home[3]&&o.outline/(S.home[3]/S.home[4])>LIMIT[c])}
+  else if(S.manual){c=storyClass(S.stories);o.living=S.manual.sqft/S.stories*TYPICAL[c]}
+  o.use=S.sizeMode==="outline"&&o.outline?"outline":S.sizeMode==="living"&&o.living?"living":o.outline&&!o.flag?"outline":o.living?"living":o.outline?"outline":"";
+  return o;
+}
 function measure(){
-  var fp=0,per=0,src="";
-  if(S.home){fp=S.home[7];per=S.home[8];src="outline";if(!fp){fp=S.home[3]/S.home[4]*FOOTPRINT_FROM_SIZE;src="size"}}
-  else if(S.manual){fp=S.manual.sqft/S.stories*FOOTPRINT_FROM_SIZE;src="size"}
-  if(!fp)return null;
-  if(!per)per=4.1*Math.sqrt(fp);
+  var z=sizing();if(!z.use)return null;
+  var fp=z.use==="outline"?z.outline:z.living,per=z.per&&z.outline?z.per*Math.sqrt(fp/z.outline):4.1*Math.sqrt(fp),k=1+S.adj/100;
+  fp*=k;per*=Math.sqrt(k);
   var area=fp*OVERHANG*PITCH[S.pitch].mult;
   var squares=Math.ceil(area*(1+SHAPE[S.shape].waste)/100*3)/3; // shingles come three bundles to a square
-  return {footprint:fp,perimeter:per,area:area,squares:squares,ridgeFt:Math.round(per*.3),eaveFt:Math.round(per*.6),source:src};
+  return {footprint:fp,perimeter:per,area:area,squares:squares,ridgeFt:Math.round(per*.3),eaveFt:Math.round(per*.6),source:z.use==="outline"?"outline":z.flag?"capped":"size",flag:z.flag};
 }
+function squaresFor(mode){var m0=S.sizeMode,r;S.sizeMode=mode;r=measure();S.sizeMode=m0;return r?r.squares.toFixed(1):"0"}
 /* ---------- price ---------- */
 function payment(total,months){var r=PRICING.finance.apr/1200;return total*r/(1-Math.pow(1+r,-months))}
 function quote(){
@@ -334,6 +346,7 @@ function applySnapshot(o){
   if(!PITCH[S.pitch])S.pitch="medium";if(!SHAPE[S.shape])S.shape="average";if(!PRICING.lines[S.line])S.line="hdz";
   if(!COLORS[S.color])S.color=0;if(!TRIM[S.trim])S.trim=0;if(PRICING.finance.terms.indexOf(S.term)<0)S.term=120;
   ["underlay","barrier","vent","gutters","warranty"].forEach(function(k){if(!PRICING[k][S[k]])S[k]=Object.keys(PRICING[k])[0]});
+  if(["auto","outline","living"].indexOf(S.sizeMode)<0)S.sizeMode="auto";S.adj=Math.max(-30,Math.min(30,Math.round((S.adj||0)/5)*5));
   S.layers=S.layers>1?2:1;S.stories=S.stories>=2?2:1;S.skylights=Math.max(0,Math.min(4,Math.round(S.skylights)||0));S.chimneys=Math.max(0,Math.min(2,Math.round(S.chimneys)||0));
   S.home=null;S.manual=null;
   if(o.addr&&H){for(var i=0;i<H.length;i++)if(H[i][0]+"|"+H[i][1]===o.addr){S.home=H[i];break}}
@@ -481,7 +494,8 @@ function drawAbove(){
   if(h&&h[9]&&h[9].length>=6){for(var k=0;k<h[9].length;k+=2)pts+=h[9][k]+","+(-h[9][k+1])+" "}
   else{var m=measure(),side=m?Math.sqrt(m.footprint):40,a=side*.62,b=side*.4;pts=[-a,-b, a,-b, a,b, -a,b].join(" ")}
   s.appendChild(svg("polygon",{points:pts,fill:"rgba(252,129,4,.16)",stroke:"#fc8104","stroke-width":half/42,"stroke-linejoin":"round"}));lot.appendChild(s);
-  lot.appendChild(el("div","cap",h?(h[9]&&h[9].length>=6?"The orange line is your home's footprint from state building records. Aerial photos are taken at a slight angle, so the roof can sit a few feet off the line.":"We don't have an outline for this home, so the size is estimated from its square footage."):"Size estimated from the square footage you entered."));
+  var zf=sizing();
+  lot.appendChild(el("div","cap",h?(h[9]&&h[9].length>=6?(zf.flag&&zf.use!=="outline")?"The orange line is the building outline on record. It looks larger than this home's roof, so the price uses a smaller estimate.":"The orange line is your home's footprint from state building records. Aerial photos are taken at a slight angle, so the roof can sit a few feet off the line.":"We don't have an outline for this home, so the size is estimated from its square footage."):"Size estimated from the square footage you entered."));
 }
 function setView(v){$("stage").setAttribute("data-view",v);[].forEach.call(document.querySelectorAll(".views button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-v")===v?"true":"false")})}
 [].forEach.call(document.querySelectorAll(".views button"),function(b){b.addEventListener("click",function(){setView(b.getAttribute("data-v"))})});
@@ -542,7 +556,7 @@ function stepAddress(p){
     var out=findHomes(q,7);
     if(!out.length){var li0=document.createElement("li"),b0=el("button",null,"We don't have that address yet. Enter your home's size instead.");b0.type="button";b0.addEventListener("click",function(){man.classList.add("open");ul.classList.remove("open");$("m-sq").focus()});li0.appendChild(b0);ul.appendChild(li0)}
     out.forEach(function(h){var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.appendChild(el("span",null,h[0]));b.appendChild(el("small",null,CONFIG.town+" "+h[1]));
-      b.addEventListener("click",function(){S.home=h;S.manual=null;S.stories=h[4]>=2?2:1;S.max=0;go(1)});li.appendChild(b);ul.appendChild(li)});
+      b.addEventListener("click",function(){S.home=h;S.manual=null;S.stories=h[4]>=2?2:1;S.sizeMode="auto";S.adj=0;S.max=0;go(1)});li.appendChild(b);ul.appendChild(li)});
     ul.classList.add("open")};
   stepAddress.refresh=show;
   inp.addEventListener("input",show);
@@ -555,7 +569,7 @@ function stepAddress(p){
   var l1=el("label","f","Heated square feet"),i1=document.createElement("input");i1.type="number";i1.min=400;i1.max=12000;i1.step=50;i1.id="m-sq";i1.placeholder="2,000";i1.value=S.manual?S.manual.sqft:"";l1.appendChild(i1);
   var l2=el("label","f","Floors above ground"),s2=document.createElement("select");s2.id="m-st";[["1","One"],["2","Two or more"]].forEach(function(o){var x=el("option",null,o[1]);x.value=o[0];s2.appendChild(x)});s2.value=String(S.stories>=2?2:1);l2.appendChild(s2);
   var mb=el("button","btn light","Use this size");mb.type="button";mb.id="m-go";
-  mb.addEventListener("click",function(){var v=+i1.value;if(!(v>=400&&v<=12000)){toast("Enter a size between 400 and 12,000 square feet");return}S.home=null;S.manual={sqft:v};S.stories=+s2.value;S.max=0;go(1)});
+  mb.addEventListener("click",function(){var v=+i1.value;if(!(v>=400&&v<=12000)){toast("Enter a size between 400 and 12,000 square feet");return}S.home=null;S.manual={sqft:v};S.stories=+s2.value;S.sizeMode="auto";S.adj=0;S.max=0;go(1)});
   man.appendChild(l1);man.appendChild(l2);man.appendChild(mb);p.appendChild(man);
   lb.addEventListener("click",function(){man.classList.toggle("open")});
   if(S.manual)man.classList.add("open");
@@ -565,8 +579,14 @@ function stepAddress(p){
 function stepRoof(p){
   var m=measure();
   p.appendChild(el("h2",null,S.home?"Here is "+S.home[0]:"Here is your roof"));
-  p.appendChild(el("p","lead","We sized your roof from "+(m.source==="outline"?"the building outline in state records":"your home's square footage")+". Check the answers below. They change how much material the roof needs."));
+  p.appendChild(el("p","lead","We sized your roof from "+(m.source==="outline"?"the building outline in state records":m.source==="capped"?"your home's square footage, because the outline on record looks too large":"your home's square footage")+". Check the answers below. They change how much material the roof needs."));
   var f=el("div","facts");[[m.squares.toFixed(1),"roofing squares to order"],[num(m.area),"square feet of roof surface"],[num(m.footprint),"square feet under the roof"]].forEach(function(a){var d=el("div");d.appendChild(el("b",null,a[0]));d.appendChild(el("span",null,a[1]));f.appendChild(d)});p.appendChild(f);
+  var z=sizing();
+  if(z.flag){
+    p.appendChild(el("p","note","The building outline on record covers "+num(z.outline)+" square feet. That is much more than a "+num(S.home[3])+" square foot "+(S.home[4]<=1?"one-story ":"")+"home usually has under its roof, so it may include a detached garage, carport or deck. We priced the house alone unless you tell us otherwise."));
+    var zs=sect(p,"What are we roofing?",null);
+    optGroup(zs,[{key:"living",name:"Just the house",desc:"About "+squaresFor("living")+" squares"},{key:"outline",name:"Everything inside the orange line",desc:"About "+squaresFor("outline")+" squares. Pick this if the garage or carport gets a new roof too."}],z.use,function(k){S.sizeMode=k;render()},"wide");
+  }
   if(S.home&&S.home[2]){var age=new Date().getFullYear()-S.home[2];if(age>=15)p.appendChild(el("p","note plain","Records show this home was built in "+S.home[2]+". If the roof has never been replaced, it is about "+age+" years old. Asphalt shingle roofs commonly last 20 to 30 years."))}
   var a=sect(p,"How steep is it?","A steeper roof has more surface and takes more safety gear.");
   optGroup(a,Object.keys(PITCH).map(function(k){return {key:k,name:PITCH[k].name,desc:PITCH[k].desc}}),S.pitch,function(k){S.pitch=k;setView("house");render()});
@@ -576,6 +596,11 @@ function stepRoof(p){
   optGroup(c,[{key:1,name:"One story"},{key:2,name:"Two stories or more"}],S.stories>=2?2:1,function(k){S.stories=k;setView("house");render()});
   var d=sect(p,"Layers of old shingles","If a past roofer went over the old roof, there are two layers to remove. Not sure? Leave it at one and we will confirm.");
   optGroup(d,[{key:1,name:"One layer"},{key:2,name:"Two layers"}],S.layers,function(k){S.layers=k;render()});
+  var zz=sect(p,"Does the size look right?","If you know your roof is bigger or smaller than this, nudge it. We confirm with a measurement report either way.");
+  var ac=el("div","count"),am=el("button",null,"\u2212"),ap=el("button",null,"+"),av=el("b",null,S.adj===0?"As estimated":(S.adj>0?"+":"\u2212")+Math.abs(S.adj)+"%");
+  am.type=ap.type="button";am.id="adj-minus";ap.id="adj-plus";am.setAttribute("data-fk","adj:minus");ap.setAttribute("data-fk","adj:plus");am.setAttribute("aria-label","Make the roof smaller");ap.setAttribute("aria-label","Make the roof bigger");av.style.minWidth="118px";
+  am.addEventListener("click",function(){if(S.adj>-30){S.adj-=5;render()}});ap.addEventListener("click",function(){if(S.adj<30){S.adj+=5;render()}});
+  ac.appendChild(am);ac.appendChild(av);ac.appendChild(ap);ac.appendChild(el("span",null,m.squares.toFixed(1)+" squares"));zz.appendChild(ac);
   p.appendChild(el("p","note","Before any material is ordered we confirm these numbers with a measurement report. If the real size is different, your price is corrected at the same rate per square and you approve it first."));
   p.appendChild(el("p","note plain","Had hail or wind damage? Your insurance may pay for the roof. Call "+CONFIG.phone+" for a free inspection before you buy."));
 }
@@ -783,7 +808,7 @@ function stepDone(p){
   p.appendChild(el("p","note","This was a demo. Nothing was sent, signed or charged. In the live version this step would create the "+(S.booked?"appointment":"job")+" in Panda's CRM and notify the office."));
   var b=el("button","btn light","Start over");b.type="button";b.id="again";b.style.marginTop="18px";b.addEventListener("click",restart);p.appendChild(b);
 }
-function restart(){S.signed=false;S.booked=false;S.call=false;S.step=0;S.max=0;S.home=null;S.manual=null;S.sig="";S.sigData="";S.sigInk=0;S.agree=false;S.sigTouched=false;S.callDay="";S.callTime="";prevRoof=null;lastStep=0;try{localStorage.removeItem(LS)}catch(e){}setView("house");render();setHash();window.scrollTo(0,0)}
+function restart(){S.signed=false;S.booked=false;S.call=false;S.step=0;S.max=0;S.home=null;S.manual=null;S.sizeMode="auto";S.adj=0;S.sig="";S.sigData="";S.sigInk=0;S.agree=false;S.sigTouched=false;S.callDay="";S.callTime="";prevRoof=null;lastStep=0;try{localStorage.removeItem(LS)}catch(e){}setView("house");render();setHash();window.scrollTo(0,0)}
 $("restart").addEventListener("click",restart);
 
 /* ---------- frame ---------- */
