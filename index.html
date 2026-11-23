@@ -24,35 +24,44 @@ button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--orange);outline-offset:2px}
 h1,h2,h3{font-stretch:118%;font-weight:800;line-height:1.08;margin:0;letter-spacing:-.01em}
+h1:focus,h2:focus{outline:0}
 .shell{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr auto;min-height:100%}
 header.top{background:var(--asphalt);color:#fff;display:flex;align-items:center;gap:14px;padding:10px 20px}
 header.top img{height:44px;width:auto}
 header.top .name{font-stretch:118%;font-weight:800;font-size:19px}
 header.top .demo{font-size:13px;background:#34393d;border-radius:999px;padding:3px 11px;color:#e6e9eb}
+header.top .restart{border:0;background:none;color:#c9ced2;font-size:14px;text-decoration:underline;text-underline-offset:3px;padding:6px}
 header.top .help{margin-left:auto;text-align:right;font-size:13px;color:#c9ced2;line-height:1.3}
 header.top .help b{display:block;color:#fff;font-size:15px}
 main{display:grid;grid-template-columns:minmax(0,46fr) minmax(0,54fr);min-height:0}
 /* ---- stage ---- */
 .stage{position:sticky;top:0;align-self:start;height:calc(100vh - 64px - 74px);min-height:420px;background:linear-gradient(var(--sky1),var(--sky2) 62%,#dfe6dc 62%,#cfd9c8);display:flex;flex-direction:column;overflow:hidden}
-.stage .views{display:flex;gap:6px;padding:14px 16px 0;z-index:2}
-.stage .views button{border:0;background:rgba(255,255,255,.72);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600}
+.stage[data-view="layers"]{background:linear-gradient(#f4f6f7,#e3e8ea)}
+.stage .views{display:flex;gap:6px;padding:14px 16px 0;z-index:2;flex-wrap:wrap}
+.stage .views button{border:0;background:rgba(255,255,255,.78);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600}
 .stage .views button[aria-pressed="true"]{background:var(--asphalt);color:#fff}
-.stage .canvas{flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center;padding:0 10px}
-.stage svg{width:100%;height:100%;display:block}
-.stage .above{flex:1;min-height:0;display:none;align-items:center;justify-content:center;padding:14px}
-.stage.showabove .above{display:flex}.stage.showabove .canvas,.stage.showabove .tag{display:none}
+.stage .pane{flex:1;min-height:0;display:none;padding:0 10px}
+.stage[data-view="house"] .pane.house{display:flex;align-items:flex-end;justify-content:center}
+.stage[data-view="above"] .pane.above{display:flex;align-items:center;justify-content:center;padding:14px}
+.stage[data-view="layers"] .pane.layers{display:flex;align-items:center;justify-content:center}
+.stage .pane>svg{width:100%;height:100%;display:block}
 .lot{position:relative;width:min(100%,62vh);aspect-ratio:1;border-radius:14px;overflow:hidden;background:#c9d4c2;box-shadow:0 10px 30px rgba(23,25,27,.25)}
 .lot img,.lot svg{position:absolute;inset:0;width:100%;height:100%}
 .lot .cap{position:absolute;left:10px;bottom:10px;right:10px;background:rgba(23,25,27,.82);color:#fff;font-size:13px;border-radius:8px;padding:6px 10px}
-.tag{position:absolute;left:16px;top:58px;background:rgba(255,255,255,.9);border-radius:10px;padding:8px 12px;font-size:14px;max-width:70%;z-index:2}
+.tag{position:absolute;left:16px;top:58px;background:rgba(255,255,255,.92);border-radius:10px;padding:8px 12px;font-size:14px;max-width:70%;z-index:2}
 .tag b{display:block;font-stretch:112%;font-size:16px}
+.stage:not([data-view="house"]) .tag{display:none}
 .stagewrap{position:relative}
+.lay{animation:lay .55s cubic-bezier(.2,.7,.2,1) both}
+@keyframes lay{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 /* ---- panel ---- */
 .panel{background:var(--panel);padding:34px clamp(20px,4vw,56px) 40px;min-width:0}
 .steps{display:flex;gap:4px;margin:0 0 26px;padding:0;list-style:none}
-.steps li{flex:1;font-size:13px;color:var(--muted);border-top:4px solid var(--line);padding-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.steps li.done{border-color:var(--green-bright);color:var(--ink)}
-.steps li.now{border-color:var(--orange);color:var(--ink);font-weight:700}
+.steps li{flex:1;min-width:0}
+.steps button,.steps span{display:block;width:100%;text-align:left;border:0;background:none;padding:6px 0 0;font-size:13px;color:var(--muted);border-top:4px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.steps li.done button{border-color:var(--green-bright);color:var(--ink)}
+.steps li.done button:hover{text-decoration:underline}
+.steps li.now span{border-color:var(--orange);color:var(--ink);font-weight:700}
 .panel h1{font-size:clamp(30px,3.6vw,46px);max-width:15ch}
 .panel h2{font-size:clamp(24px,2.6vw,32px)}
 .lead{font-size:18px;color:var(--muted);max-width:52ch;margin:12px 0 22px}
@@ -64,17 +73,20 @@ main{display:grid;grid-template-columns:minmax(0,46fr) minmax(0,54fr);min-height
 .find ul{list-style:none;margin:6px 0 0;padding:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;display:none;background:#fff;box-shadow:0 12px 28px rgba(23,25,27,.14)}
 .find ul.open{display:block}
 .find li button{display:flex;justify-content:space-between;gap:12px;width:100%;border:0;background:none;text-align:left;padding:12px 16px;font-size:17px}
-.find li button:hover,.find li button:focus-visible{background:var(--concrete)}
+.find li button:hover,.find li button:focus-visible,.find li button.act{background:var(--concrete)}
 .find li small{color:var(--muted);font-size:14px}
 .linkbtn{border:0;background:none;padding:0;color:var(--orange-deep);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 .manual{display:none;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:12px;max-width:520px}
 .manual.open{display:flex}
 label.f{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--muted)}
 label.f input,label.f select{height:46px;border:1.5px solid var(--line);border-radius:9px;padding:0 12px;font-size:16px;color:var(--ink);background:#fff;min-width:0}
+.proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:26px 0 0;max-width:640px}
+.proof div{border-top:3px solid var(--ink);padding-top:8px;font-size:14px;color:var(--muted)}
+.proof b{display:block;color:var(--ink);font-size:17px;font-stretch:112%}
 .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
 .opts.wide{grid-template-columns:1fr}
 .opt{border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:13px 14px;text-align:left;display:flex;flex-direction:column;gap:2px;position:relative}
-.opt b{font-size:16px;font-stretch:110%}
+.opt b{font-size:16px;font-stretch:110%;padding-right:22px}
 .opt span{font-size:14px;color:var(--muted)}
 .opt em{font-style:normal;font-weight:700;font-size:14px;color:var(--ink);margin-top:4px}
 .opt em.inc{color:var(--green)}
@@ -97,13 +109,16 @@ label.f input,label.f select{height:46px;border:1.5px solid var(--line);border-r
 .facts b{display:block;font-size:26px;font-stretch:115%;font-weight:800;line-height:1.1}
 .facts span{font-size:14px;color:var(--muted)}
 .note{background:#fff6e9;border-left:4px solid var(--orange);border-radius:0 10px 10px 0;padding:11px 14px;font-size:15px;max-width:64ch;margin:14px 0 0}
+.note.plain{background:var(--concrete);border-left-color:var(--ink)}
 table.prop{width:100%;border-collapse:collapse;margin:8px 0 0;font-size:16px}
 table.prop td{padding:10px 0;border-bottom:1px solid var(--line);vertical-align:top}
 table.prop td small{display:block;color:var(--muted);font-size:14px;max-width:56ch}
 table.prop td:last-child{text-align:right;white-space:nowrap;font-weight:600;font-variant-numeric:tabular-nums;padding-left:14px}
 table.prop tr.tot td{border-bottom:0;font-size:24px;font-weight:800;font-stretch:112%;padding-top:16px}
-.pay{display:flex;flex-wrap:wrap;gap:8px 26px;font-size:15px;color:var(--muted);margin-top:2px}
-.pay b{color:var(--ink)}
+.terms{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px;font-size:15px;color:var(--muted)}
+.terms button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 13px;font-size:14px;font-weight:600;color:var(--ink)}
+.terms button[aria-pressed="true"]{background:var(--asphalt);border-color:var(--asphalt);color:#fff}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:560px}
 .sigbox{border:1.5px dashed var(--muted);border-radius:12px;min-height:84px;display:flex;align-items:center;padding:6px 18px;font-family:"Caveat",cursive;font-size:44px;line-height:1;max-width:560px;margin-top:10px;overflow:hidden;white-space:nowrap}
 .sigbox:empty::before{content:"Your signature appears here";font-family:var(--font);font-size:15px;color:var(--muted)}
@@ -114,64 +129,85 @@ label.chk input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var
 .next{margin:18px 0 0;padding:0;list-style:none;counter-reset:n;max-width:60ch}
 .next li{counter-increment:n;display:grid;grid-template-columns:34px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .next li::before{content:counter(n);width:30px;height:30px;border-radius:50%;background:var(--asphalt);color:#fff;font-weight:700;display:grid;place-items:center;font-size:15px}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;max-width:560px}
+.slots button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 6px;font-weight:600;font-size:15px}
+.slots button[aria-pressed="true"]{background:var(--asphalt);border-color:var(--asphalt);color:#fff}
 /* ---- bottom bar ---- */
-.bar{position:sticky;bottom:0;background:var(--asphalt);color:#fff;display:flex;align-items:center;gap:14px;padding:12px 20px;z-index:5}
+.bar{position:sticky;bottom:0;background:var(--asphalt);color:#fff;display:flex;align-items:center;gap:14px;padding:12px 20px;z-index:6}
 .bar .price{margin-right:auto;line-height:1.15;min-width:0;flex:1 1 0}
 .bar .price b{display:block;font-size:26px;font-weight:800;font-stretch:115%;font-variant-numeric:tabular-nums}
 .bar .price span{font-size:13px;color:#b9c0c5;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .btn{border:0;border-radius:12px;height:50px;padding:0 24px;font-weight:700;font-size:17px;white-space:nowrap;flex:none}
-.btn.go{background:var(--orange);color:var(--asphalt);min-width:0;overflow:hidden;text-overflow:ellipsis}
+.btn.go{background:var(--orange);color:var(--asphalt)}
 .btn.go:hover{background:#ff9320}
 .btn.back{background:#34393d;color:#fff}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
 .btn.light{background:var(--concrete);color:var(--ink);height:44px;font-size:15px;padding:0 16px}
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--asphalt);color:#fff;padding:9px 16px;border-radius:10px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+.btn.outline{background:#fff;color:var(--ink);height:44px;font-size:15px;padding:0 16px;border:1.5px solid var(--ink)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--asphalt);color:#fff;padding:9px 16px;border-radius:10px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;max-width:90vw}
 .toast.on{opacity:1}
 @media (max-width:900px){
   main{grid-template-columns:minmax(0,1fr)}
-  .stage{position:relative;height:42vh;min-height:250px}
+  .stage{position:relative;height:38vh;min-height:230px}
+  /* while choosing the roof, the preview stays pinned so every tap shows on the house */
+  body[data-step="1"] .stagewrap,body[data-step="2"] .stagewrap,body[data-step="3"] .stagewrap{position:sticky;top:0;z-index:5}
+  body[data-step="1"] .stage,body[data-step="2"] .stage,body[data-step="3"] .stage{height:31vh;min-height:200px}
+  body[data-step="4"] .stage,body[data-step="5"] .stage,body[data-step="6"] .stage{height:26vh;min-height:180px}
+  .stage .views{padding:8px 10px 0;gap:5px}
+  .stage .views button{padding:4px 10px;font-size:13px}
   .panel{padding:22px 16px 30px}
   .lines{grid-template-columns:1fr}
   .lead{font-size:17px}
   header.top{padding:8px 12px;gap:10px}
   header.top img{height:36px}
   header.top .demo{display:none}
-  .steps li{font-size:0;padding-top:0}
-  .steps li.now{font-size:13px;padding-top:6px;flex:3}
+  .steps li{flex:0 0 22px}
+  .steps button,.steps span{font-size:0;padding-top:0}
+  .steps li.now{flex:1}
+  .steps li.now span{font-size:13px;padding-top:6px}
   .facts{grid-template-columns:1fr 1fr}
+  .proof{grid-template-columns:1fr}
   .formgrid{grid-template-columns:1fr}
   .bar{padding:10px 12px;gap:8px}
   .bar .price b{font-size:21px}
   .btn{padding:0 16px;font-size:16px}
-  .tag{font-size:13px;padding:5px 10px;top:50px}
+  .tag{font-size:13px;padding:4px 9px;top:auto;bottom:6px;left:8px}
   .tag span{display:none}
   .tag b{font-size:14px}
-  .lot{width:min(100%,36vh)}
+  .lot{width:min(100%,24vh)}
+  .lot .cap{display:none}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  header.top .demo,header.top .restart,.stagewrap,.bar,.steps,.acts,.terms button:not([aria-pressed="true"]),.toast{display:none!important}
+  main{display:block}body{background:#fff}.panel{padding:0}header.top{background:#fff;color:#000;padding:0 0 12px}header.top .help,header.top .help b{color:#000}
+}
 </style>
 </head>
-<body>
+<body data-step="0">
 <div class="shell">
   <header class="top">
     <img src="panda-logo.png" alt="Panda Exteriors" width="274" height="300">
     <span class="name">Roof Builder</span>
     <span class="demo">Demo with sample prices</span>
-    <div class="help">Rather talk it through?<b>(877) 213-8536</b></div>
+    <button type="button" class="restart" id="restart" hidden>Start over</button>
+    <div class="help">Rather talk it through?<b id="phone"></b></div>
   </header>
   <main>
     <div class="stagewrap">
-    <section class="stage" id="stage" aria-label="Preview of your roof">
+    <section class="stage" id="stage" data-view="house" aria-label="Preview of your roof">
       <div class="views" role="group" aria-label="Preview">
-        <button type="button" id="v-house" aria-pressed="true">Roof preview</button>
-        <button type="button" id="v-above" aria-pressed="false">Your home from above</button>
+        <button type="button" data-v="house" aria-pressed="true">Roof preview</button>
+        <button type="button" data-v="above" aria-pressed="false">From above</button>
+        <button type="button" data-v="layers" aria-pressed="false">What's inside</button>
       </div>
-      <div class="canvas"><svg id="house" viewBox="0 0 800 560" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Illustration of a house wearing the roof you have chosen"></svg></div>
-      <div class="above"><div class="lot" id="lot"></div></div>
+      <div class="pane house"><svg id="house" viewBox="0 0 800 560" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Illustration of a house wearing the roof you have chosen"></svg></div>
+      <div class="pane above"><div class="lot" id="lot"></div></div>
+      <div class="pane layers"><svg id="layers" viewBox="0 0 800 570" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cutaway showing each layer of your new roof"></svg></div>
       <div class="tag" id="tag"></div>
     </section>
     </div>
-    <section class="panel" id="panel" aria-live="polite"></section>
+    <section class="panel" id="panel"></section>
   </main>
   <div class="bar">
     <div class="price"><b id="bar-price">$0</b><span id="bar-sub"></span></div>
@@ -185,8 +221,14 @@ label.chk input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var
 (function(){
 "use strict";
 /* =====================================================================
-   SETTINGS. Every price below is a SAMPLE. Swap in Panda's real numbers here and nothing else needs to change.
+   SETTINGS. Change the territory, the phone number and every price here. Nothing else needs to change.
+   Every price below is a SAMPLE, not Panda's price list.
    ===================================================================== */
+var CONFIG={
+  town:"Laurel, MD", coverage:"Laurel ZIP codes 20707, 20708, 20723 and 20724", example:"13807 Brown Branch Rd",
+  phone:"(877) 213-8536", priceHoldDays:30,
+  proof:[["GAF Master Elite","and President's Club contractor"],["4.8 stars","from 1,000+ Google reviews"],["9,900+ jobs","completed across 19 states"]]
+};
 var PRICING={
   lines:{ // installed price per roofing square (100 sq ft), tear-off of one layer included
     hdz:{tier:"Good",name:"GAF Timberline HDZ",perSq:560,points:["GAF's best-selling architectural shingle","Wind warranty with no maximum wind speed when installed as a system","Algae stain protection"]},
@@ -207,8 +249,8 @@ var PRICING={
     golden:{name:"GAF Golden Pledge",desc:"GAF's strongest: 25 to 30 years of GAF-backed workmanship coverage",perSq:24}
   },
   deckingIncludedSheets:2, deckingPerSheet:95,
-  depositRate:0.10,            // Maryland law caps a home improvement deposit at one third of the contract price
-  finance:{apr:9.99,months:120} // sample terms only
+  depositRate:0.10,                         // Maryland law caps a home improvement deposit at one third of the contract price
+  finance:{apr:9.99,terms:[60,120,180]}     // sample terms only
 };
 var PITCH={low:{name:"Low",desc:"Easy to walk on",mult:1.054,rise:.55},medium:{name:"Medium",desc:"Most homes here",mult:1.118,rise:.8},steep:{name:"Steep",desc:"Hard to stand on",mult:1.25,rise:1.1},vsteep:{name:"Very steep",desc:"Can't be walked",mult:1.414,rise:1.4}};
 var SHAPE={simple:{name:"Simple",desc:"Two main sides",waste:.10},average:{name:"Average",desc:"A few valleys or a garage wing",waste:.13},cutup:{name:"Cut up",desc:"Many peaks, valleys or dormers",waste:.17}};
@@ -217,14 +259,19 @@ var COLORS=[["Charcoal","#3d3f42"],["Pewter Gray","#7d8082"],["Weathered Wood","
 var TRIM=[["White","#f4f4f2"],["Brown","#4a3a2e"],["Black","#1d1d1d"]];
 var OVERHANG=1.06, FOOTPRINT_FROM_SIZE=1.5;
 var IMG="https://mdgeodata.md.gov/imagery/rest/services/SixInch/SixInchImagery2023_2024_2025/MapServer/export";
-var STEPS=["Address","Your roof","Shingles","Roof system","Your proposal","Sign"];
+var STEPS=["Address","Your roof","Shingles","Roof system","Your proposal","Sign"],HASH=["address","roof","shingles","system","proposal","sign"];
+var SAVE_KEYS=["step","stories","pitch","shape","layers","line","color","trim","underlay","barrier","vent","gutters","skylights","chimneys","warranty","pay","term"];
+var LS="panda-roof-builder-v2";
 
-var H=null, S={step:0,home:null,manual:null,stories:2,pitch:"medium",shape:"average",layers:1,line:"hdz",color:0,trim:0,underlay:"std",barrier:"std",vent:"ridge",gutters:"none",skylights:0,chimneys:0,warranty:"silver",pay:"finance",name:"",email:"",phone:"",sig:"",agree:false,signed:false,order:""};
+var H=null, S={step:0,max:0,home:null,manual:null,stories:2,pitch:"medium",shape:"average",layers:1,line:"hdz",color:0,trim:0,underlay:"std",barrier:"std",vent:"ridge",gutters:"none",skylights:0,chimneys:0,warranty:"silver",pay:"finance",term:120,name:"",email:"",phone:"",sig:"",agree:false,week:"",signed:false,order:"",call:false,callDay:"",callTime:"",booked:false};
+var prevRoof=null, pendingRestore=null;
 var $=function(id){return document.getElementById(id)};
 function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
 function svg(tag,at){var e=document.createElementNS("http://www.w3.org/2000/svg",tag);for(var k in at)e.setAttribute(k,at[k]);return e}
 function money(n){return "$"+Math.round(n).toLocaleString("en-US")}
 function num(n){return Math.round(n).toLocaleString("en-US")}
+function where(){return S.home?S.home[0]+", "+CONFIG.town+" "+S.home[1]:"Your home"}
+$("phone").textContent=CONFIG.phone;
 
 /* ---------- measurements ---------- */
 function measure(){
@@ -238,6 +285,7 @@ function measure(){
   return {footprint:fp,perimeter:per,area:area,squares:squares,ridgeFt:Math.round(per*.3),eaveFt:Math.round(per*.6),source:src};
 }
 /* ---------- price ---------- */
+function payment(total,months){var r=PRICING.finance.apr/1200;return total*r/(1-Math.pow(1+r,-months))}
 function quote(){
   var m=measure();if(!m)return null;
   var P=PRICING,q=m.squares,rows=[],L=P.lines[S.line],add=function(label,detail,amt){rows.push({label:label,detail:detail,amount:Math.round(amt)})};
@@ -253,10 +301,32 @@ function quote(){
   if(S.chimneys)add("Chimney flashing",S.chimneys+" at "+money(P.chimneyEach)+" each",S.chimneys*P.chimneyEach);
   if(P.warranty[S.warranty].perSq)add(P.warranty[S.warranty].name+" warranty",q.toFixed(1)+" squares at "+money(P.warranty[S.warranty].perSq),q*P.warranty[S.warranty].perSq);
   var total=rows.reduce(function(a,r){return a+r.amount},0);
-  var r=P.finance.apr/1200,n=P.finance.months,monthly=total*r/(1-Math.pow(1+r,-n));
-  return {m:m,rows:rows,total:total,monthly:monthly,deposit:Math.round(total*P.depositRate)};
+  return {m:m,rows:rows,total:total,monthly:payment(total,S.term),deposit:Math.round(total*P.depositRate)};
 }
 window.__roofQuote=quote; window.__roofState=S; // used by the automated checks
+
+/* ---------- remembering the visitor's place ---------- */
+function snapshot(){var o={};SAVE_KEYS.forEach(function(k){o[k]=S[k]});o.max=S.max;if(S.home)o.addr=S.home[0]+"|"+S.home[1];if(S.manual)o.sqft=S.manual.sqft;return o}
+function save(){try{if(S.signed||S.booked)localStorage.removeItem(LS);else localStorage.setItem(LS,JSON.stringify(snapshot()))}catch(e){}}
+function applySnapshot(o){
+  if(!o)return false;
+  SAVE_KEYS.forEach(function(k){if(o[k]!=null&&typeof o[k]===typeof S[k])S[k]=o[k]});
+  if(!PITCH[S.pitch])S.pitch="medium";if(!SHAPE[S.shape])S.shape="average";if(!PRICING.lines[S.line])S.line="hdz";
+  if(!COLORS[S.color])S.color=0;if(!TRIM[S.trim])S.trim=0;if(PRICING.finance.terms.indexOf(S.term)<0)S.term=120;
+  ["underlay","barrier","vent","gutters","warranty"].forEach(function(k){if(!PRICING[k][S[k]])S[k]=Object.keys(PRICING[k])[0]});
+  S.layers=S.layers>1?2:1;S.stories=S.stories>=2?2:1;S.skylights=Math.max(0,Math.min(4,Math.round(S.skylights)||0));S.chimneys=Math.max(0,Math.min(2,Math.round(S.chimneys)||0));
+  S.home=null;S.manual=null;
+  if(o.addr&&H){for(var i=0;i<H.length;i++)if(H[i][0]+"|"+H[i][1]===o.addr){S.home=H[i];break}}
+  else if(o.sqft>=400&&o.sqft<=12000)S.manual={sqft:+o.sqft};
+  if(!measure()){S.step=0;S.max=0;return false}
+  S.step=Math.max(0,Math.min(5,Math.round(S.step)||0));S.max=Math.min(5,Math.max(+o.max||0,S.step));return true;
+}
+function shareLink(){var o=snapshot();o.step=4;o.max=4;var q=Object.keys(o).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(o[k])}).join("&");return location.origin+location.pathname+"?"+q}
+function fromQuery(){
+  if(!location.search||location.search.length<2)return null;var o={};
+  location.search.slice(1).split("&").forEach(function(p){var kv=p.split("=");if(kv.length!==2)return;var k,v;try{k=decodeURIComponent(kv[0]);v=decodeURIComponent(kv[1])}catch(e){return}o[k]=(typeof S[k]==="number"||k==="max"||k==="sqft")?+v:v});
+  return (o.addr||o.sqft)?o:null;
+}
 
 /* ---------- the house on the stage ---------- */
 function rng(seed){return function(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296}}
@@ -269,44 +339,49 @@ function shinglePattern(defs,id,base,deep){
     while(x<W){var w=14+Math.round(r()*16),t=(r()-.5)*.34;
       p.appendChild(svg("rect",{x:x,y:y*C,width:w-1,height:C,fill:tone(base,t)}));x+=w}
     p.appendChild(svg("rect",{x:0,y:y*C+C-(deep?3.4:2),width:W,height:deep?3.4:2,fill:tone(base,-.5),opacity:deep?.62:.45}));}
-  defs.appendChild(p);
+  defs.appendChild(p);return p;
 }
 function drawHouse(){
   var s=$("house");s.textContent="";
-  var base=COLORS[S.color][1],trim=TRIM[S.trim][1],two=S.stories>=2,rise=PITCH[S.pitch].rise;
-  var defs=svg("defs",{});shinglePattern(defs,"sh",base,S.line!=="hdz");
-  var g=svg("linearGradient",{id:"lite",x1:"0",y1:"0",x2:"1",y2:"1"});g.appendChild(svg("stop",{offset:"0","stop-color":"#fff","stop-opacity":".16"}));g.appendChild(svg("stop",{offset:"1","stop-color":"#000","stop-opacity":".2"}));defs.appendChild(g);s.appendChild(defs);
+  var base=COLORS[S.color][1],trim=TRIM[S.trim][1],two=S.stories>=2,rise=PITCH[S.pitch].rise,deep=S.line!=="hdz";
+  var changed=prevRoof&&(prevRoof.color!==S.color||prevRoof.line!==S.line);
+  var defs=svg("defs",{});shinglePattern(defs,"sh",base,deep);
+  if(changed)shinglePattern(defs,"shOld",COLORS[prevRoof.color][1],prevRoof.line!=="hdz");
+  var g=svg("linearGradient",{id:"lite",x1:"0",y1:"0",x2:"1",y2:"1"});g.appendChild(svg("stop",{offset:"0","stop-color":"#fff","stop-opacity":".18"}));g.appendChild(svg("stop",{offset:"1","stop-color":"#000","stop-opacity":".22"}));defs.appendChild(g);
+  var sh=svg("linearGradient",{id:"eave",x1:"0",y1:"0",x2:"0",y2:"1"});sh.appendChild(svg("stop",{offset:"0","stop-color":"#000","stop-opacity":".28"}));sh.appendChild(svg("stop",{offset:"1","stop-color":"#000","stop-opacity":"0"}));defs.appendChild(sh);s.appendChild(defs);
   var ground=520,wallH=two?250:150,eave=ground-wallH,roofH=Math.round(150*rise),ridge=eave-roofH;
   var x0=150,x1=650,gx0=560,gx1=760,gEave=ground-130,gRidge=gEave-Math.round(84*rise);
   var add=function(tag,at){var e=svg(tag,at);s.appendChild(e);return e};
+  var roof=function(pts){if(changed)add("polygon",{points:pts,fill:"url(#shOld)"});var n=add("polygon",{points:pts,fill:"url(#sh)"});if(changed)n.setAttribute("class","lay");add("polygon",{points:pts,fill:"url(#lite)"})};
   add("ellipse",{cx:410,cy:ground+6,rx:380,ry:18,fill:"#000",opacity:.12});
+  add("polygon",{points:[360,ground, 442,ground, 470,560, 330,560].join(" "),fill:"#d8d3c8"});
   /* garage wing */
   add("rect",{x:gx0,y:gEave,width:gx1-gx0,height:ground-gEave,fill:"#e6e1d8"});
   add("rect",{x:gx0+38,y:gEave+38,width:132,height:ground-gEave-38,fill:"#f7f5f0",stroke:"#bdb6aa","stroke-width":2});
   for(var i=1;i<4;i++)add("line",{x1:gx0+38,x2:gx0+170,y1:gEave+38+i*23,y2:gEave+38+i*23,stroke:"#cfc9be","stroke-width":2});
-  var gp=[gx0-10,gEave, gx1+18,gEave, gx1-30,gRidge, gx0-10,gRidge].join(" ");
-  add("polygon",{points:gp,fill:"url(#sh)"});add("polygon",{points:gp,fill:"url(#lite)"});
+  roof([gx0-10,gEave, gx1+18,gEave, gx1-30,gRidge, gx0-10,gRidge].join(" "));
   add("rect",{x:gx0-10,y:gEave-3,width:gx1-gx0+28,height:6,fill:trim});
+  add("rect",{x:gx0,y:gEave+3,width:gx1-gx0,height:16,fill:"url(#eave)"});
   /* main house */
   add("rect",{x:x0,y:eave,width:x1-x0,height:wallH,fill:"#efe9df"});
   for(var y=eave+18;y<ground;y+=18)add("line",{x1:x0,x2:x1,y1:y,y2:y,stroke:"#ded7ca","stroke-width":1.5});
-  var win=function(x,y,w,h){add("rect",{x:x,y:y,width:w,height:h,fill:"#8fb0c4",stroke:"#fff","stroke-width":6});add("line",{x1:x+w/2,x2:x+w/2,y1:y,y2:y+h,stroke:"#fff","stroke-width":3});add("line",{x1:x,x2:x+w,y1:y+h/2,y2:y+h/2,stroke:"#fff","stroke-width":3})};
-  if(two){win(200,eave+32,70,78);win(365,eave+32,70,78);win(530,eave+32,70,78)}
-  win(200,ground-112,70,78);win(530,ground-112,70,78);
+  add("rect",{x:x0,y:eave+3,width:x1-x0,height:22,fill:"url(#eave)"});
+  var win=function(x,y,w,h){add("rect",{x:x-13,y:y-3,width:11,height:h+6,fill:"#3a4046"});add("rect",{x:x+w+2,y:y-3,width:11,height:h+6,fill:"#3a4046"});add("rect",{x:x,y:y,width:w,height:h,fill:"#8fb0c4",stroke:"#fff","stroke-width":6});add("line",{x1:x+w/2,x2:x+w/2,y1:y,y2:y+h,stroke:"#fff","stroke-width":3});add("line",{x1:x,x2:x+w,y1:y+h/2,y2:y+h/2,stroke:"#fff","stroke-width":3})};
+  if(two){win(205,eave+36,62,74);win(369,eave+36,62,74);win(533,eave+36,62,74)}
+  win(205,ground-110,62,74);win(533,ground-110,62,74);
   add("rect",{x:372,y:ground-112,width:58,height:112,fill:"#2a2e31"});add("circle",{cx:420,cy:ground-56,r:3.5,fill:"#fcda00"});
   add("rect",{x:352,y:ground-8,width:98,height:8,fill:"#b9b2a6"});
+  [[185,30],[300,26],[500,26],[615,30]].forEach(function(b){add("ellipse",{cx:b[0],cy:ground-b[1]*.45,rx:b[1],ry:b[1]*.62,fill:"#6f8f55"});add("ellipse",{cx:b[0]-8,cy:ground-b[1]*.6,rx:b[1]*.55,ry:b[1]*.4,fill:"#86a66a"})});
   /* main roof plane */
-  var rp=[x0-34,eave, x1+34,eave, x1-42,ridge, x0+42,ridge].join(" ");
-  add("polygon",{points:rp,fill:"url(#sh)"});add("polygon",{points:rp,fill:"url(#lite)"});
+  roof([x0-34,eave, x1+34,eave, x1-42,ridge, x0+42,ridge].join(" "));
   /* ridge cap, raised a little when a ridge vent is chosen */
   var rv=S.vent==="ridge";
   add("rect",{x:x0+38,y:ridge-(rv?9:5),width:x1-x0-76,height:rv?11:7,rx:2,fill:tone(base,-.22)});
   if(rv)add("line",{x1:x0+40,x2:x1-40,y1:ridge+3,y2:ridge+3,stroke:"#000","stroke-width":2,opacity:.35});
-  /* pipe boots, skylights, chimney */
+  /* pipe boot, skylights, chimney */
   add("rect",{x:x0+150,y:ridge+roofH*.36,width:9,height:20,fill:"#b9bcc0"});add("rect",{x:x0+145,y:ridge+roofH*.36+17,width:19,height:6,fill:tone(base,-.3)});
   for(var k=0;k<Math.min(S.skylights,3);k++){var sx=x0+230+k*88,sy=ridge+roofH*.4;add("polygon",{points:[sx,sy+44, sx+54,sy+44, sx+48,sy, sx+6,sy].join(" "),fill:"#9cc3da",stroke:"#30353a","stroke-width":4})}
-  if(S.chimneys)add("rect",{x:x1-150,y:ridge-34,width:44,height:Math.max(60,roofH*.5),fill:"#9a5b45",stroke:"#7b4634","stroke-width":2});
-  if(S.chimneys)add("rect",{x:x1-155,y:ridge-40,width:54,height:9,fill:"#6d3e2e"});
+  if(S.chimneys){add("rect",{x:x1-150,y:ridge-34,width:44,height:Math.max(60,roofH*.5),fill:"#9a5b45",stroke:"#7b4634","stroke-width":2});add("rect",{x:x1-155,y:ridge-40,width:54,height:9,fill:"#6d3e2e"})}
   /* drip edge, then gutters and downspouts when they are part of the job */
   add("rect",{x:x0-34,y:eave-3,width:x1-x0+68,height:6,fill:trim});
   if(S.gutters!=="none"){
@@ -315,35 +390,57 @@ function drawHouse(){
     add("rect",{x:x1+21,y:eave+12,width:9,height:wallH-12,fill:trim,stroke:"#00000030","stroke-width":1});
     if(S.gutters==="guard")add("line",{x1:x0-36,x2:x1+36,y1:eave+4,y2:eave+4,stroke:"#8a9096","stroke-width":2,"stroke-dasharray":"3 3"});
   }
+  prevRoof={color:S.color,line:S.line};
   var L=PRICING.lines[S.line],t=$("tag");t.textContent="";t.appendChild(el("b",null,L.name+", "+COLORS[S.color][0]));
   t.appendChild(el("span",null,"Colors on screen are close, not exact. We bring real samples before install."));
 }
+/* ---------- cutaway: every layer of the roof, peeled back from left to right ---------- */
+function drawLayers(){
+  var s=$("layers");s.textContent="";var base=COLORS[S.color][1],P=PRICING,full=S.barrier==="full",rv=S.vent==="ridge",prem=S.underlay==="prem";
+  var defs=svg("defs",{});shinglePattern(defs,"sh3",base,S.line!=="hdz");
+  var wood=svg("pattern",{id:"wood",width:160,height:80,patternUnits:"userSpaceOnUse"});wood.appendChild(svg("rect",{width:160,height:80,fill:"#d9b98a"}));
+  wood.appendChild(svg("path",{d:"M0 20 Q40 10 80 22 T160 18 M0 52 Q50 44 90 56 T160 50 M0 70 Q60 64 160 72",fill:"none",stroke:"#c39f6b","stroke-width":2}));wood.appendChild(svg("rect",{x:0,y:0,width:160,height:80,fill:"none",stroke:"#b8935f","stroke-width":2}));defs.appendChild(wood);s.appendChild(defs);
+  var g=svg("g",{transform:"translate(170,56) skewX(-16)"});s.appendChild(g);
+  var W=560,Hh=300,add=function(tag,at){var e=svg(tag,at);g.appendChild(e);return e};
+  add("rect",{x:8,y:10,width:W,height:Hh,fill:"#000",opacity:.12});
+  add("rect",{x:0,y:0,width:W,height:Hh,fill:"url(#wood)"});                                   // wood deck
+  add("rect",{x:0,y:full?0:Hh-64,width:455,height:full?Hh:64,fill:"#2f3337"});                // leak barrier
+  add("rect",{x:0,y:0,width:330,height:Hh,fill:prem?"#b9c7d6":"#8c949b"});                    // underlayment
+  for(var y=50;y<Hh;y+=50)add("line",{x1:0,x2:330,y1:y,y2:y,stroke:"#00000022","stroke-width":2});
+  add("rect",{x:0,y:Hh-26,width:215,height:26,fill:tone(base,-.35)});                         // starter strip
+  add("rect",{x:0,y:0,width:205,height:Hh,fill:"url(#sh3)"});                                 // shingles
+  add("rect",{x:0,y:-16,width:W,height:16,fill:rv?"#1f2225":tone(base,-.25)});                // ridge
+  if(rv)for(var x=8;x<W;x+=14)add("line",{x1:x,x2:x,y1:-13,y2:-3,stroke:"#555b61","stroke-width":2});
+  add("rect",{x:0,y:-22,width:205,height:9,fill:tone(base,-.18)});
+  add("rect",{x:-4,y:Hh,width:W+8,height:9,fill:TRIM[S.trim][1],stroke:"#00000040","stroke-width":1}); // drip edge
+  /* numbered dots on the drawing, with the names set below it so they stay easy to read */
+  var badge=function(n,x,y,ring){var c=svg("g",{});c.appendChild(svg("circle",{cx:x,cy:y,r:15,fill:"#fc8104",stroke:ring?"#fff":"none","stroke-width":3}));var t=svg("text",{x:x,y:y+6,"text-anchor":"middle","font-size":17,"font-weight":800,fill:"#17191b"});t.textContent=n;c.appendChild(t);s.appendChild(c)};
+  var at=function(lx,ly){return [170+lx-.2867*ly,56+ly]};
+  [[1,100,150],[2,268,150],[3,392,full?150:268],[4,505,150],[5,400,-8],[6,300,305]].forEach(function(d){var p=at(d[1],d[2]);badge(d[0],p[0],p[1],true)});
+  var rows=[[1,P.lines[S.line].name.replace("GAF ",""),COLORS[S.color][0]+" shingles"],[2,prem?"Deck-Armor underlayment":"FeltBuster underlayment",prem?"Premium, breathable":"Synthetic, under every shingle"],[3,"Leak barrier",full?"Over the whole deck":"At eaves, valleys and pipes"],[4,"Wood deck","Checked once the old roof is off"],[5,rv?"Ridge vent":"Ridge cap",rv?"Lets attic heat out at the peak":"Covers the peak"],[6,"Drip edge",TRIM[S.trim][0]+" metal at the roof's edge"]];
+  rows.forEach(function(r,i){var x=40+(i%2)*380,y=428+Math.floor(i/2)*48;badge(r[0],x,y,false);
+    var a=svg("text",{x:x+25,y:y+1,"font-size":20,"font-weight":700,fill:"#17191b"});a.textContent=r[1];s.appendChild(a);
+    var b=svg("text",{x:x+25,y:y+21,"font-size":15.5,fill:"#5b6369"});b.textContent=r[2];s.appendChild(b)});
+}
 function drawAbove(){
-  var lot=$("lot");lot.textContent="";var h=S.home;
-  var half=70,k0;
+  var lot=$("lot");lot.textContent="";var h=S.home,half=70,k0;
   if(h&&h[9]&&h[9].length>=6){var ext=0;for(k0=0;k0<h[9].length;k0++)ext=Math.max(ext,Math.abs(h[9][k0]));half=Math.max(55,Math.min(160,ext*1.75))}
   else{var m0=measure();if(m0)half=Math.max(55,Math.sqrt(m0.footprint)*1.25)}
-  var vb=[-half,-half,half*2,half*2].join(" ");
   if(h){
     var dLat=half/364320,dLon=half/(364567.2*Math.cos(h[6]*Math.PI/180));
-    var im=document.createElement("img");im.alt="Aerial photo of your home";
-    im.onerror=function(){im.remove()};
+    var im=document.createElement("img");im.alt="Aerial photo of your home";im.onerror=function(){im.remove()};
     im.src=IMG+"?bbox="+(h[5]-dLon).toFixed(6)+","+(h[6]-dLat).toFixed(6)+","+(h[5]+dLon).toFixed(6)+","+(h[6]+dLat).toFixed(6)+"&bboxSR=4326&imageSR=4326&size=640,640&format=jpg&f=image";
     lot.appendChild(im);
   }
-  var s=svg("svg",{viewBox:vb,role:"img","aria-label":"Outline of your roof from above"});
-  var defs=svg("defs",{});shinglePattern(defs,"sh2",COLORS[S.color][1],S.line!=="hdz");s.appendChild(defs);
+  var s=svg("svg",{viewBox:[-half,-half,half*2,half*2].join(" "),role:"img","aria-label":"Outline of your roof from above"});
   var pts="";
   if(h&&h[9]&&h[9].length>=6){for(var k=0;k<h[9].length;k+=2)pts+=h[9][k]+","+(-h[9][k+1])+" "}
   else{var m=measure(),side=m?Math.sqrt(m.footprint):40,a=side*.62,b=side*.4;pts=[-a,-b, a,-b, a,b, -a,b].join(" ")}
-  var poly=svg("polygon",{points:pts,fill:"url(#sh2)",stroke:"#fc8104","stroke-width":2.2,"stroke-linejoin":"round",opacity:S.step>=2?.96:.5});
-  defs.firstChild.setAttribute("patternTransform","scale(.2)"); /* the outline is in feet, so the shingle pattern is shrunk to match */
-  poly.setAttribute("stroke-width",half/42);
-  s.appendChild(poly);lot.appendChild(s);
-  lot.appendChild(el("div","cap",h?(h[9]&&h[9].length>=6?"The orange line is your roof's outline from state building records.":"We don't have an outline for this home, so the size is estimated from its square footage."):"Size estimated from the square footage you entered."));
+  s.appendChild(svg("polygon",{points:pts,fill:"rgba(252,129,4,.16)",stroke:"#fc8104","stroke-width":half/42,"stroke-linejoin":"round"}));lot.appendChild(s);
+  lot.appendChild(el("div","cap",h?(h[9]&&h[9].length>=6?"The orange line is your home's footprint from state building records. Aerial photos are taken at a slight angle, so the roof can sit a few feet off the line.":"We don't have an outline for this home, so the size is estimated from its square footage."):"Size estimated from the square footage you entered."));
 }
-function setView(above){$("stage").classList.toggle("showabove",above);$("v-above").setAttribute("aria-pressed",above?"true":"false");$("v-house").setAttribute("aria-pressed",above?"false":"true")}
-$("v-house").addEventListener("click",function(){setView(false)});$("v-above").addEventListener("click",function(){setView(true)});
+function setView(v){$("stage").setAttribute("data-view",v);[].forEach.call(document.querySelectorAll(".views button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-v")===v?"true":"false")})}
+[].forEach.call(document.querySelectorAll(".views button"),function(b){b.addEventListener("click",function(){setView(b.getAttribute("data-v"))})});
 
 /* ---------- small builders ---------- */
 function optGroup(parent,items,current,onPick,cls){
@@ -355,50 +452,77 @@ function optGroup(parent,items,current,onPick,cls){
   parent.appendChild(box);return box;
 }
 function sect(parent,title,sub){var s=el("div","sect");s.appendChild(el("h3",null,title));if(sub)s.appendChild(el("p",null,sub));parent.appendChild(s);return s}
-function plus(perSq){var m=measure();return perSq&&m?"+ "+money(perSq*m.squares):0}
-function toast(t){var e=$("toast");e.textContent=t;e.classList.add("on");setTimeout(function(){e.classList.remove("on")},2000)}
+var toastT;function toast(t){var e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(function(){e.classList.remove("on")},2200)}
+function copy(text,okMsg){try{navigator.clipboard.writeText(text).then(function(){toast(okMsg)},function(){toast("Copy was blocked by the browser")})}catch(e){toast("Copy was blocked by the browser")}}
+function contactFields(parent){
+  var g=el("div","formgrid");
+  [["name","Full name","text","name"],["phone","Mobile phone","tel","tel"],["email","Email","email","email"]].forEach(function(a){var l=el("label","f",a[1]),i=document.createElement("input");i.type=a[2];i.id="f-"+a[0];i.autocomplete=a[3];i.value=S[a[0]];
+    i.addEventListener("input",function(){S[a[0]]=i.value;if(a[0]==="name"&&!S.sigTouched){S.sig=i.value;var sg=$("f-sig");if(sg){sg.value=i.value;$("sigbox").textContent=S.sig}}});l.appendChild(i);g.appendChild(l)});
+  parent.appendChild(g);
+}
+function contactError(){
+  if(S.name.trim().length<3)return "Enter your full name.";
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.email.trim()))return "Enter an email address so we can send your copy.";
+  if(S.phone.replace(/\D/g,"").length<10)return "Enter a 10-digit phone number.";
+  return "";
+}
+function upcoming(kind){ // install weeks start two weeks out; call days are the next five weekdays
+  var out=[],d=new Date(),fmt=function(x,o){return x.toLocaleDateString("en-US",o)};d.setHours(12,0,0,0);
+  if(kind==="weeks"){d.setDate(d.getDate()+14);while(d.getDay()!==1)d.setDate(d.getDate()+1);for(var i=0;i<6;i++){out.push("Week of "+fmt(d,{month:"long",day:"numeric"}));d.setDate(d.getDate()+7)}}
+  else{while(out.length<5){d.setDate(d.getDate()+1);if(d.getDay()%6)out.push(fmt(d,{weekday:"short",month:"short",day:"numeric"}))}}
+  return out;
+}
 
 /* ---------- steps ---------- */
 function stepAddress(p){
   p.appendChild(el("h1",null,"Design your new roof and see your price today"));
   p.appendChild(el("p","lead","Pick your shingle, color and protection, watch it go on the house, and get a written proposal. It takes about five minutes and nobody has to come out first."));
-  var f=el("div","find"),inp=document.createElement("input"),ul=document.createElement("ul");
+  var f=el("div","find"),inp=document.createElement("input"),ul=document.createElement("ul"),act=-1;
   inp.type="search";inp.id="addr";inp.autocomplete="off";inp.placeholder="Start typing your street address";inp.setAttribute("aria-label","Your street address");
   if(S.home)inp.value=S.home[0];
   f.appendChild(inp);f.appendChild(ul);p.appendChild(f);
-  var show=function(){var q=inp.value.trim().toUpperCase().replace(/\s+/g," ");ul.textContent="";if(q.length<2||!H){ul.classList.remove("open");return}
+  var mark=function(){[].forEach.call(ul.querySelectorAll("button"),function(b,i){b.classList.toggle("act",i===act)})};
+  var show=function(){var q=inp.value.trim().toUpperCase().replace(/\s+/g," ");ul.textContent="";act=-1;if(q.length<2){ul.classList.remove("open");return}
+    if(!H){var w=document.createElement("li");w.appendChild(el("button",null,"Loading addresses…"));ul.appendChild(w);ul.classList.add("open");return}
     var out=[],i;for(i=0;i<H.length&&out.length<7;i++)if(H[i][0].toUpperCase().indexOf(q)===0)out.push(H[i]);
-    if(!out.length){var li0=document.createElement("li"),b0=el("button",null,"We don't have that address yet. Enter your home's size instead.");b0.type="button";b0.addEventListener("click",function(){man.classList.add("open");ul.classList.remove("open")});li0.appendChild(b0);ul.appendChild(li0)}
-    out.forEach(function(h){var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.appendChild(el("span",null,h[0]));b.appendChild(el("small",null,"Laurel, MD "+h[1]));
-      b.addEventListener("click",function(){S.home=h;S.manual=null;S.stories=h[4]>=2?2:1;go(1)});li.appendChild(b);ul.appendChild(li)});
+    if(!out.length){var li0=document.createElement("li"),b0=el("button",null,"We don't have that address yet. Enter your home's size instead.");b0.type="button";b0.addEventListener("click",function(){man.classList.add("open");ul.classList.remove("open");$("m-sq").focus()});li0.appendChild(b0);ul.appendChild(li0)}
+    out.forEach(function(h){var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.appendChild(el("span",null,h[0]));b.appendChild(el("small",null,CONFIG.town+" "+h[1]));
+      b.addEventListener("click",function(){S.home=h;S.manual=null;S.stories=h[4]>=2?2:1;S.max=0;go(1)});li.appendChild(b);ul.appendChild(li)});
     ul.classList.add("open")};
+  stepAddress.refresh=show;
   inp.addEventListener("input",show);
-  inp.addEventListener("keydown",function(e){if(e.key==="Enter"){var b=ul.querySelector("button");if(b)b.click()}});
+  inp.addEventListener("keydown",function(e){var bs=ul.querySelectorAll("button");if(!bs.length)return;
+    if(e.key==="ArrowDown"){act=Math.min(bs.length-1,act+1);mark();e.preventDefault()}
+    else if(e.key==="ArrowUp"){act=Math.max(0,act-1);mark();e.preventDefault()}
+    else if(e.key==="Enter"){bs[Math.max(0,act)].click()}});
   var wrap=el("p",null,"");wrap.style.margin="14px 0 0";var lb=el("button","linkbtn","My address isn't listed");lb.type="button";wrap.appendChild(lb);p.appendChild(wrap);
   var man=el("div","manual");man.id="manual";
   var l1=el("label","f","Heated square feet"),i1=document.createElement("input");i1.type="number";i1.min=400;i1.max=12000;i1.step=50;i1.id="m-sq";i1.placeholder="2,000";i1.value=S.manual?S.manual.sqft:"";l1.appendChild(i1);
   var l2=el("label","f","Floors above ground"),s2=document.createElement("select");s2.id="m-st";[["1","One"],["2","Two or more"]].forEach(function(o){var x=el("option",null,o[1]);x.value=o[0];s2.appendChild(x)});s2.value=String(S.stories>=2?2:1);l2.appendChild(s2);
   var mb=el("button","btn light","Use this size");mb.type="button";mb.id="m-go";
-  mb.addEventListener("click",function(){var v=+i1.value;if(!(v>=400&&v<=12000)){toast("Enter a size between 400 and 12,000 square feet");return}S.home=null;S.manual={sqft:v};S.stories=+s2.value;go(1)});
+  mb.addEventListener("click",function(){var v=+i1.value;if(!(v>=400&&v<=12000)){toast("Enter a size between 400 and 12,000 square feet");return}S.home=null;S.manual={sqft:v};S.stories=+s2.value;S.max=0;go(1)});
   man.appendChild(l1);man.appendChild(l2);man.appendChild(mb);p.appendChild(man);
   lb.addEventListener("click",function(){man.classList.toggle("open")});
   if(S.manual)man.classList.add("open");
-  p.appendChild(el("p","note","This demo knows the 15,000 detached homes in Laurel ZIP codes 20707, 20708, 20723 and 20724. Try \"13807 Brown Branch Rd\"."));
+  var pr=el("div","proof");CONFIG.proof.forEach(function(x){var d=el("div");d.appendChild(el("b",null,x[0]));d.appendChild(document.createTextNode(x[1]));pr.appendChild(d)});p.appendChild(pr);
+  p.appendChild(el("p","note plain","This demo knows the 15,000 detached homes in "+CONFIG.coverage+". Try \""+CONFIG.example+"\"."));
 }
 function stepRoof(p){
   var m=measure();
   p.appendChild(el("h2",null,S.home?"Here is "+S.home[0]:"Here is your roof"));
-  p.appendChild(el("p","lead","We sized your roof from "+(m.source==="outline"?"the building outline in state records":"your home's square footage")+". Check the three answers below. They change how much material the roof needs."));
+  p.appendChild(el("p","lead","We sized your roof from "+(m.source==="outline"?"the building outline in state records":"your home's square footage")+". Check the answers below. They change how much material the roof needs."));
   var f=el("div","facts");[[m.squares.toFixed(1),"roofing squares to order"],[num(m.area),"square feet of roof surface"],[num(m.footprint),"square feet under the roof"]].forEach(function(a){var d=el("div");d.appendChild(el("b",null,a[0]));d.appendChild(el("span",null,a[1]));f.appendChild(d)});p.appendChild(f);
+  if(S.home&&S.home[2]){var age=new Date().getFullYear()-S.home[2];if(age>=15)p.appendChild(el("p","note plain","Records show this home was built in "+S.home[2]+". If the roof has never been replaced, it is about "+age+" years old. Asphalt shingle roofs commonly last 20 to 30 years."))}
   var a=sect(p,"How steep is it?","A steeper roof has more surface and takes more safety gear.");
-  optGroup(a,Object.keys(PITCH).map(function(k){return {key:k,name:PITCH[k].name,desc:PITCH[k].desc}}),S.pitch,function(k){S.pitch=k;render()});
+  optGroup(a,Object.keys(PITCH).map(function(k){return {key:k,name:PITCH[k].name,desc:PITCH[k].desc}}),S.pitch,function(k){S.pitch=k;setView("house");render()});
   var b=sect(p,"How complicated is the shape?","More peaks and valleys mean more cut shingles.");
   optGroup(b,Object.keys(SHAPE).map(function(k){return {key:k,name:SHAPE[k].name,desc:SHAPE[k].desc}}),S.shape,function(k){S.shape=k;render()});
   var c=sect(p,"How many floors?",null);
-  optGroup(c,[{key:1,name:"One story"},{key:2,name:"Two stories or more"}],S.stories>=2?2:1,function(k){S.stories=k;render()});
+  optGroup(c,[{key:1,name:"One story"},{key:2,name:"Two stories or more"}],S.stories>=2?2:1,function(k){S.stories=k;setView("house");render()});
   var d=sect(p,"Layers of old shingles","If a past roofer went over the old roof, there are two layers to remove. Not sure? Leave it at one and we will confirm.");
   optGroup(d,[{key:1,name:"One layer"},{key:2,name:"Two layers"}],S.layers,function(k){S.layers=k;render()});
   p.appendChild(el("p","note","Before any material is ordered we confirm these numbers with a measurement report. If the real size is different, your price is corrected at the same rate per square and you approve it first."));
+  p.appendChild(el("p","note plain","Had hail or wind damage? Your insurance may pay for the roof. Call "+CONFIG.phone+" for a free inspection before you buy."));
 }
 function stepShingle(p){
   p.appendChild(el("h2",null,"Choose your shingle"));
@@ -406,9 +530,9 @@ function stepShingle(p){
   var box=el("div","lines");box.setAttribute("role","group");
   Object.keys(PRICING.lines).forEach(function(k){var L=PRICING.lines[k],b=el("button","opt line");b.type="button";b.setAttribute("aria-pressed",k===S.line?"true":"false");
     b.appendChild(el("span","tier",L.tier));b.appendChild(el("b",null,L.name));
-    var q0=S.line;S.line=k;var t=quote().total;S.line=q0;b.appendChild(el("em",null,money(t)+" for your roof"));
+    var q0=S.line;S.line=k;var qq=quote();S.line=q0;b.appendChild(el("em",null,money(qq.total)+" or "+money(qq.monthly)+" a month"));
     var ul=document.createElement("ul");L.points.forEach(function(x){ul.appendChild(el("li",null,x))});b.appendChild(ul);
-    b.addEventListener("click",function(){S.line=k;render()});box.appendChild(b)});
+    b.addEventListener("click",function(){S.line=k;setView("house");render()});box.appendChild(b)});
   p.appendChild(box);
   var c=sect(p,"Color","Every color comes in all three shingles at the same price.");
   var sw=el("div","swatches");sw.setAttribute("role","group");
@@ -417,24 +541,24 @@ function stepShingle(p){
     b.appendChild(sq);b.appendChild(document.createTextNode(col[0]));b.addEventListener("click",function(){S.color=i;render()});sw.appendChild(b)});
   c.appendChild(sw);
   var t=sect(p,"Drip edge and gutter color","The metal trim along the roof's edge.");
-  optGroup(t,TRIM.map(function(x,i){return {key:i,name:x[0]}}),S.trim,function(k){S.trim=k;render()});
+  optGroup(t,TRIM.map(function(x,i){return {key:i,name:x[0]}}),S.trim,function(k){S.trim=k;setView("house");render()});
 }
 function stepSystem(p){
   var P=PRICING,m=measure();
   p.appendChild(el("h2",null,"Build the rest of your roof"));
-  p.appendChild(el("p","lead","Shingles are the part you see. These choices are what keeps water out and how long the roof is covered."));
-  var mk=function(title,sub,table,cur,set,unit){var s=sect(p,title,sub);
-    optGroup(s,Object.keys(table).map(function(k){var o=table[k],amt=unit==="sq"?o.perSq*m.squares:unit==="ridge"?o.perFt*m.ridgeFt:o.perFt*m.eaveFt;return {key:k,name:o.name,desc:o.desc,price:amt?"+ "+money(amt):0}}),cur,function(k){set(k);render()},"wide")};
-  mk("Underlayment","The sheet between the wood deck and the shingles.",P.underlay,S.underlay,function(k){S.underlay=k},"sq");
-  mk("Leak barrier","A stick-on waterproof membrane.",P.barrier,S.barrier,function(k){S.barrier=k},"sq");
-  mk("Attic ventilation","A cooler, drier attic helps shingles last.",P.vent,S.vent,function(k){S.vent=k},"ridge");
+  p.appendChild(el("p","lead","Shingles are the part you see. These choices are what keeps water out and how long the roof is covered. The cutaway shows each layer as you choose."));
+  var mk=function(title,sub,table,cur,set,unit,view){var s=sect(p,title,sub);
+    optGroup(s,Object.keys(table).map(function(k){var o=table[k],amt=unit==="sq"?o.perSq*m.squares:unit==="ridge"?o.perFt*m.ridgeFt:o.perFt*m.eaveFt;return {key:k,name:o.name,desc:o.desc,price:amt?"+ "+money(amt):0}}),cur,function(k){set(k);if(view)setView(view);render()},"wide")};
+  mk("Underlayment","The sheet between the wood deck and the shingles.",P.underlay,S.underlay,function(k){S.underlay=k},"sq","layers");
+  mk("Leak barrier","A stick-on waterproof membrane.",P.barrier,S.barrier,function(k){S.barrier=k},"sq","layers");
+  mk("Attic ventilation","A cooler, drier attic helps shingles last.",P.vent,S.vent,function(k){S.vent=k},"ridge","layers");
   mk("Warranty","Panda can register all three because it is a GAF Master Elite contractor. See GAF's warranty documents for full terms.",P.warranty,S.warranty,function(k){S.warranty=k},"sq");
-  mk("Gutters","Often replaced with the roof while the crew is there.",P.gutters,S.gutters,function(k){S.gutters=k},"eave");
+  mk("Gutters","Often replaced with the roof while the crew is there.",P.gutters,S.gutters,function(k){S.gutters=k},"eave","house");
   var s=sect(p,"Skylights and chimneys","Each one gets new flashing so it doesn't leak. Skylights "+money(P.skylightEach)+" each, chimneys "+money(P.chimneyEach)+" each.");
   var row=el("div","row");row.style.cssText="display:flex;gap:28px;flex-wrap:wrap";
   [["skylights","Skylights",4],["chimneys","Chimneys",2]].forEach(function(a){var w=el("div"),c=el("div","count");w.appendChild(el("div",null,a[1]));
     var mi=el("button",null,"−"),pl=el("button",null,"+"),v=el("b",null,String(S[a[0]]));mi.type=pl.type="button";mi.setAttribute("aria-label","Fewer "+a[1].toLowerCase());pl.setAttribute("aria-label","More "+a[1].toLowerCase());pl.id="plus-"+a[0];
-    mi.addEventListener("click",function(){if(S[a[0]]>0){S[a[0]]--;render()}});pl.addEventListener("click",function(){if(S[a[0]]<a[2]){S[a[0]]++;render()}});
+    mi.addEventListener("click",function(){if(S[a[0]]>0){S[a[0]]--;setView("house");render()}});pl.addEventListener("click",function(){if(S[a[0]]<a[2]){S[a[0]]++;setView("house");render()}});
     c.appendChild(mi);c.appendChild(v);c.appendChild(pl);w.appendChild(c);row.appendChild(w)});
   s.appendChild(row);
 }
@@ -446,18 +570,26 @@ function proposalTable(q){
   return t;
 }
 function proposalText(q){
-  var a=["Panda Exteriors roof proposal (demo, sample prices)",S.home?S.home[0]+", Laurel, MD "+S.home[1]:"Home size entered by hand",""];
+  var a=["Panda Exteriors roof proposal (demo, sample prices)",S.home?where():"Home size entered by hand",""];
   q.rows.forEach(function(r){a.push(r.label+": "+money(r.amount))});
-  a.push("Total: "+money(q.total));a.push("About "+money(q.monthly)+" a month on a sample "+PRICING.finance.months+"-month loan at "+PRICING.finance.apr+"% APR");return a.join("\n");
+  a.push("Total: "+money(q.total));a.push("About "+money(q.monthly)+" a month on a sample "+S.term+"-month loan at "+PRICING.finance.apr+"% APR");return a.join("\n");
 }
 function stepProposal(p){
   var q=quote(),P=PRICING;
   p.appendChild(el("h2",null,"Your roof, in writing"));
-  p.appendChild(el("p","lead",(S.home?S.home[0]+", Laurel, MD "+S.home[1]:"Your home")+". "+q.m.squares.toFixed(1)+" squares, "+PITCH[S.pitch].name.toLowerCase()+" pitch, "+(S.stories>=2?"two stories":"one story")+"."));
+  p.appendChild(el("p","lead",where()+". "+q.m.squares.toFixed(1)+" squares, "+PITCH[S.pitch].name.toLowerCase()+" pitch, "+(S.stories>=2?"two stories":"one story")+"."));
   p.appendChild(proposalTable(q));
-  var pay=el("div","pay");var a=el("span");a.appendChild(document.createTextNode("Or about "));a.appendChild(el("b",null,money(q.monthly)+" a month"));a.appendChild(document.createTextNode(" on a sample "+P.finance.months+"-month loan at "+P.finance.apr+"% APR through Service Finance"));pay.appendChild(a);p.appendChild(pay);
-  var cp=el("button","btn light","Copy this proposal");cp.type="button";cp.style.marginTop="16px";
-  cp.addEventListener("click",function(){try{navigator.clipboard.writeText(proposalText(q)).then(function(){toast("Proposal copied")},function(){toast("Copy was blocked by the browser")})}catch(e){toast("Copy was blocked by the browser")}});p.appendChild(cp);
+  var tm=el("div","terms");tm.setAttribute("role","group");tm.setAttribute("aria-label","Loan length");
+  tm.appendChild(document.createTextNode("Or about "));var mb=el("b",null,money(q.monthly)+" a month");mb.style.color="var(--ink)";mb.id="monthly";tm.appendChild(mb);tm.appendChild(document.createTextNode(" over"));
+  P.finance.terms.forEach(function(n){var b=el("button",null,(n/12)+" years");b.type="button";b.setAttribute("data-term",n);b.setAttribute("aria-pressed",n===S.term?"true":"false");b.addEventListener("click",function(){S.term=n;render()});tm.appendChild(b)});
+  p.appendChild(tm);
+  var fine=el("p",null,"Sample loan at "+P.finance.apr+"% APR through Service Finance. This price is held for "+CONFIG.priceHoldDays+" days.");fine.style.cssText="margin:6px 0 0;font-size:14px;color:var(--muted)";p.appendChild(fine);
+  var acts=el("div","acts");
+  var b1=el("button","btn outline","Book a video walkthrough instead");b1.type="button";b1.id="to-call";b1.addEventListener("click",function(){S.call=true;render();window.scrollTo(0,0)});acts.appendChild(b1);
+  var b2=el("button","btn light","Copy a link to this roof");b2.type="button";b2.id="share";b2.addEventListener("click",function(){copy(shareLink(),"Link copied")});acts.appendChild(b2);
+  var b3=el("button","btn light","Copy as text");b3.type="button";b3.addEventListener("click",function(){copy(proposalText(q),"Proposal copied")});acts.appendChild(b3);
+  var b4=el("button","btn light","Print or save as PDF");b4.type="button";b4.addEventListener("click",function(){try{window.print()}catch(e){toast("Printing isn't available here")}});acts.appendChild(b4);
+  p.appendChild(acts);
   var s=sect(p,"What could change this price","Two things, and both need your approval first.");
   var ul=document.createElement("ul");ul.style.cssText="margin:0;padding-left:20px;max-width:62ch";
   ["Rotten wood under the old shingles. Nobody can see it until the old roof is off. The first "+P.deckingIncludedSheets+" sheets of new decking are included. More than that is "+money(P.deckingPerSheet)+" a sheet, and we send photos before replacing any.","The confirmed measurement. If the measurement report differs from this estimate, the price moves at the same rate per square, up or down."].forEach(function(x){ul.appendChild(el("li",null,x))});s.appendChild(ul);
@@ -467,68 +599,99 @@ function stepSign(p){
   var q=quote(),P=PRICING;
   p.appendChild(el("h2",null,"Reserve your roof"));
   p.appendChild(el("p","lead","Sign to hold this price and get on the install schedule. "+money(q.total)+" for "+P.lines[S.line].name+" in "+COLORS[S.color][0]+"."));
-  var s1=sect(p,"Who is the homeowner?",null),g=el("div","formgrid");
-  [["name","Full name","text","name"],["phone","Mobile phone","tel","tel"],["email","Email","email","email"]].forEach(function(a){var l=el("label","f",a[1]),i=document.createElement("input");i.type=a[2];i.id="f-"+a[0];i.autocomplete=a[3];i.value=S[a[0]];
-    i.addEventListener("input",function(){S[a[0]]=i.value;if(a[0]==="name"&&!S.sigTouched){S.sig=i.value;var sg=$("f-sig");if(sg)sg.value=i.value;$("sigbox").textContent=S.sig}});l.appendChild(i);g.appendChild(l)});
-  s1.appendChild(g);
+  var s1=sect(p,"Who is the homeowner?",null);contactFields(s1);
+  var s0=sect(p,"When would you like it installed?","Pick the week that suits you. We confirm the exact day by phone.");
+  var lw=el("label","f","Preferred week"),sel=document.createElement("select");sel.id="f-week";sel.style.maxWidth="320px";upcoming("weeks").forEach(function(w){var o=el("option",null,w);o.value=w;sel.appendChild(o)});
+  if(S.week)sel.value=S.week;S.week=sel.value;sel.addEventListener("change",function(){S.week=sel.value});lw.appendChild(sel);s0.appendChild(lw);
   var s2=sect(p,"How would you like to pay?","Nothing is charged in this demo.");
-  optGroup(s2,[{key:"finance",name:"Finance it",desc:"About "+money(q.monthly)+" a month on the sample loan. No money today."},{key:"deposit",name:"Pay a "+Math.round(P.depositRate*100)+"% deposit",desc:money(q.deposit)+" today, the rest when the roof is done."}],S.pay,function(k){S.pay=k;render()},"wide");
+  optGroup(s2,[{key:"finance",name:"Finance it",desc:"About "+money(q.monthly)+" a month over "+(S.term/12)+" years on the sample loan. No money today."},{key:"deposit",name:"Pay a "+Math.round(P.depositRate*100)+"% deposit",desc:money(q.deposit)+" today, the rest when the roof is done."}],S.pay,function(k){S.pay=k;render()},"wide");
   var s3=sect(p,"Sign","Type your name to sign.");
   var l=el("label","f","Signature"),i=document.createElement("input");i.type="text";i.id="f-sig";i.autocomplete="off";i.value=S.sig;i.style.maxWidth="560px";
   i.addEventListener("input",function(){S.sig=i.value;S.sigTouched=true;$("sigbox").textContent=S.sig});l.appendChild(i);s3.appendChild(l);
   var sb=el("div","sigbox",S.sig);sb.id="sigbox";s3.appendChild(sb);
   var ck=el("label","chk"),cb=document.createElement("input");cb.type="checkbox";cb.id="f-agree";cb.checked=S.agree;cb.addEventListener("change",function(){S.agree=cb.checked});
   ck.appendChild(cb);ck.appendChild(el("span",null,"I have read the proposal, including what could change the price, and I want Panda Exteriors to replace my roof as described."));s3.appendChild(ck);
-  var e=el("div","err");e.id="err";s3.appendChild(e);
+  var e=el("div","err");e.id="err";e.setAttribute("role","alert");s3.appendChild(e);
+  var alt=el("p",null,"");alt.style.margin="6px 0 0";var ab=el("button","linkbtn","Not ready? Book a video walkthrough instead");ab.type="button";ab.addEventListener("click",function(){S.call=true;render();window.scrollTo(0,0)});alt.appendChild(ab);p.appendChild(alt);
   p.appendChild(el("p","note","Demo only. This does not create a contract and no card is charged. The live version would show Panda's full Maryland home improvement agreement here, with its license number, start and finish dates and your right to cancel, and collect a real e-signature."));
+}
+function stepCall(p){
+  var q=quote();
+  p.appendChild(el("h2",null,"Book a video walkthrough"));
+  p.appendChild(el("p","lead","Fifteen minutes on video with a Panda roof specialist. We pull up this exact roof, answer your questions and adjust anything with you. No one comes to the house."));
+  var s1=sect(p,"Pick a day",null),d=el("div","slots");d.setAttribute("role","group");d.id="days";
+  upcoming("days").forEach(function(x){var b=el("button",null,x);b.type="button";b.setAttribute("aria-pressed",S.callDay===x?"true":"false");b.addEventListener("click",function(){S.callDay=x;render()});d.appendChild(b)});s1.appendChild(d);
+  var s2=sect(p,"Pick a time",null),t=el("div","slots");t.setAttribute("role","group");t.id="times";
+  ["9:00 AM","10:30 AM","12:00 PM","2:00 PM","4:30 PM","6:00 PM","7:30 PM"].forEach(function(x){var b=el("button",null,x);b.type="button";b.setAttribute("aria-pressed",S.callTime===x?"true":"false");b.addEventListener("click",function(){S.callTime=x;render()});t.appendChild(b)});s2.appendChild(t);
+  var s3=sect(p,"Where should we send the link?",null);contactFields(s3);
+  var e=el("div","err");e.id="err";e.setAttribute("role","alert");s3.appendChild(e);
+  p.appendChild(el("p","note","Demo only. Nothing is booked or sent. The live version would put this on a specialist's calendar and attach your roof ("+money(q.total)+") to the appointment."));
 }
 function stepDone(p){
   var q=quote();p.classList.add("done");
-  p.appendChild(el("h1",null,"You're on the schedule, "+(S.name.trim().split(" ")[0]||"neighbor")));
-  p.appendChild(el("p","lead","Reservation "+S.order+". A copy of your signed proposal would be emailed to "+(S.email||"you")+" in the live version."));
-  var ol=el("ol","next");
-  ["We order a measurement report for your roof and confirm the size, usually within one business day.","A Panda project manager calls to pick your install date and answer questions.","Material is delivered and your roof goes on, most often in a single day.","A final walk-around, cleanup with magnets for nails, and your warranty is registered with GAF."].forEach(function(x){ol.appendChild(el("li",null,x))});p.appendChild(ol);
+  if(S.booked){
+    p.appendChild(el("h1",null,"Your walkthrough is booked, "+(S.name.trim().split(" ")[0]||"neighbor")));
+    p.appendChild(el("p","lead",S.callDay+" at "+S.callTime+". In the live version a video link would be sent to "+(S.email||"you")+" and by text to "+(S.phone||"your phone")+"."));
+    p.appendChild(el("p","note plain","Your specialist will have this roof open when the call starts: "+PRICING.lines[S.line].name+" in "+COLORS[S.color][0]+", "+money(q.total)+"."));
+  }else{
+    p.appendChild(el("h1",null,"You're on the schedule, "+(S.name.trim().split(" ")[0]||"neighbor")));
+    p.appendChild(el("p","lead","Reservation "+S.order+", "+S.week.toLowerCase()+". A copy of your signed proposal would be emailed to "+(S.email||"you")+" in the live version."));
+    var ol=el("ol","next");
+    ["We order a measurement report for your roof and confirm the size, usually within one business day.","A Panda project manager calls to set your install day and answer questions.","Material is delivered and your roof goes on, most often in a single day.","A final walk-around, cleanup with magnets for nails, and your warranty is registered with GAF."].forEach(function(x){ol.appendChild(el("li",null,x))});p.appendChild(ol);
+  }
   p.appendChild(proposalTable(q));
-  p.appendChild(el("p","note","This was a demo. Nothing was sent, signed or charged. In the live version this step would create the job in Panda's CRM and notify the office."));
-  var b=el("button","btn light","Start over");b.type="button";b.style.marginTop="18px";b.addEventListener("click",function(){S.signed=false;S.step=0;S.home=null;S.manual=null;S.sig="";S.agree=false;S.sigTouched=false;render()});p.appendChild(b);
+  p.appendChild(el("p","note","This was a demo. Nothing was sent, signed or charged. In the live version this step would create the "+(S.booked?"appointment":"job")+" in Panda's CRM and notify the office."));
+  var b=el("button","btn light","Start over");b.type="button";b.id="again";b.style.marginTop="18px";b.addEventListener("click",restart);p.appendChild(b);
 }
-function validateSign(){
-  var e=$("err"),bad="";
-  if(S.name.trim().length<3)bad="Enter the homeowner's full name.";
-  else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.email.trim()))bad="Enter an email address so we can send your copy.";
-  else if(S.phone.replace(/\D/g,"").length<10)bad="Enter a 10-digit phone number.";
-  else if(S.sig.trim().length<3)bad="Type your name in the signature box.";
-  else if(!S.agree)bad="Tick the box to confirm you have read the proposal.";
-  e.textContent=bad;return !bad;
-}
+function restart(){S.signed=false;S.booked=false;S.call=false;S.step=0;S.max=0;S.home=null;S.manual=null;S.sig="";S.agree=false;S.sigTouched=false;S.callDay="";S.callTime="";prevRoof=null;lastStep=0;try{localStorage.removeItem(LS)}catch(e){}setView("house");render();setHash();window.scrollTo(0,0)}
+$("restart").addEventListener("click",restart);
 
 /* ---------- frame ---------- */
 function render(){
-  var p=$("panel");p.textContent="";p.className="panel";
-  if(S.signed){stepDone(p)}
+  var p=$("panel");p.textContent="";p.className="panel";var fin=S.signed||S.booked;
+  document.body.setAttribute("data-step",fin?"6":String(S.step));
+  if(fin){stepDone(p)}
+  else if(S.call){stepCall(p)}
   else{
-    var ol=el("ol","steps");STEPS.forEach(function(n,i){var li=el("li",i<S.step?"done":i===S.step?"now":"",n);if(i===S.step)li.setAttribute("aria-current","step");ol.appendChild(li)});p.appendChild(ol);
+    var ol=el("ol","steps");STEPS.forEach(function(n,i){var li=el("li",i===S.step?"now":i<=S.max?"done":"");
+      if(i!==S.step&&i<=S.max&&(i===0||quote())){var b=el("button",null,n);b.type="button";b.addEventListener("click",function(){go(i)});li.appendChild(b)}
+      else{var sp=el("span",null,n);if(i===S.step)li.setAttribute("aria-current","step");li.appendChild(sp)}
+      ol.appendChild(li)});p.appendChild(ol);
     [stepAddress,stepRoof,stepShingle,stepSystem,stepProposal,stepSign][S.step](p);
   }
-  drawHouse();drawAbove();
+  drawHouse();drawAbove();drawLayers();
   var q=quote();
   $("bar-price").textContent=q?money(q.total):"Your price";
   $("bar-sub").textContent=q?"or about "+money(q.monthly)+" a month. Sample pricing.":"Enter your address to begin";
-  var go=$("go"),back=$("back");
-  back.style.display=S.step>0&&!S.signed?"":"none";
-  go.style.display=S.signed?"none":"";
-  go.textContent=["Continue","Choose shingles","Build the rest","See my proposal","Reserve this roof","Sign and reserve"][S.step];
-  go.disabled=S.step===0&&!q;
+  var goB=$("go"),back=$("back");
+  back.style.display=(S.step>0||S.call)&&!fin?"":"none";
+  goB.style.display=fin?"none":"";
+  goB.textContent=S.call?"Book this call":["Continue","Choose shingles","Build the rest","See my proposal","Reserve this roof","Sign and reserve"][S.step];
+  goB.disabled=S.step===0&&!q;
+  $("restart").hidden=!(S.step>0||fin);
+  save();
 }
-var lastStep=-1;
-function go(n){S.step=n;render();if(lastStep!==n){lastStep=n;setView(n===1);window.scrollTo(0,0)}}
+var lastStep=0;
+function setHash(){try{var h="#"+HASH[S.step];if(location.hash!==h)history.pushState(null,"",location.pathname+location.search+h)}catch(e){}}
+function go(n,quiet){
+  S.call=false;S.step=n;S.max=Math.max(S.max,n);render();
+  if(lastStep!==n){lastStep=n;setView(n===1?"above":n===3?"layers":"house");window.scrollTo(0,0);
+    if(!quiet){setHash();var hd=$("panel").querySelector("h1,h2");if(hd&&n>0){hd.tabIndex=-1;try{hd.focus({preventScroll:true})}catch(e){}}}}
+}
+window.addEventListener("popstate",function(){if(S.signed||S.booked)return;var i=HASH.indexOf(location.hash.slice(1));if(i<0)i=0;if(i<=S.max&&(i===0||quote())&&(i!==S.step||S.call))go(i,true)});
 $("go").addEventListener("click",function(){
-  if(S.step===5){if(!validateSign())return;S.order="PX-"+String(Date.now()).slice(-6);S.signed=true;render();setView(false);window.scrollTo(0,0);return}
+  var e,bad;
+  if(S.call){e=$("err");bad=!S.callDay?"Pick a day for your call.":!S.callTime?"Pick a time for your call.":contactError();e.textContent=bad;if(bad)return;S.booked=true;render();setView("house");window.scrollTo(0,0);return}
+  if(S.step===5){e=$("err");bad=contactError()||(S.sig.trim().length<3?"Type your name in the signature box.":!S.agree?"Tick the box to confirm you have read the proposal.":"");e.textContent=bad;if(bad)return;S.order="PX-"+String(Date.now()).slice(-6);S.signed=true;render();setView("house");window.scrollTo(0,0);return}
   if(S.step===0&&!quote())return;
   go(S.step+1)});
-$("back").addEventListener("click",function(){if(S.step>0)go(S.step-1)});
+$("back").addEventListener("click",function(){if(S.call){S.call=false;render();window.scrollTo(0,0);return}if(S.step>0)go(S.step-1)});
+try{pendingRestore=fromQuery()||JSON.parse(localStorage.getItem(LS)||"null")}catch(e){pendingRestore=fromQuery()}
 render();
-fetch("homes.json").then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){H=d}).catch(function(){H=[];var m=$("manual");if(m)m.classList.add("open")});
+fetch("homes.json").then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){H=d;
+  if(pendingRestore&&applySnapshot(pendingRestore)){var n=S.step;lastStep=-1;go(n,true);if(n>0)toast("Welcome back. We saved your roof.")}
+  else if(stepAddress.refresh&&S.step===0&&$("addr")&&$("addr").value)stepAddress.refresh();
+}).catch(function(){H=[];if(pendingRestore&&pendingRestore.sqft&&applySnapshot(pendingRestore)){lastStep=-1;go(S.step,true)}var m=$("manual");if(m)m.classList.add("open")});
 })();
 </script>
 </body>
