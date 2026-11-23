@@ -284,7 +284,7 @@ var SAVE_KEYS=["step","stories","pitch","shape","layers","line","color","trim","
 var LS="panda-roof-builder-v2";
 
 var H=null, S={step:0,max:0,home:null,manual:null,stories:2,pitch:"medium",shape:"average",layers:1,line:"hdz",color:0,trim:0,underlay:"std",barrier:"std",vent:"ridge",gutters:"none",skylights:0,chimneys:0,warranty:"silver",pay:"finance",term:120,name:"",email:"",phone:"",sig:"",agree:false,week:"",sigMode:"draw",sigData:"",sigInk:0,signed:false,order:"",call:false,callDay:"",callTime:"",booked:false};
-var prevRoof=null, pendingRestore=null, HT=null, lastTotal=null, deltaT, gid=0;
+var prevRoof=null, pendingRestore=null, HT=null, lastTotal=null, deltaT, gid=0, pdfT, pdfCache=null, pdfLib=null, logoData=null;
 var $=function(id){return document.getElementById(id)};
 function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
 function svg(tag,at){var e=document.createElementNS("http://www.w3.org/2000/svg",tag);for(var k in at)e.setAttribute(k,at[k]);return e}
@@ -647,12 +647,77 @@ function stepProposal(p){
   var b1=el("button","btn outline","Book a video walkthrough instead");b1.type="button";b1.id="to-call";b1.addEventListener("click",function(){S.call=true;render();window.scrollTo(0,0)});acts.appendChild(b1);
   var b2=el("button","btn light","Copy a link to this roof");b2.type="button";b2.id="share";b2.addEventListener("click",function(){copy(shareLink(),"Link copied")});acts.appendChild(b2);
   var b3=el("button","btn light","Copy as text");b3.type="button";b3.addEventListener("click",function(){copy(proposalText(q),"Proposal copied")});acts.appendChild(b3);
-  var b4=el("button","btn light","Print or save as PDF");b4.type="button";b4.addEventListener("click",function(){try{window.print()}catch(e){toast("Printing isn't available here")}});acts.appendChild(b4);
+  var b5=el("button","btn light","Save as PDF");b5.type="button";b5.id="pdf";b5.addEventListener("click",savePdf);acts.appendChild(b5);
+  var b4=el("button","btn light","Print");b4.type="button";b4.id="print";b4.addEventListener("click",function(){try{window.print()}catch(e){toast("Printing isn't available here")}});acts.appendChild(b4);
+  clearTimeout(pdfT);pdfT=setTimeout(function(){buildPdf().catch(function(){})},400); // get the PDF ready before it is asked for, so a phone can open its share sheet straight from the tap
   p.appendChild(acts);
   var s=sect(p,"What could change this price","Two things, and both need your approval first.");
   var ul=document.createElement("ul");ul.style.cssText="margin:0;padding-left:20px;max-width:62ch";
   ["Rotten wood under the old shingles. Nobody can see it until the old roof is off. The first "+P.deckingIncludedSheets+" sheets of new decking are included. More than that is "+money(P.deckingPerSheet)+" a sheet, and we send photos before replacing any.","The confirmed measurement. If the measurement report differs from this estimate, the price moves at the same rate per square, up or down."].forEach(function(x){ul.appendChild(el("li",null,x))});s.appendChild(ul);
   p.appendChild(el("p","note","These are sample prices for this demo, not Panda's price list."));
+}
+/* ---------- the proposal as a real PDF file ----------
+   Phones often ignore a page's print command, so the page builds the PDF itself.
+   On a phone it opens the share sheet (Save to Files, Messages, Mail); on a computer it downloads. */
+function pdfKey(){return JSON.stringify(snapshot())}
+function pdfName(){return "Panda-roof-proposal"+(S.home?"-"+S.home[0].replace(/[^A-Za-z0-9]+/g,"-"):"")+".pdf"}
+function loadPdfLib(){
+  if(window.jspdf)return Promise.resolve();
+  if(!pdfLib)pdfLib=new Promise(function(res,rej){var sc=document.createElement("script");sc.src="jspdf.umd.min.js";sc.onload=function(){res()};sc.onerror=function(){pdfLib=null;rej(new Error("library"))};document.head.appendChild(sc)});
+  return pdfLib;
+}
+function imgData(src){return new Promise(function(res){var im=new Image();im.onload=function(){try{var c=document.createElement("canvas");c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext("2d").drawImage(im,0,0);res(c.toDataURL("image/png"))}catch(e){res(null)}};im.onerror=function(){res(null)};im.src=src})}
+function housePng(){ // the configured house, drawn to a picture for the PDF
+  return new Promise(function(res){try{
+    var t=houseThumb();t.setAttribute("xmlns","http://www.w3.org/2000/svg");t.setAttribute("width",960);t.setAttribute("height",600);
+    var im=new Image();im.onload=function(){try{var c=document.createElement("canvas");c.width=960;c.height=600;var x=c.getContext("2d"),g=x.createLinearGradient(0,0,0,600);g.addColorStop(0,"#cfe3f1");g.addColorStop(.72,"#f2f6f8");g.addColorStop(.72,"#d5dfcd");g.addColorStop(1,"#cfd9c8");x.fillStyle=g;x.fillRect(0,0,960,600);x.drawImage(im,0,0,960,600);res(c.toDataURL("image/jpeg",.9))}catch(e){res(null)}};
+    im.onerror=function(){res(null)};im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(new XMLSerializer().serializeToString(t));
+  }catch(e){res(null)}});
+}
+function buildPdf(){
+  var key=pdfKey();if(pdfCache&&pdfCache.key===key)return Promise.resolve(pdfCache.blob);
+  var q=quote(),P=PRICING;if(!q)return Promise.reject(new Error("no roof"));
+  return loadPdfLib().then(function(){return Promise.all([housePng(),logoData?logoData:imgData("panda-logo.png")])}).then(function(r){
+    logoData=r[1];
+    var doc=new window.jspdf.jsPDF({unit:"pt",format:"letter"}),L=48,R=564,y=44,ink=[23,25,27],mut=[91,99,105];
+    var txt=function(t,x,yy,o){o=o||{};doc.setFont("helvetica",o.bold?"bold":"normal");doc.setFontSize(o.size||10.5);doc.setTextColor.apply(doc,o.muted?mut:ink);doc.text(t,x,yy,o.right?{align:"right"}:undefined)};
+    var room=function(h){if(y+h>744){doc.addPage();y=56}};
+    if(r[1])doc.addImage(r[1],"PNG",L,y-8,38,41.6);
+    txt("Panda Exteriors",L+48,y+10,{bold:true,size:16});txt("Roof proposal",L+48,y+26,{muted:true,size:11});
+    txt(CONFIG.phone,R,y+10,{right:true,bold:true});txt(new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}),R,y+26,{right:true,muted:true});
+    y+=62;txt(where(),L,y,{bold:true,size:14});y+=16;
+    txt(q.m.squares.toFixed(1)+" squares, "+PITCH[S.pitch].name.toLowerCase()+" pitch, "+(S.stories>=2?"two stories":"one story"),L,y,{muted:true});y+=16;
+    var top=y,specs=[["Shingle",P.lines[S.line].name],["Color",COLORS[S.color][0]],["Underlayment",P.underlay[S.underlay].name],["Leak barrier",S.barrier==="full"?"Whole roof deck":"Eaves, valleys and pipes"],["Ventilation",P.vent[S.vent].name],["Gutters",P.gutters[S.gutters].name],["Warranty",P.warranty[S.warranty].name]];
+    doc.setFillColor(233,236,238);doc.roundedRect(L,top,R-L,140,8,8,"F");
+    if(r[0])doc.addImage(r[0],"JPEG",L+10,top+10,192,120);
+    specs.forEach(function(x,i){txt(x[0],L+218,top+24+i*16.5,{muted:true,size:10});txt(x[1],L+300,top+24+i*16.5,{bold:true,size:10})});
+    y=top+164;
+    var rowsP=q.rows.map(function(x){return [x.label,x.detail,money(x.amount)]}),w=P.warranty[S.warranty];if(!w.perSq)rowsP.push([w.name+" warranty",w.desc,"Included"]);
+    rowsP.forEach(function(x){doc.setFont("helvetica","normal");doc.setFontSize(9);var lines=doc.splitTextToSize(x[1],400);room(22+lines.length*11.5);
+      txt(x[0],L,y,{bold:true});txt(x[2],R,y,{right:true,bold:true});y+=13;lines.forEach(function(ln){txt(ln,L,y,{muted:true,size:9});y+=11.5});
+      y+=3;doc.setDrawColor(211,216,220);doc.setLineWidth(.7);doc.line(L,y,R,y);y+=15});
+    room(64);y+=6;txt("Your price",L,y,{bold:true,size:17});txt(money(q.total),R,y,{right:true,bold:true,size:17});y+=20;
+    var hold=new Date();hold.setDate(hold.getDate()+CONFIG.priceHoldDays);
+    txt("Or about "+money(q.monthly)+" a month over "+(S.term/12)+" years on a sample loan at "+P.finance.apr+"% APR through Service Finance.",L,y,{muted:true,size:10});y+=13;
+    txt("This price is held until "+hold.toLocaleDateString("en-US",{month:"long",day:"numeric"})+".",L,y,{muted:true,size:10});y+=26;
+    room(120);txt("What could change this price",L,y,{bold:true,size:12});y+=15;
+    ["Rotten wood under the old shingles. Nobody can see it until the old roof is off. The first "+P.deckingIncludedSheets+" sheets of new decking are included. More than that is "+money(P.deckingPerSheet)+" a sheet, and we send photos before replacing any.","The confirmed measurement. If the measurement report differs from this estimate, the price moves at the same rate per square, up or down."].forEach(function(t,i){doc.setFont("helvetica","normal");doc.setFontSize(10);doc.splitTextToSize((i+1)+". "+t,R-L).forEach(function(ln){txt(ln,L,y,{size:10});y+=13});y+=4});
+    y+=8;room(30);txt("Demo with sample prices. This is not Panda's price list and nothing has been signed or charged.",L,y,{muted:true,size:9});
+    var blob=doc.output("blob");pdfCache={key:key,blob:blob};return blob;
+  });
+}
+function givePdf(blob){
+  var name=pdfName(),file=null;try{file=new File([blob],name,{type:"application/pdf"})}catch(e){}
+  var touch=false;try{touch=window.matchMedia("(pointer:coarse)").matches}catch(e){}
+  var dl=function(){try{var u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},60000);toast("Proposal saved as a PDF")}catch(e){toast("This browser blocked the download. Try Print instead.")}};
+  if(touch&&file&&navigator.canShare&&navigator.canShare({files:[file]})){
+    navigator.share({files:[file],title:"Panda roof proposal"}).catch(function(err){if(err&&err.name==="AbortError")return;if(err&&err.name==="NotAllowedError"){toast("Your PDF is ready. Tap Save as PDF again.");return}dl()});
+  }else dl();
+}
+function savePdf(){
+  if(pdfCache&&pdfCache.key===pdfKey()){givePdf(pdfCache.blob);return}
+  toast("Getting your PDF ready\u2026");
+  buildPdf().then(givePdf,function(){toast("Couldn't build the PDF here. Try Print instead.")});
 }
 function stepSign(p){
   var q=quote(),P=PRICING;
