@@ -526,15 +526,18 @@ function contactError(){
 }
 var SUF={ROAD:"RD",STREET:"ST",DRIVE:"DR",COURT:"CT",LANE:"LN",AVENUE:"AVE",PLACE:"PL",TERRACE:"TER",CIRCLE:"CIR",BOULEVARD:"BLVD",PARKWAY:"PKWY",TRAIL:"TRL",CROSSING:"XING",NORTH:"N",SOUTH:"S",EAST:"E",WEST:"W"};
 function toks(t){return t.toUpperCase().replace(/[.,#']/g,"").split(/\s+/).filter(Boolean).map(function(x){return SUF[x]||x})}
-function hit(qt,at){ // every typed word must match the address in order; the last word may be unfinished
-  var st=/^\d/.test(qt[0])?0:1,j,a,q;
-  for(j=0;j<qt.length;j++){a=at[st+j];q=qt[j];if(!a)return false;
+function hit(qt,at,zip){ // every typed word must match the address in order; the last word may be unfinished
+  var st=/^\d/.test(qt[0])?0:1,j,a,q,last;
+  for(j=0;j<qt.length;j++){a=at[st+j];q=qt[j];last=j===qt.length-1;
+    if(!a){ // past the street: any town or state name is fine (people write "North Laurel" too), but a ZIP code has to be this home's
+      if(!/^\d/.test(q)||q.indexOf(zip)===0||(last&&zip.indexOf(q)===0))continue;
+      return false}
     if(j<qt.length-1){if(a!==q)return false}
     else if(a.indexOf(q)!==0&&!Object.keys(SUF).some(function(w){return w.indexOf(q)===0&&SUF[w]===a}))return false}
   return true;
 }
 function findHomes(text,max){var qt=toks(text),out=[],i;if(!qt.length||!H)return out;if(!HT)HT=H.map(function(h){return toks(h[0])});
-  for(i=0;i<H.length&&out.length<max;i++)if(hit(qt,HT[i]))out.push(H[i]);return out}
+  for(i=0;i<H.length&&out.length<max;i++)if(hit(qt,HT[i],H[i][1]))out.push(H[i]);return out}
 function upcoming(kind){ // install weeks start two weeks out; call days are the next five weekdays
   var out=[],d=new Date(),fmt=function(x,o){return x.toLocaleDateString("en-US",o)};d.setHours(12,0,0,0);
   if(kind==="weeks"){d.setDate(d.getDate()+14);while(d.getDay()!==1)d.setDate(d.getDate()+1);for(var i=0;i<6;i++){out.push("Week of "+fmt(d,{month:"long",day:"numeric"}));d.setDate(d.getDate()+7)}}
