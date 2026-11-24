@@ -244,6 +244,61 @@ header.top .help a{display:block;color:#fff;font-size:16px;font-weight:700;text-
   .roofcard{grid-template-columns:1fr;gap:10px}
   .roofcard svg{max-width:250px}
 }
+/* ---------- the Photos look: same builder, real-looking pictures in place of the drawings ---------- */
+.look{display:inline-flex;background:#34393d;border-radius:999px;padding:3px;gap:2px;flex:none}
+.look button{border:0;background:none;color:#d5d9dc;font-size:13px;font-weight:700;padding:5px 13px;border-radius:999px;white-space:nowrap}
+.look button[aria-pressed="true"]{background:#fff;color:var(--ink)}
+.ph,.cut{display:none}
+body[data-look="photo"] .pane.house>svg,body[data-look="photo"] .pane.layers>svg{display:none}
+body[data-look="photo"] .stage[data-view="house"]{background:#20262a}
+body[data-look="photo"] .stage[data-view="house"] .pane.house{position:absolute;inset:0;padding:0;z-index:0}
+body[data-look="photo"] .ph{display:block;position:absolute;inset:0}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:46% 47%;opacity:0;transition:opacity .5s}
+.ph img.on{opacity:1}
+.ph .phcap{position:absolute;left:10px;right:10px;bottom:10px;width:fit-content;max-width:calc(100% - 20px);background:rgba(23,25,27,.8);color:#fff;font-size:12.5px;line-height:1.35;border-radius:8px;padding:6px 10px}
+body[data-look="photo"] .stage[data-view="layers"]{background:#bab6b8}
+body[data-look="photo"] .stage[data-view="layers"] .pane.layers{padding:0;align-items:stretch}
+body[data-look="photo"] .cut{display:flex;flex-direction:column;width:100%;min-height:0}
+.cut .frame{position:relative;flex:1;min-height:0;container-type:size;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cut .shot{position:relative;width:min(100cqw,150cqh);height:min(66.667cqw,100cqh);-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent),linear-gradient(180deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent),linear-gradient(180deg,transparent,#000 5%,#000 95%,transparent);-webkit-mask-composite:source-in;mask-composite:intersect}
+.cut .shot img{position:absolute;inset:0;width:100%;height:100%;clip-path:polygon(128% 0,150% 0,150% 100%,102% 100%);transition:clip-path .95s cubic-bezier(.45,0,.2,1)}
+.cut .shot img.on{clip-path:polygon(-2% 0,150% 0,150% 100%,-28% 100%)}
+.cut .dot{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:var(--orange,#fc8104);color:#17191b;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35);opacity:0;transform:scale(.4);transition:opacity .3s .55s,transform .3s .55s}
+.cut .dot.on{opacity:1;transform:none}
+.cut .tray{background:rgba(255,255,255,.94);padding:9px 12px 10px;flex:none}
+.cut .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.cut .chips::-webkit-scrollbar{display:none}
+.cut .chips button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px 5px 6px;font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.cut .chips button i{font-style:normal;width:22px;height:22px;border-radius:50%;background:#e9ecee;display:flex;align-items:center;justify-content:center;font-size:13px}
+.cut .chips button[aria-pressed="true"]{border-color:var(--ink);background:var(--asphalt);color:#fff}
+.cut .chips button[aria-pressed="true"] i{background:#fc8104;color:#17191b}
+.cut .chips button.replay{padding:5px 12px;margin-left:auto;border-style:dashed}
+.cut .chips button.replay span{display:none}
+.cut .line{margin:7px 2px 0;font-size:14px;line-height:1.4;min-height:2.8em}
+.cut .line b{font-stretch:110%;font-size:inherit}
+.sw img{display:block;width:100%;height:58px;object-fit:cover;border-radius:7px;margin-bottom:6px}
+.opts.pics{align-items:start}
+.opt img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;margin-bottom:9px;background:#e9ecee}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 14px;max-width:440px}
+.shots figure{margin:0}
+.shots img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;background:#e9ecee}
+.shots figcaption{font-size:13px;color:var(--mute,#5b6369);margin-top:5px}
+@media (max-width:900px){
+  body[data-look="photo"] .stage[data-view="layers"]{height:50vh;min-height:330px}
+  body[data-look="photo"][data-step="2"] .stage[data-view="layers"],body[data-look="photo"][data-step="6"] .stage[data-view="layers"]{height:50vh;min-height:330px}
+  .look button{padding:5px 10px;font-size:12.5px}
+  .ph .phcap{font-size:11.5px;padding:5px 8px;left:8px;bottom:8px}
+  .cut .dot{width:26px;height:26px;margin:-13px 0 0 -13px;font-size:14px}
+  .cut .line{font-size:13.5px}
+  .cut .tray{padding:8px 10px 9px}
+  .cut .chips{gap:5px}
+  .cut .chips button{flex:1 1 auto;flex-direction:column;gap:3px;padding:6px 5px;border-radius:12px;font-size:12px;min-width:0}
+  .cut .chips button.replay{flex:0 0 44px;margin-left:0;justify-content:center;font-size:0}
+  .cut .chips button.replay span{display:block;font-size:19px;line-height:1}
+}
+@media (max-width:540px){header.top .name{display:none}}
+@media (max-width:380px){.bar .price b{font-size:18px}.bar .btn{padding:0 12px;font-size:15px}}
+@media print{.look{display:none!important}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media print{
   header.top .demo,.stagewrap,.bar,.steps,.cta,.sub,.form,.terms button:not([aria-pressed="true"]),.toast{display:none!important}
@@ -259,6 +314,7 @@ header.top .help a{display:block;color:#fff;font-size:16px;font-weight:700;text-
     <img src="panda-logo.png" alt="Panda Exteriors" width="274" height="300">
     <span class="name">Roof Builder</span>
     <span class="demo">Demo</span>
+    <div class="look" role="group" aria-label="Picture style"><button type="button" data-look="draw" aria-pressed="true">Illustration</button><button type="button" data-look="photo" aria-pressed="false">Photos</button></div>
     <div class="help"><span>Talk to us</span><a id="phone"></a></div>
   </header>
   <main>
@@ -269,9 +325,9 @@ header.top .help a{display:block;color:#fff;font-size:16px;font-weight:700;text-
         <button type="button" data-v="above" aria-pressed="false">From above</button>
         <button type="button" data-v="layers" aria-pressed="false">What's inside</button>
       </div>
-      <div class="pane house"><svg id="house" viewBox="0 0 800 560" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Illustration of a house wearing the roof you have chosen"></svg></div>
+      <div class="pane house"><svg id="house" viewBox="0 0 800 560" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Illustration of a house wearing the roof you have chosen"></svg><div class="ph" id="ph"><img id="ph-a" alt=""><img id="ph-b" alt=""><div class="phcap" id="phcap"></div></div></div>
       <div class="pane above"><div class="lot" id="lot"></div></div>
-      <div class="pane layers"><svg id="layers" viewBox="0 0 800 570" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cutaway showing each layer of your new roof"></svg></div>
+      <div class="pane layers"><svg id="layers" viewBox="0 0 800 570" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cutaway showing each layer of your new roof"></svg><div class="cut" id="cut"><div class="frame"><div class="shot" id="shot"></div></div><div class="tray"><div class="chips" id="chips" role="group" aria-label="Build the roof one layer at a time"></div><p class="line" id="cutline" aria-live="polite"></p></div></div></div>
       <div class="tag" id="tag"></div>
     </section>
     </div>
@@ -327,7 +383,8 @@ var PRICING={
 var PITCH={low:{name:"Low",desc:"Easy to walk on",mult:1.054,rise:.55},medium:{name:"Medium",desc:"Most homes here",mult:1.118,rise:.8},steep:{name:"Steep",desc:"Hard to stand on",mult:1.25,rise:1.1},vsteep:{name:"Very steep",desc:"Can't be walked",mult:1.414,rise:1.4}};
 var SHAPE={simple:{name:"Simple",desc:"Two main sides",waste:.10},average:{name:"Average",desc:"A few valleys or a garage wing",waste:.13},cutup:{name:"Cut up",desc:"Many peaks, valleys or dormers",waste:.17}};
 /* Screen colours are approximations made for this tool. They are not the manufacturer's photos. */
-var COLORS=[["Charcoal","#3d3f42"],["Pewter Gray","#7d8082"],["Weathered Wood","#6f675c"],["Barkwood","#5e5045"],["Hickory","#7b5b3d"],["Shakewood","#9b805d"],["Mission Brown","#4b3b31"],["Hunter Green","#3f4c3d"],["Williamsburg Slate","#515c65"]];
+/* drawn colours are taken from GAF's own swatch photos (measured Nov 2026), lightened a touch so the drawing reads in daylight */
+var COLORS=[["Charcoal","#3a3a39"],["Pewter Gray","#6c7379"],["Weathered Wood","#766d60"],["Barkwood","#6d5a46"],["Hickory","#654433"],["Shakewood","#a37d58"],["Mission Brown","#796f63"],["Hunter Green","#314b3d"],["Williamsburg Slate","#6a6e67"]];
 var TRIM=[["White","#f4f4f2"],["Brown","#4a3a2e"],["Black","#1d1d1d"]];
 var OVERHANG=1.06;
 var IMG="https://mdgeodata.md.gov/imagery/rest/services/SixInch/SixInchImagery2023_2024_2025/MapServer/export";
@@ -403,7 +460,7 @@ function applySnapshot(o){
   if(!measure()){S.step=0;S.max=0;return false}
   S.step=Math.max(0,Math.min(LAST,Math.round(S.step)||0));S.max=Math.min(LAST,Math.max(+o.max||0,S.step));return true;
 }
-function shareLink(){var o=snapshot();o.step=LAST;o.max=LAST;var q=Object.keys(o).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(o[k])}).join("&");return location.origin+location.pathname+"?"+q}
+function shareLink(){var o=snapshot();o.step=LAST;o.max=LAST;var q=Object.keys(o).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(o[k])}).join("&");return location.origin+location.pathname+"?"+q+(LOOK==="photo"?"&look=photo":"")}
 function fromQuery(){
   if(!location.search||location.search.length<2)return null;var o={};
   location.search.slice(1).split("&").forEach(function(p){var kv=p.split("=");if(kv.length!==2)return;var k,v;try{k=decodeURIComponent(kv[0]);v=decodeURIComponent(kv[1])}catch(e){return}o[k]=(typeof S[k]==="number"||k==="max"||k==="sqft")?+v:v});
@@ -510,8 +567,8 @@ function drawLayers(){
   var W=560,Hh=300,add=function(tag,at){var e=svg(tag,at);g.appendChild(e);return e};
   add("rect",{x:8,y:10,width:W,height:Hh,fill:"#000",opacity:.12});
   add("rect",{x:0,y:0,width:W,height:Hh,fill:"url(#wood)"});                                   // wood deck
-  add("rect",{x:0,y:Hh-64,width:455,height:64,fill:prem?"#3b4d63":"#2f3337"});                // leak barrier
-  add("rect",{x:0,y:0,width:330,height:Hh,fill:prem?"#b9c7d6":"#8c949b"});                    // underlayment
+  add("rect",{x:0,y:Hh-64,width:455,height:64,fill:prem?"#7fcfc9":"#2a2c2e"});                // leak barrier
+  add("rect",{x:0,y:0,width:330,height:Hh,fill:prem?"#a9d4e6":"#c4c8cc"});                    // underlayment
   for(var y=50;y<Hh;y+=50)add("line",{x1:0,x2:330,y1:y,y2:y,stroke:"#00000022","stroke-width":2});
   add("rect",{x:0,y:Hh-26,width:215,height:26,fill:tone(base,-.35)});                         // starter strip
   add("rect",{x:0,y:0,width:205,height:Hh,fill:"url(#sh3)"});                                 // shingles
@@ -546,13 +603,79 @@ function drawAbove(){
   var zf=sizing();
   lot.appendChild(el("div","cap",h?(h[9]&&h[9].length>=6?(zf.flag&&zf.use!=="outline")?"The orange line is the building outline on record. It looks larger than this home's roof, so the price uses a smaller estimate.":"The orange line is your home's footprint from state building records. Aerial photos are taken at a slight angle, so the roof can sit a few feet off the line.":"We don't have an outline for this home, so the size is estimated from its square footage."):"Size estimated from the square footage you entered."));
 }
-function setView(v){$("stage").setAttribute("data-view",v);[].forEach.call(document.querySelectorAll(".views button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-v")===v?"true":"false")})}
+/* ---------- the Photos look ----------
+   Pictures live in /photo. They were made with AI and checked against GAF's swatch photos; they show a sample home, never the customer's own. */
+var LOOK="draw",LOOK_KEY="panda-roof-look",PHOTO="photo/";
+function slug(n){return COLORS[n][0].toLowerCase().replace(/ /g,"-")}
+function small(){return window.innerWidth<=900}
+function pic(name){return PHOTO+name+(small()?"-s":"")+".webp"}
+function tier(){return PRICING.packages[S.pkg].premium?"prem":"std"}
+var phTop=0,phShown="",warmed=false;
+function warmPhotos(){ // fetch the other roof colours quietly so a tap on a swatch changes the house straight away
+  if(warmed)return;warmed=true;var n=0,next=function(){if(n>=COLORS.length)return;var im=new Image();im.onload=im.onerror=function(){setTimeout(next,120)};im.src=pic("house-"+slug(n++))};
+  setTimeout(next,1200);
+}
+function drawPhotoHouse(){
+  var src=pic("house-"+slug(S.color)),cap=$("phcap");
+  cap.textContent="Sample home in "+COLORS[S.color][0]+". AI picture, matched to the real shingle color.";
+  if(src===phShown)return;phShown=src;
+  var imgs=[$("ph-a"),$("ph-b")],nx=imgs[1-phTop],cur=imgs[phTop],pre=new Image();
+  pre.onload=function(){if(phShown!==src)return;nx.src=src;nx.alt="Sample two story home with a "+COLORS[S.color][0]+" shingle roof";nx.classList.add("on");cur.classList.remove("on");cur.alt="";phTop=1-phTop;warmPhotos()};
+  pre.src=src;
+}
+var CUT={stage:4,timers:[],key:""};
+var CUT_DOTS=[[82.3,54.8],[69,57.5],[58.2,45.2],[27.3,45.2]];
+function cutSteps(){var prem=PRICING.packages[S.pkg].premium;return [
+  ["Deck","Wood deck.","Every sheet is checked once the old roof is off, then new drip edge goes on along the edges."],
+  ["Leak barrier",prem?"Premium leak barrier.":"Leak barrier.","A stick-on membrane at the eaves, in valleys and around pipes, where leaks usually start."],
+  ["Underlayment",prem?"Premium underlayment.":"Synthetic underlayment.",(prem?"A breathable sheet":"A water-shedding sheet")+" over the whole deck, under every shingle."],
+  ["Shingles",PRICING.lines[S.line].name.replace("GAF ","")+" in "+COLORS[S.color][0]+".","Starter strip first, then the shingles, then a ridge vent and ridge caps at the peak."]]}
+function cutSrc(k){var t=tier();return k===1?pic("build-1"):k===4?pic("cut-"+t+"-"+slug(S.color)):pic("build-"+k+"-"+t)}
+function cutStage(k,keep){
+  if(!keep){CUT.timers.forEach(clearTimeout);CUT.timers=[]}
+  CUT.stage=k;var st=cutSteps();
+  [].forEach.call($("shot").querySelectorAll("img"),function(im,i){im.classList.toggle("on",i+1<=k)});
+  [].forEach.call($("shot").querySelectorAll(".dot"),function(d,i){d.classList.toggle("on",i+1<=k)});
+  [].forEach.call($("chips").querySelectorAll("button[data-k]"),function(b){b.setAttribute("aria-pressed",+b.getAttribute("data-k")===k?"true":"false")});
+  var ln=$("cutline");ln.textContent="";ln.appendChild(el("b",null,st[k-1][1]+" "));ln.appendChild(document.createTextNode(st[k-1][2]));
+}
+function cutPlay(){
+  CUT.timers.forEach(clearTimeout);CUT.timers=[];
+  if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches){cutStage(4);return}
+  cutStage(1,true);[2,3,4].forEach(function(k,i){CUT.timers.push(setTimeout(function(){cutStage(k,true)},900+i*1500))});
+}
+function drawPhotoCut(){
+  var shot=$("shot"),chips=$("chips"),st=cutSteps(),key=tier()+"|"+S.color+"|"+(small()?"s":"l");
+  if(!shot.firstChild){
+    for(var k=1;k<=4;k++){var im=el("img");im.alt=k===4?"Photo of a roof section with each layer of the new roof showing":"";im.decoding="async";shot.appendChild(im)}
+    CUT_DOTS.forEach(function(d,i){var dot=el("span","dot",String(i+1));dot.style.left=d[0]+"%";dot.style.top=d[1]+"%";dot.setAttribute("aria-hidden","true");shot.appendChild(dot)});
+  }
+  if(key!==CUT.key){CUT.key=key;
+    [].forEach.call(shot.querySelectorAll("img"),function(im,i){var src=cutSrc(i+1);if(im.getAttribute("data-src")===src)return;im.setAttribute("data-src",src);
+      if(!im.getAttribute("src")){im.src=src;return}
+      var pre=new Image();pre.onload=function(){if(im.getAttribute("data-src")===src)im.src=src};pre.src=src})}
+  chips.textContent="";
+  st.forEach(function(x,i){var b=el("button");b.type="button";b.setAttribute("data-k",i+1);b.setAttribute("data-fk","cut:"+(i+1));b.appendChild(el("i",null,String(i+1)));b.appendChild(document.createTextNode(x[0]));
+    b.addEventListener("click",function(){cutStage(i+1)});chips.appendChild(b)});
+  var rp=el("button","replay","Watch it build");rp.type="button";rp.id="replay";rp.setAttribute("aria-label","Watch it build again");var ic=el("span",null,"\u21bb");ic.setAttribute("aria-hidden","true");rp.appendChild(ic);rp.addEventListener("click",cutPlay);chips.appendChild(rp);
+  cutStage(CUT.stage,true);
+}
+function drawPhoto(){if(LOOK!=="photo")return;drawPhotoHouse();drawPhotoCut()}
+function setLook(l,quiet){
+  LOOK=l==="photo"?"photo":"draw";document.body.setAttribute("data-look",LOOK);
+  [].forEach.call(document.querySelectorAll(".look button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-look")===LOOK?"true":"false")});
+  try{localStorage.setItem(LOOK_KEY,LOOK)}catch(e){}
+  if(!quiet){render();if(LOOK==="photo"&&$("stage").getAttribute("data-view")==="layers")cutPlay()}
+}
+[].forEach.call(document.querySelectorAll(".look button"),function(b){b.addEventListener("click",function(){setLook(b.getAttribute("data-look"))})});
+function setView(v){var was=$("stage").getAttribute("data-view");$("stage").setAttribute("data-view",v);if(LOOK==="photo"&&v==="layers"&&was!=="layers")cutPlay();[].forEach.call(document.querySelectorAll(".views button"),function(b){b.setAttribute("aria-pressed",b.getAttribute("data-v")===v?"true":"false")})}
 [].forEach.call(document.querySelectorAll(".views button"),function(b){b.addEventListener("click",function(){setView(b.getAttribute("data-v"))})});
 
 /* ---------- small builders ---------- */
 function optGroup(parent,items,current,onPick,cls){
-  var box=el("div","opts"+(cls?" "+cls:"")),id=++gid;box.setAttribute("role","group");
+  var box=el("div","opts"+(cls?" "+cls:"")+(items.some(function(x){return x.img})?" pics":"")),id=++gid;box.setAttribute("role","group");
   items.forEach(function(it){var b=el("button","opt");b.type="button";b.setAttribute("data-fk","o"+id+":"+it.key);b.setAttribute("aria-pressed",it.key===current?"true":"false");
+    if(it.img){var im=el("img");im.src=it.img;im.alt="";im.loading="lazy";b.appendChild(im)}
     b.appendChild(el("b",null,it.name));if(it.desc)b.appendChild(el("span",null,it.desc));
     if(it.price!=null)b.appendChild(el("em",it.price?null:"inc",it.price?it.price:"Included"));
     b.addEventListener("click",function(){onPick(it.key)});box.appendChild(b)});
@@ -654,11 +777,13 @@ function roofEditor(p,m){ // the roof questions, kept out of the way unless the 
 }
 function customizer(p){ // optional extras; no line prices, the package ranges simply update
   var P=PRICING;
-  var t=sect(p,"Drip edge and gutter color",null);
+  var ph=LOOK==="photo",GP={new:"x-gutter",guard:"x-guard"};
+  var t=sect(p,"Drip edge and gutter color",ph?"The sample home is shown in white. Yours is installed in the color you pick.":null);
   optGroup(t,TRIM.map(function(x,n){return {key:n,name:x[0]}}),S.trim,function(k){S.trim=k;setView("house");render()});
   var g=sect(p,"Gutters","Often replaced with the roof while the crew is there.");
-  optGroup(g,Object.keys(P.gutters).map(function(k){return {key:k,name:P.gutters[k].name}}),S.gutters,function(k){S.gutters=k;setView("house");render()});
+  optGroup(g,Object.keys(P.gutters).map(function(k){return {key:k,name:P.gutters[k].name,img:ph&&GP[k]?PHOTO+GP[k]+".webp":null}}),S.gutters,function(k){S.gutters=k;setView("house");render()});
   var sk=sect(p,"Skylights and chimneys","Each one gets new flashing so it doesn't leak.");
+  if(ph){var sh=el("div","shots");[["x-skylight","New flashing around a skylight"],["x-chimney","New flashing at a chimney"]].forEach(function(a){var f=el("figure"),im=el("img");im.src=PHOTO+a[0]+".webp";im.alt=a[1];im.loading="lazy";f.appendChild(im);f.appendChild(el("figcaption",null,a[1]));sh.appendChild(f)});sk.appendChild(sh)}
   var row=el("div","row");row.style.cssText="display:flex;gap:28px;flex-wrap:wrap";
   [["skylights","Skylights",4],["chimneys","Chimneys",2]].forEach(function(a){var w=el("div"),c=el("div","count");w.appendChild(el("div",null,a[1]));
     var mi=el("button",null,"−"),pl=el("button",null,"+"),v=el("b",null,String(S[a[0]]));mi.type=pl.type="button";mi.setAttribute("aria-label","Fewer "+a[1].toLowerCase());pl.setAttribute("aria-label","More "+a[1].toLowerCase());pl.id="plus-"+a[0];pl.setAttribute("data-fk","plus:"+a[0]);mi.setAttribute("data-fk","minus:"+a[0]);
@@ -688,7 +813,8 @@ function stepPackage(p){
   var c=sect(p,"Shingle color","Same price in every color. Tap one and watch the house change.");
   var sw=el("div","swatches");sw.setAttribute("role","group");
   COLORS.forEach(function(col,n){var b=el("button","sw");b.type="button";b.setAttribute("aria-pressed",n===S.color?"true":"false");
-    var sq=svg("svg",{viewBox:"0 0 132 52",preserveAspectRatio:"xMidYMid slice","aria-hidden":"true"}),df=svg("defs",{});shinglePattern(df,"swp"+n,col[1],false);sq.appendChild(df);sq.appendChild(svg("rect",{width:132,height:52,fill:"url(#swp"+n+")"}));
+    var sq;if(LOOK==="photo"){sq=el("img");sq.src=PHOTO+"sw-"+slug(n)+".webp";sq.alt="";sq.width=276;sq.height=120}
+    else{sq=svg("svg",{viewBox:"0 0 132 52",preserveAspectRatio:"xMidYMid slice","aria-hidden":"true"});var df=svg("defs",{});shinglePattern(df,"swp"+n,col[1],false);sq.appendChild(df);sq.appendChild(svg("rect",{width:132,height:52,fill:"url(#swp"+n+")"}))}
     b.setAttribute("data-fk","sw:"+n);b.appendChild(sq);b.appendChild(document.createTextNode(col[0]));b.addEventListener("click",function(){S.color=n;setView("house");render()});sw.appendChild(b)});
   c.appendChild(sw);
   var cu=el("button","linkbtn more",S.custom?"Hide the extras":"Customize: gutters, skylights and trim color (optional)");cu.type="button";cu.id="customize";cu.setAttribute("data-fk","custom");cu.setAttribute("aria-expanded",S.custom?"true":"false");cu.addEventListener("click",function(){S.custom=!S.custom;render()});p.appendChild(cu);
@@ -886,7 +1012,7 @@ function render(){
       ol.appendChild(li)});p.appendChild(ol);
     [stepAddress,stepPackage,stepBook][S.step](p);
   }
-  drawHouse();drawAbove();drawLayers();
+  drawHouse();drawAbove();drawLayers();drawPhoto();
   var q=quote(),bar=$("bar"),goB=$("go"),back=$("back");
   bar.hidden=!q||fin;                                   // no price bar until there is an address
   if(q){$("bar-price").textContent=rangeText(q);$("bar-sub").textContent=PRICING.packages[S.pkg].name+". "+monthText(q)+"."}
@@ -906,6 +1032,7 @@ function go(n,quiet){
 window.addEventListener("popstate",function(){if(S.signed||S.booked)return;var i=HASH.indexOf(location.hash.slice(1));if(i<0)i=0;if(i<=S.max&&(i===0||quote())&&i!==S.step)go(i,true)});
 $("go").addEventListener("click",function(){if(S.step===0&&!quote())return;if(S.step<LAST)go(S.step+1)});
 $("back").addEventListener("click",function(){if(S.step>0)go(S.step-1)});
+(function(){var q=/[?&]look=(photo|draw)\b/.exec(location.search),l=q?q[1]:null;if(!l){try{l=localStorage.getItem(LOOK_KEY)}catch(e){}}setLook(l,true)})();
 try{pendingRestore=fromQuery()||JSON.parse(localStorage.getItem(LS)||"null")}catch(e){pendingRestore=fromQuery()}
 render();
 fetch("homes.json").then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){H=d;
