@@ -1,14 +1,13 @@
 # Photos look: where the pictures came from
 
-Every picture in this folder was made with AI (Higgsfield, model GPT Image 2.6; the tall house frame was
-extended with FLUX.2 Pro Outpaint) on Nov 24, 2026. None is a photo of a real home or a real job, and none
+Every picture in this folder was made with AI (Higgsfield, model GPT Image 2.6) on Nov 24, 2026. None is a photo of a real home or a real job, and none
 shows a customer's house. The page labels the house as a sample and as an AI picture.
 
 ## What each file is
 
 | File | What it shows |
 |---|---|
-| `house-<color>.webp` (and `-s` for phones) | One sample two story home, re-roofed in each of the nine Timberline HDZ colors |
+| `house-<color>.webp` (and `-s` for phones) | One sample roof, shot like a contractor's low drone photo, in each of the nine Timberline HDZ colors |
 | `cut-std-<color>.webp` | Roof display section with standard layers: plywood deck, black mineral leak barrier, light gray synthetic underlayment, starter strip, shingles, ridge vent and ridge caps |
 | `cut-prem-<color>.webp` | The same section with the premium layers: turquoise film leak barrier and pale blue breathable underlayment |
 | `build-1`, `build-2-*`, `build-3-*` | The earlier stages of the same section (bare deck, leak barrier, underlayment) for the "watch it build" steps |
@@ -21,20 +20,23 @@ shows a customer's house. The page labels the house as a sample and as an AI pic
 2. The swatch was given to the image model as the reference for that roof.
 3. The average color of each finished roof was measured and compared with the swatch.
 
-| Color | GAF swatch (average) | House roof (average, in sunlight) |
+| Color | GAF swatch (average) | House roof (average, in daylight) |
 |---|---|---|
-| Charcoal | #2c2d2f | #2e2e2d |
+| Charcoal | #2c2d2f | #323335 |
 | Pewter Gray | #4a5153 | #565c61 |
-| Weathered Wood | #655e4f | #5e574d |
-| Barkwood | #554737 | #574838 |
-| Hickory | #4a3427 | #4e3527 |
-| Shakewood | #775e41 | #826446 |
-| Mission Brown | #5f5347 | #615950 |
-| Hunter Green | #253930 | #273c31 |
-| Williamsburg Slate | #51564f | #555852 |
+| Weathered Wood | #655e4f | #6b6455 |
+| Barkwood | #554737 | #5b4e41 |
+| Hickory | #4a3427 | #523d31 |
+| Shakewood | #775e41 | #7e674f |
+| Mission Brown | #5f5347 | #655d57 |
+| Hunter Green | #253930 | #2e4037 |
+| Williamsburg Slate | #51564f | #5c5e5a |
 
-Shingle size was also corrected: the first drafts drew tabs about twice too large, so the roofs were redone
-at a 5 5/8 inch exposure (about 32 courses from gutter to ridge on the main roof).
+The first house picture was a wider, street-level view. It read as staged, so it was replaced with a closer
+drone-style view where the roof fills the frame and the color grading is left flat.
+
+Shingle size was also corrected: the first drafts drew tabs about twice too large, so the roofs are drawn
+at a 5 5/8 inch exposure (about 30 courses from gutter to ridge).
 
 ## Known limits
 

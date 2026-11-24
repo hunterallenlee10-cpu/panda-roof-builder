@@ -253,7 +253,7 @@ body[data-look="photo"] .pane.house>svg,body[data-look="photo"] .pane.layers>svg
 body[data-look="photo"] .stage[data-view="house"]{background:#20262a}
 body[data-look="photo"] .stage[data-view="house"] .pane.house{position:absolute;inset:0;padding:0;z-index:0}
 body[data-look="photo"] .ph{display:block;position:absolute;inset:0}
-.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:46% 47%;opacity:0;transition:opacity .5s}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 52%;opacity:0;transition:opacity .5s}
 .ph img.on{opacity:1}
 .ph .phcap{position:absolute;left:10px;right:10px;bottom:10px;width:fit-content;max-width:calc(100% - 20px);background:rgba(23,25,27,.8);color:#fff;font-size:12.5px;line-height:1.35;border-radius:8px;padding:6px 10px}
 body[data-look="photo"] .stage[data-view="layers"]{background:#bab6b8}
@@ -288,6 +288,7 @@ body[data-look="photo"] .cut{display:flex;flex-direction:column;width:100%;min-h
   body[data-look="photo"][data-step="2"] .stage[data-view="layers"],body[data-look="photo"][data-step="6"] .stage[data-view="layers"]{height:50vh;min-height:330px}
   .look button{padding:5px 10px;font-size:12.5px}
   .ph .phcap{font-size:11.5px;padding:5px 8px;left:8px;bottom:8px}
+  .ph img{object-position:50% 60%}
   .cut .dot{width:26px;height:26px;margin:-13px 0 0 -13px;font-size:14px}
   .cut .line{font-size:13.5px}
   .cut .tray{padding:8px 10px 9px}
@@ -617,10 +618,10 @@ function warmPhotos(){ // fetch the other roof colours quietly so a tap on a swa
 }
 function drawPhotoHouse(){
   var src=pic("house-"+slug(S.color)),cap=$("phcap");
-  cap.textContent="Sample home in "+COLORS[S.color][0]+". AI picture, matched to the real shingle color.";
+  cap.textContent="Sample roof in "+COLORS[S.color][0]+". AI picture, matched to the real shingle color.";
   if(src===phShown)return;phShown=src;
   var imgs=[$("ph-a"),$("ph-b")],nx=imgs[1-phTop],cur=imgs[phTop],pre=new Image();
-  pre.onload=function(){if(phShown!==src)return;nx.src=src;nx.alt="Sample two story home with a "+COLORS[S.color][0]+" shingle roof";nx.classList.add("on");cur.classList.remove("on");cur.alt="";phTop=1-phTop;warmPhotos()};
+  pre.onload=function(){if(phShown!==src)return;nx.src=src;nx.alt="Sample home seen from just above the roofline, with a "+COLORS[S.color][0]+" shingle roof";nx.classList.add("on");cur.classList.remove("on");cur.alt="";phTop=1-phTop;warmPhotos()};
   pre.src=src;
 }
 var CUT={stage:4,timers:[],key:""};
