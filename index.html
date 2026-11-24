@@ -258,7 +258,7 @@ header.top .help a{display:block;color:#fff;font-size:16px;font-weight:700;text-
   <header class="top">
     <img src="panda-logo.png" alt="Panda Exteriors" width="274" height="300">
     <span class="name">Roof Builder</span>
-    <span class="demo">Demo with sample prices</span>
+    <span class="demo">Demo</span>
     <div class="help"><span>Talk to us</span><a id="phone"></a></div>
   </header>
   <main>
@@ -298,27 +298,29 @@ var CONFIG={
   proof:[["GAF Presidential Master Elite","Top 0.1% nationwide"],["1,500+ five star reviews","from homeowners"],["10,000+ projects","completed"]],
   footer:"GAF Presidential Master Elite (top 0.1% nationwide) · BBB A rated · 10,000+ projects completed"
 };
-/* PRICES ARE PLACEHOLDERS until the 2026 retail sheet is loaded. The three package rates ($910, $1,080 and $1,200 a square) were worked
-   backwards from the example estimate for 7661 Kindler Rd and reproduce its ranges and monthly figures exactly. Swap the numbers here and nothing else needs to change. */
+/* PRICES. From the active "Panda Exteriors Price Book" in the Panda CRM, read on Nov 23, 2026:
+   packages per square (rows PANDA-PKG-package_standard / _gold / _presidential), 5k gutters $17 a foot,
+   5" gutter guard $13 a foot, plywood $145 a sheet.
+   STILL PLACEHOLDERS, not in that price book: steep-roof and second-layer charges, skylight and chimney flashing. */
 var PRICING={
   lines:{hdz:{name:"GAF Timberline HDZ"}},
   packages:{
-    plus:{name:"Systems Plus",tag:"Solid, warrantied protection",perSq:910,premium:false,
+    plus:{name:"Systems Plus",tag:"Solid, warrantied protection",perSq:840,premium:false,
       points:["GAF Timberline HDZ shingles","GAF System Plus warranty","5 year Panda workmanship"],
       full:["GAF Timberline HDZ shingles","GAF System Plus warranty","5 year Panda workmanship"]},
-    golden:{name:"HDZ Golden Pledge",tag:"GAF's strongest warranty",perSq:1080,premium:false,featured:true,
+    golden:{name:"HDZ Golden Pledge",tag:"GAF's strongest warranty",perSq:997.5,premium:false,featured:true,
       points:["Everything in Systems Plus","GAF Golden Pledge warranty","25 year workmanship coverage, backed by GAF"],
       full:["GAF Timberline HDZ shingles","GAF Golden Pledge warranty","25 year workmanship coverage, backed by GAF"]},
-    pres:{name:"Presidential HDZ",tag:"Our top of the line system",perSq:1200,premium:true,
+    pres:{name:"Presidential HDZ",tag:"Our top of the line system",perSq:1043.7,premium:true,
       points:["Everything in Golden Pledge","Full GAF premium component system","Premium underlayment and leak barrier"],
       full:["GAF Timberline HDZ shingles","GAF Golden Pledge warranty","25 year workmanship coverage, backed by GAF","Full GAF premium component system","Premium underlayment and leak barrier"]}
   },
   everyPackage:["Tear off of one layer of old shingles","New drip edge, ridge cap and pipe boots","Ridge vent ventilation","First 2 sheets of new decking","Permit, cleanup and haul away","Install by a GAF Presidential Master Elite crew"],
   steepPerSq:{low:0,medium:0,steep:45,vsteep:90},
   extraLayerPerSq:45,
-  gutters:{none:{name:"Keep my gutters",perFt:0},new:{name:"New seamless gutters",perFt:11},guard:{name:"New gutters with leaf guards",perFt:20}},
+  gutters:{none:{name:"Keep my gutters",perFt:0},new:{name:"New seamless gutters",perFt:17},guard:{name:"New gutters with leaf guards",perFt:30}},
   skylightEach:350, chimneyEach:450,
-  deckingIncludedSheets:2, deckingPerSheet:155,
+  deckingIncludedSheets:2, deckingPerSheet:145,
   range:{measured:.05,estimated:.08},        // how far either side of the estimate the range runs until the measurement is confirmed
   finance:{apr:9.99,months:180}              // sample terms only
 };
@@ -776,7 +778,7 @@ function stepBook(p){
   p.appendChild(sub);
   clearTimeout(pdfT);pdfT=setTimeout(function(){buildPdf().catch(function(){})},400); // ready before it is asked for, so a phone can open its share sheet straight from the tap
   if(S.book==="reserve")reserveForm(p);else if(S.book==="call")callForm(p);
-  else p.appendChild(el("p","note","These are placeholder prices for this demo, not Panda's price list."));
+  else p.appendChild(el("p","note","Demo. Package prices come from Panda's retail price book. Nothing here is a binding quote."));
 }
 
 /* ---------- the estimate as a real PDF file, laid out like Panda's three package estimate ---------- */
@@ -834,7 +836,7 @@ function buildPdf(){
       var first=wrap(pr[1],W-bw,9),rest=first.length>1?wrap(pr[1].slice(first[0].length).trim(),W,9):[];txt(first[0],L+bw,y,{size:9});y+=12.5;rest.forEach(function(ln){txt(ln,L,y,{size:9});y+=12.5});y+=5});
     y+=6;doc.setDrawColor(216,214,206);doc.setLineWidth(.6);doc.line(L,y,R,y);y+=15;
     txt(CONFIG.footer.replace(/·/g,"|"),L,y,{bold:true,size:8.5});y+=12;
-    wrap("Prices held until "+holdDate()+". Monthly amounts are a sample "+(P.finance.months/12)+" year loan at "+P.finance.apr+"% APR through Service Finance, subject to credit approval. Demo with placeholder prices: nothing has been signed or charged.",W,7.5).forEach(function(ln){txt(ln,L,y,{size:7.5,muted:true});y+=10});
+    wrap("Prices held until "+holdDate()+". Monthly amounts are a sample "+(P.finance.months/12)+" year loan at "+P.finance.apr+"% APR through Service Finance, subject to credit approval. Demo: nothing has been signed or charged.",W,7.5).forEach(function(ln){txt(ln,L,y,{size:7.5,muted:true});y+=10});
     var blob=doc.output("blob");pdfCache={key:key,blob:blob,bottom:y};return blob;
   });
 }
