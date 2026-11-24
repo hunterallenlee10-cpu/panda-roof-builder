@@ -258,8 +258,7 @@ body[data-look="photo"] .ph{display:block;position:absolute;inset:0}
 .look .sm{display:none}
 .phbg{display:none;position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(28px) brightness(.5)}
 body[data-set="real"] .phbg{display:block}
-body[data-set="real"] .ph img{object-fit:contain;object-position:50% 64%;width:120%;left:-10%}
-.ph .phcap{position:absolute;left:10px;right:10px;bottom:10px;width:fit-content;max-width:calc(100% - 20px);background:rgba(23,25,27,.8);color:#fff;font-size:12.5px;line-height:1.35;border-radius:8px;padding:6px 10px}
+body[data-set="real"] .ph img{object-fit:cover;object-position:50% 50%}
 body[data-look="photo"] .stage[data-view="layers"]{background:#bab6b8}
 body[data-look="photo"] .stage[data-view="layers"] .pane.layers{padding:0;align-items:stretch}
 body[data-look="photo"] .cut{display:flex;flex-direction:column;width:100%;min-height:0}
@@ -291,9 +290,8 @@ body[data-look="photo"] .cut{display:flex;flex-direction:column;width:100%;min-h
   body[data-look="photo"] .stage[data-view="layers"]{height:50vh;min-height:330px}
   body[data-look="photo"][data-step="2"] .stage[data-view="layers"],body[data-look="photo"][data-step="6"] .stage[data-view="layers"]{height:50vh;min-height:330px}
   .look button{padding:5px 10px;font-size:12.5px}
-  .ph .phcap{font-size:11.5px;padding:5px 8px;left:8px;bottom:8px}
   .ph img{object-position:50% 60%}
-  body[data-set="real"] .ph img{object-fit:cover;object-position:52% 42%;width:100%;left:0}
+  body[data-set="real"] .ph img{object-position:52% 42%}
   .look .lg{display:none}.look .sm{display:inline}
   .look button{padding:5px 9px}
   .cut .dot{width:26px;height:26px;margin:-13px 0 0 -13px;font-size:14px}
@@ -306,6 +304,11 @@ body[data-look="photo"] .cut{display:flex;flex-direction:column;width:100%;min-h
 }
 @media (max-width:540px){header.top .name{display:none}}
 @media (max-width:380px){.bar .price b{font-size:18px}.bar .btn{padding:0 12px;font-size:15px}}
+@media (min-width:901px){
+  header.top{position:sticky;top:0;z-index:7}
+  .stage{top:64px}
+  body.nobar .stage{height:calc(100vh - 64px)}
+}
 @media print{.look{display:none!important}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media print{
@@ -333,7 +336,7 @@ body[data-look="photo"] .cut{display:flex;flex-direction:column;width:100%;min-h
         <button type="button" data-v="above" aria-pressed="false">From above</button>
         <button type="button" data-v="layers" aria-pressed="false">What's inside</button>
       </div>
-      <div class="pane house"><svg id="house" viewBox="0 0 800 560" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Illustration of a house wearing the roof you have chosen"></svg><div class="ph" id="ph"><div class="phbg" id="phbg"></div><img id="ph-a" alt=""><img id="ph-b" alt=""><div class="phcap" id="phcap"></div></div></div>
+      <div class="pane house"><svg id="house" viewBox="0 0 800 560" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Illustration of a house wearing the roof you have chosen"></svg><div class="ph" id="ph"><div class="phbg" id="phbg"></div><img id="ph-a" alt=""><img id="ph-b" alt=""></div></div>
       <div class="pane above"><div class="lot" id="lot"></div></div>
       <div class="pane layers"><svg id="layers" viewBox="0 0 800 570" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cutaway showing each layer of your new roof"></svg><div class="cut" id="cut"><div class="frame"><div class="shot" id="shot"></div></div><div class="tray"><div class="chips" id="chips" role="group" aria-label="Build the roof one layer at a time"></div><p class="line" id="cutline" aria-live="polite"></p></div></div></div>
       <div class="tag" id="tag"></div>
@@ -624,8 +627,7 @@ function warmPhotos(){ // fetch the other roof colours quietly so a tap on a swa
   setTimeout(next,1200);
 }
 function drawPhotoHouse(){
-  var real=LOOK==="real",src=pic((real?"real-":"house-")+slug(S.color)),cap=$("phcap");
-  cap.textContent=real?"A real Panda job. Shingle color changed with AI, shown in "+COLORS[S.color][0]+".":"Sample roof in "+COLORS[S.color][0]+". AI picture, matched to the real shingle color.";
+  var real=LOOK==="real",src=pic((real?"real-":"house-")+slug(S.color));
   if(src===phShown)return;phShown=src;
   var imgs=[$("ph-a"),$("ph-b")],nx=imgs[1-phTop],cur=imgs[phTop],pre=new Image();
   pre.onload=function(){if(phShown!==src)return;nx.src=src;$("phbg").style.backgroundImage=real?'url("'+src+'")':"";nx.alt=(real?"Drone photo of a home Panda re-roofed, shown with a ":"Sample home seen from just above the roofline, with a ")+COLORS[S.color][0]+" shingle roof";nx.classList.add("on");cur.classList.remove("on");cur.alt="";phTop=1-phTop;warmPhotos()};
@@ -818,7 +820,7 @@ function stepPackage(p){
     var ins=el("button","linkbtn inside","See what's inside");ins.type="button";ins.setAttribute("aria-label","See what's inside "+K.name);ins.addEventListener("click",function(){S.pkg=k;setView("layers");render();if(window.matchMedia&&window.matchMedia("(max-width:900px)").matches)window.scrollTo(0,0)});card.appendChild(ins);
     box.appendChild(card)});
   p.appendChild(box);
-  var c=sect(p,"Shingle color","Same price in every color. Tap one and watch the house change.");
+  var c=sect(p,"Shingle color","Same price in every color. Tap one and watch the house change."+(LOOK==="real"?" The picture is one of our finished jobs with the shingle color swapped.":LOOK==="photo"?" The picture is a sample home.":""));
   var sw=el("div","swatches");sw.setAttribute("role","group");
   COLORS.forEach(function(col,n){var b=el("button","sw");b.type="button";b.setAttribute("aria-pressed",n===S.color?"true":"false");
     var sq;if(LOOK!=="draw"){sq=el("img");sq.src=PHOTO+(LOOK==="real"?"rsw-":"sw-")+slug(n)+".webp";sq.alt="";sq.width=276;sq.height=120}
@@ -1022,7 +1024,7 @@ function render(){
   }
   drawHouse();drawAbove();drawLayers();drawPhoto();
   var q=quote(),bar=$("bar"),goB=$("go"),back=$("back");
-  bar.hidden=!q||fin;                                   // no price bar until there is an address
+  bar.hidden=!q||fin;document.body.classList.toggle("nobar",bar.hidden);   // no price bar until there is an address
   if(q){$("bar-price").textContent=rangeText(q);$("bar-sub").textContent=PRICING.packages[S.pkg].name+". "+monthText(q)+"."}
   back.style.display=S.step>0?"":"none";
   goB.style.display=S.step===LAST?"none":"";
