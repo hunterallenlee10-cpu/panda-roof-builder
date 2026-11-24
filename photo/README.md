@@ -38,6 +38,20 @@ drone-style view where the roof fills the frame and the color grading is left fl
 Shingle size was also corrected: the first drafts drew tabs about twice too large, so the roofs are drawn
 at a 5 5/8 inch exposure (about 30 courses from gutter to ridge).
 
+## The Real job version
+
+`real-<color>.webp` (and `-s`) and `rsw-<color>.webp` come from one of Panda's own drone photos in the website
+media library (item 1691, uploaded April 2025, a finished roof with the Panda truck in the street). Each color
+was made by asking the image model to change only the shingles, then lining the result up with the original
+(about half a pixel of error) and keeping the original photo everywhere outside a hand-traced roof outline. So
+the lawn, siding, windows, street and truck are the untouched photo, and only the roof is AI. Roughly 45% of
+the frame is roof.
+
+The roof in the original photo is a sunlit dark gray. All nine colors, Charcoal included, are recolored so they
+sit on the same scale as the swatches.
+
+Before this goes in front of customers: confirm the homeowner is fine with the photo being used this way.
+
 ## Known limits
 
 - The underlayment and leak barrier carry no printed logos. The real GAF rolls do.
