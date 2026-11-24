@@ -32,7 +32,7 @@ header.top .name{font-stretch:118%;font-weight:800;font-size:19px}
 header.top .demo{font-size:13px;background:#34393d;border-radius:999px;padding:3px 11px;color:#e6e9eb}
 header.top .restart{border:0;background:none;color:#c9ced2;font-size:14px;text-decoration:underline;text-underline-offset:3px;padding:6px}
 header.top .help{margin-left:auto;text-align:right;font-size:13px;color:#c9ced2;line-height:1.3}
-header.top .help b{display:block;color:#fff;font-size:15px}
+
 main{display:grid;grid-template-columns:minmax(0,46fr) minmax(0,54fr);min-height:0}
 /* ---- stage ---- */
 .stage{position:sticky;top:0;align-self:start;height:calc(100vh - 64px - 74px);min-height:420px;background:linear-gradient(var(--sky1),var(--sky2) 62%,#dfe6dc 62%,#cfd9c8);display:flex;flex-direction:column;overflow:hidden}
@@ -146,6 +146,46 @@ label.chk input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var
 .delta{font-style:normal;font-size:14px;font-weight:700;font-stretch:100%;border-radius:999px;padding:2px 9px;background:#34393d;color:#fff;margin-left:8px;vertical-align:middle;opacity:0;transition:opacity .25s}
 .delta.on{opacity:1}
 .sw svg{display:block;width:100%;height:58px;border-radius:7px;margin-bottom:6px}
+.pks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch;margin-top:26px}
+.pk{position:relative;border:1.5px solid var(--line);border-radius:16px;background:#fff;display:flex;flex-direction:column}
+.pk.feat{background:var(--asphalt);border-color:var(--asphalt);color:#fff}
+.pk .rib{position:absolute;left:-1.5px;right:-1.5px;top:-24px;height:26px;border-radius:12px 12px 0 0;background:var(--green);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center}
+.pk.feat{border-radius:0 0 16px 16px}
+.pk.on{box-shadow:0 0 0 3px var(--orange)}
+.pkbtn{border:0;background:none;color:inherit;text-align:left;padding:16px 16px 6px;display:flex;flex-direction:column;gap:2px;flex:1;border-radius:16px}
+.pkbtn .nm{font-size:19px;font-weight:800;font-stretch:112%;padding-right:26px}
+.pkbtn .tg{font-size:14px;opacity:.75}
+.pkbtn .pr{font-size:25px;font-weight:800;font-stretch:112%;margin-top:10px;font-variant-numeric:tabular-nums}
+.pkbtn .mo{font-size:14px}
+.pkbtn ul{margin:12px 0 0;padding:12px 0 0 18px;border-top:1px solid rgba(128,128,128,.35);font-size:14px;line-height:1.45}
+.pk .pick{position:absolute;right:12px;top:14px;width:22px;height:22px;border-radius:50%;border:2px solid var(--line)}
+.pk.on .pick{border-color:var(--orange);background:var(--orange) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.5l2.6 2.6L13 6.6' fill='none' stroke='%2317191b' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/18px}
+.pk .inside{margin:0 16px 14px;align-self:flex-start;font-size:14px}
+.pk.feat .inside{color:#ffb766}
+.roofline{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:16px;color:var(--muted);margin:10px 0 0;max-width:62ch}
+.box{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:22px}
+.box h3{font-size:17px;margin-bottom:8px}
+.box ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 24px;font-size:15px}
+.box.one ul{grid-template-columns:1fr}
+.box li{padding-left:22px;position:relative}
+.box li::before{content:"";position:absolute;left:0;top:.38em;width:12px;height:7px;border-left:2.5px solid var(--green);border-bottom:2.5px solid var(--green);transform:rotate(-45deg)}
+.more{display:block;margin-top:22px;font-size:16px}
+.pricecard{background:var(--asphalt);color:#fff;border-radius:16px;padding:20px 22px;margin-top:6px}
+.pricecard .nm{font-size:15px;color:#c9ced2}
+.pricecard .pr{font-size:clamp(34px,5vw,46px);font-weight:800;font-stretch:115%;line-height:1.1;font-variant-numeric:tabular-nums}
+.pricecard .mo{font-size:18px;margin-top:2px}
+.pricecard .fine{font-size:13px;color:#b9c0c5;margin-top:10px;max-width:60ch}
+.pricecard .linkbtn{color:#ffb766;margin-top:12px;font-size:16px}
+.cta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.cta .btn{height:64px;font-size:18px;white-space:normal;line-height:1.15}
+.btn.dark{background:var(--asphalt);color:#fff}
+.btn.dark:hover{background:#2a2e31}
+.cta .btn[aria-pressed="true"]{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ink)}
+.sub{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:14px;font-size:15px}
+.form{border-top:2px solid var(--ink);margin-top:26px;padding-top:4px}
+.form .btn.go{margin-top:16px;height:56px;width:100%;max-width:560px}
+header.top .help a{display:block;color:#fff;font-size:16px;font-weight:700;text-decoration:none}
+.bar[hidden]{display:none}
 /* ---- bottom bar ---- */
 .bar{position:sticky;bottom:0;background:var(--asphalt);color:#fff;display:flex;align-items:center;gap:14px;padding:12px 20px;z-index:6}
 .bar .price{margin-right:auto;line-height:1.15;min-width:0;flex:1 1 0}
@@ -164,13 +204,24 @@ label.chk input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var
   main{grid-template-columns:minmax(0,1fr)}
   .stage{position:relative;height:38vh;min-height:230px}
   /* while choosing the roof, the preview stays pinned so every tap shows on the house */
-  body[data-step="1"] .stagewrap,body[data-step="2"] .stagewrap,body[data-step="3"] .stagewrap{position:sticky;top:0;z-index:5}
-  body[data-step="1"] .stage,body[data-step="2"] .stage,body[data-step="3"] .stage{height:31vh;min-height:200px}
-  body[data-step="4"] .stage,body[data-step="5"] .stage,body[data-step="6"] .stage{height:26vh;min-height:180px}
+  body[data-step="1"] .stagewrap{position:sticky;top:0;z-index:5}
+  body[data-step="1"] .stage{height:30vh;min-height:200px}
+  body[data-step="2"] .stage,body[data-step="6"] .stage{height:24vh;min-height:170px}
   .stage .views{padding:8px 10px 0;gap:5px}
   .stage .views button{padding:4px 10px;font-size:13px}
   .panel{padding:22px 16px 30px}
   .lines{grid-template-columns:1fr}
+  /* phones: the address box comes first, the picture follows it */
+  body[data-step="0"] main{display:flex;flex-direction:column}
+  body[data-step="0"] .stagewrap{order:2}
+  body[data-step="0"] .stage{height:34vh}
+  body[data-step="0"] .panel h1{font-size:27px}
+  body[data-step="0"] .lead{font-size:16px;margin:8px 0 14px}
+  .pks{grid-template-columns:1fr;gap:14px}
+  .pk.feat{margin-top:22px}
+  .box ul{grid-template-columns:1fr}
+  .cta{grid-template-columns:1fr}
+  .cta .btn{height:58px}
   .lead{font-size:17px}
   header.top{padding:8px 12px;gap:10px}
   header.top img{height:36px}
@@ -187,8 +238,6 @@ label.chk input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var
   .btn{padding:0 16px;font-size:16px}
   .tag{display:none}
   header.top .name{font-size:16px;white-space:nowrap}
-  header.top .restart{white-space:nowrap;font-size:13px;padding:6px 2px}
-  header.top .help span{display:none}
   .delta{position:absolute;left:12px;bottom:calc(100% + 6px);margin:0;background:var(--asphalt);box-shadow:0 4px 12px rgba(0,0,0,.25)}
   .lot{width:min(100%,24vh)}
   .lot .cap{display:none}
@@ -197,7 +246,7 @@ label.chk input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media print{
-  header.top .demo,header.top .restart,.stagewrap,.bar,.steps,.acts,.chg,.terms button:not([aria-pressed="true"]),.toast{display:none!important}
+  header.top .demo,.stagewrap,.bar,.steps,.cta,.sub,.form,.terms button:not([aria-pressed="true"]),.toast{display:none!important}
   .roofcard{grid-template-columns:210px minmax(0,1fr)!important;gap:18px!important}
   table.prop tr,.sect,.note,.roofcard{break-inside:avoid}
   main{display:block}body{background:#fff}.panel{padding:0}header.top{background:#fff;color:#000;padding:0 0 12px}header.top .help,header.top .help b{color:#000}
@@ -210,8 +259,7 @@ label.chk input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var
     <img src="panda-logo.png" alt="Panda Exteriors" width="274" height="300">
     <span class="name">Roof Builder</span>
     <span class="demo">Demo with sample prices</span>
-    <button type="button" class="restart" id="restart" hidden>Start over</button>
-    <div class="help"><span>Rather talk it through?</span><b id="phone"></b></div>
+    <div class="help"><span>Talk to us</span><a id="phone"></a></div>
   </header>
   <main>
     <div class="stagewrap">
@@ -229,8 +277,8 @@ label.chk input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var
     </div>
     <section class="panel" id="panel"></section>
   </main>
-  <div class="bar">
-    <div class="price"><b><bdi id="bar-price">$0</bdi><i class="delta" id="bar-delta"></i></b><span id="bar-sub"></span></div>
+  <div class="bar" id="bar" hidden>
+    <div class="price"><b><bdi id="bar-price"></bdi></b><span id="bar-sub"></span></div>
     <button type="button" class="btn back" id="back">Back</button>
     <button type="button" class="btn go" id="go">Continue</button>
   </div>
@@ -247,30 +295,32 @@ label.chk input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var
 var CONFIG={
   town:"Laurel, MD", coverage:"Laurel ZIP codes 20707, 20708, 20723 and 20724", example:"13807 Brown Branch Rd",
   phone:"(877) 213-8536", priceHoldDays:30,
-  proof:[["GAF Master Elite","and President's Club contractor"],["4.8 stars","from 1,000+ Google reviews"],["9,900+ jobs","completed across 19 states"]]
+  proof:[["GAF Presidential Master Elite","Top 0.1% nationwide"],["1,500+ five star reviews","from homeowners"],["10,000+ projects","completed"]],
+  footer:"GAF Presidential Master Elite (top 0.1% nationwide) · BBB A rated · 10,000+ projects completed"
 };
+/* PRICES ARE PLACEHOLDERS until the 2026 retail sheet is loaded. The three package rates ($910, $1,080 and $1,200 a square) were worked
+   backwards from the example estimate for 7661 Kindler Rd and reproduce its ranges and monthly figures exactly. Swap the numbers here and nothing else needs to change. */
 var PRICING={
-  lines:{ // installed price per roofing square (100 sq ft), tear-off of one layer included
-    hdz:{tier:"Good",name:"GAF Timberline HDZ",perSq:560,points:["GAF's best-selling architectural shingle","Wind warranty with no maximum wind speed when installed as a system","Algae stain protection"]},
-    uhdz:{tier:"Better",name:"GAF Timberline UHDZ",perSq:640,points:["Thicker shingle with a deeper shadow line","Longer algae stain protection","Qualifies for the longest workmanship coverage"]},
-    as2:{tier:"Best",name:"GAF Timberline AS II",perSq:720,points:["Impact-resistant shingle built for hail","May earn an insurance discount, ask your insurer","Qualifies for the longest workmanship coverage"]}
+  lines:{hdz:{name:"GAF Timberline HDZ"}},
+  packages:{
+    plus:{name:"Systems Plus",tag:"Solid, warrantied protection",perSq:910,premium:false,
+      points:["GAF Timberline HDZ shingles","GAF System Plus warranty","5 year Panda workmanship"],
+      full:["GAF Timberline HDZ shingles","GAF System Plus warranty","5 year Panda workmanship"]},
+    golden:{name:"HDZ Golden Pledge",tag:"GAF's strongest warranty",perSq:1080,premium:false,featured:true,
+      points:["Everything in Systems Plus","GAF Golden Pledge warranty","25 year workmanship coverage, backed by GAF"],
+      full:["GAF Timberline HDZ shingles","GAF Golden Pledge warranty","25 year workmanship coverage, backed by GAF"]},
+    pres:{name:"Presidential HDZ",tag:"Our top of the line system",perSq:1200,premium:true,
+      points:["Everything in Golden Pledge","Full GAF premium component system","Premium underlayment and leak barrier"],
+      full:["GAF Timberline HDZ shingles","GAF Golden Pledge warranty","25 year workmanship coverage, backed by GAF","Full GAF premium component system","Premium underlayment and leak barrier"]}
   },
+  everyPackage:["Tear off of one layer of old shingles","New drip edge, ridge cap and pipe boots","Ridge vent ventilation","First 2 sheets of new decking","Permit, cleanup and haul away","Install by a GAF Presidential Master Elite crew"],
   steepPerSq:{low:0,medium:0,steep:45,vsteep:90},
-  twoStoryPerSq:20,
   extraLayerPerSq:45,
-  underlay:{std:{name:"Synthetic underlayment",desc:"GAF FeltBuster under every shingle",perSq:0},prem:{name:"Premium breathable underlayment",desc:"GAF Deck-Armor lets attic moisture escape",perSq:18}},
-  barrier:{std:{name:"Leak barrier at eaves, valleys and pipes",desc:"The spots where most leaks start",perSq:0},full:{name:"Leak barrier over the whole roof deck",desc:"A second waterproof layer under everything",perSq:95}},
-  vent:{keep:{name:"Keep my current vents",desc:"New flashing and boots around what is there",perFt:0},ridge:{name:"Ridge vent",desc:"GAF Cobra vent along the peak, hidden under the ridge cap",perFt:9}},
   gutters:{none:{name:"Keep my gutters",perFt:0},new:{name:"New seamless gutters",perFt:11},guard:{name:"New gutters with leaf guards",perFt:20}},
   skylightEach:350, chimneyEach:450,
-  warranty:{
-    plus:{name:"GAF System Plus",desc:"50 years of non-prorated material coverage",perSq:0},
-    silver:{name:"GAF Silver Pledge",desc:"Adds 10 years of GAF-backed workmanship coverage",perSq:12},
-    golden:{name:"GAF Golden Pledge",desc:"GAF's strongest: 25 to 30 years of GAF-backed workmanship coverage",perSq:24}
-  },
-  deckingIncludedSheets:2, deckingPerSheet:95,
-  depositRate:0.10,                         // Maryland law caps a home improvement deposit at one third of the contract price
-  finance:{apr:9.99,terms:[60,120,180]}     // sample terms only
+  deckingIncludedSheets:2, deckingPerSheet:155,
+  range:{measured:.05,estimated:.08},        // how far either side of the estimate the range runs until the measurement is confirmed
+  finance:{apr:9.99,months:180}              // sample terms only
 };
 var PITCH={low:{name:"Low",desc:"Easy to walk on",mult:1.054,rise:.55},medium:{name:"Medium",desc:"Most homes here",mult:1.118,rise:.8},steep:{name:"Steep",desc:"Hard to stand on",mult:1.25,rise:1.1},vsteep:{name:"Very steep",desc:"Can't be walked",mult:1.414,rise:1.4}};
 var SHAPE={simple:{name:"Simple",desc:"Two main sides",waste:.10},average:{name:"Average",desc:"A few valleys or a garage wing",waste:.13},cutup:{name:"Cut up",desc:"Many peaks, valleys or dormers",waste:.17}};
@@ -279,11 +329,11 @@ var COLORS=[["Charcoal","#3d3f42"],["Pewter Gray","#7d8082"],["Weathered Wood","
 var TRIM=[["White","#f4f4f2"],["Brown","#4a3a2e"],["Black","#1d1d1d"]];
 var OVERHANG=1.06;
 var IMG="https://mdgeodata.md.gov/imagery/rest/services/SixInch/SixInchImagery2023_2024_2025/MapServer/export";
-var STEPS=["Address","Your roof","Shingles","Roof system","Your proposal","Sign"],HASH=["address","roof","shingles","system","proposal","sign"];
-var SAVE_KEYS=["step","stories","pitch","shape","layers","line","color","trim","underlay","barrier","vent","gutters","skylights","chimneys","warranty","pay","term","sizeMode","adj"];
-var LS="panda-roof-builder-v2";
+var STEPS=["Address","Pick a package","Price and book"],HASH=["address","package","book"],LAST=2;
+var SAVE_KEYS=["step","stories","pitch","shape","layers","pkg","color","trim","gutters","skylights","chimneys","sizeMode","adj"];
+var LS="panda-roof-builder-v3";
 
-var H=null, S={step:0,max:0,home:null,manual:null,stories:2,pitch:"medium",shape:"average",layers:1,line:"hdz",color:0,trim:0,underlay:"std",barrier:"std",vent:"ridge",gutters:"none",skylights:0,chimneys:0,sizeMode:"auto",adj:0,warranty:"silver",pay:"finance",term:120,name:"",email:"",phone:"",sig:"",agree:false,week:"",sigMode:"draw",sigData:"",sigInk:0,signed:false,order:"",call:false,callDay:"",callTime:"",booked:false};
+var H=null, S={step:0,max:0,home:null,manual:null,stories:2,pitch:"medium",shape:"average",layers:1,line:"hdz",vent:"ridge",pkg:"golden",color:0,trim:0,gutters:"none",skylights:0,chimneys:0,sizeMode:"auto",adj:0,editRoof:false,custom:false,inc:false,book:"",name:"",email:"",phone:"",sig:"",agree:false,week:"",sigMode:"draw",sigData:"",sigInk:0,signed:false,order:"",callDay:"",callTime:"",booked:false};
 var prevRoof=null, pendingRestore=null, HT=null, lastTotal=null, deltaT, gid=0, pdfT, pdfCache=null, pdfLib=null, logoData=null;
 var $=function(id){return document.getElementById(id)};
 function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
@@ -291,7 +341,7 @@ function svg(tag,at){var e=document.createElementNS("http://www.w3.org/2000/svg"
 function money(n){return "$"+Math.round(n).toLocaleString("en-US")}
 function num(n){return Math.round(n).toLocaleString("en-US")}
 function where(){return S.home?S.home[0]+", "+CONFIG.town+" "+S.home[1]:"Your home"}
-$("phone").textContent=CONFIG.phone;
+$("phone").textContent=CONFIG.phone;$("phone").href="tel:+1"+CONFIG.phone.replace(/\D/g,"");
 
 /* ---------- measurements ---------- */
 /* How big is the roof?  Two sources: the building outline on record, and the home's living area times the
@@ -317,23 +367,21 @@ function measure(){
 }
 function squaresFor(mode){var m0=S.sizeMode,r;S.sizeMode=mode;r=measure();S.sizeMode=m0;return r?r.squares.toFixed(1):"0"}
 /* ---------- price ---------- */
-function payment(total,months){var r=PRICING.finance.apr/1200;return total*r/(1-Math.pow(1+r,-months))}
+function payment(total){var r=PRICING.finance.apr/1200;return total*r/(1-Math.pow(1+r,-PRICING.finance.months))}
+function rangeText(o){var a="$"+Math.floor(o.low/1000)+"k",b="$"+Math.round(o.high/1000)+"k";return a===b?"About "+a:a+" to "+b} // rounding matches Panda's example estimate
+function monthText(o){return "About "+money(o.mLow)+" to "+money(o.mHigh)+" a month"}
 function quote(){
   var m=measure();if(!m)return null;
-  var P=PRICING,q=m.squares,rows=[],L=P.lines[S.line],add=function(label,detail,amt,step){rows.push({label:label,detail:detail,amount:Math.round(amt),step:step})};
-  add(L.name+" roof in "+COLORS[S.color][0],q.toFixed(1)+" squares at "+money(L.perSq)+". Covers removing one layer of old shingles, underlayment, leak barrier, starter strip, "+TRIM[S.trim][0].toLowerCase()+" drip edge, ridge cap, new pipe boots, permit, cleanup and haul-away.",q*L.perSq,2);
-  if(P.steepPerSq[S.pitch])add(PITCH[S.pitch].name+" roof safety setup",q.toFixed(1)+" squares at "+money(P.steepPerSq[S.pitch]),q*P.steepPerSq[S.pitch],1);
-  if(S.stories>=2)add("Two-story access",q.toFixed(1)+" squares at "+money(P.twoStoryPerSq),q*P.twoStoryPerSq,1);
-  if(S.layers>1)add("Second layer of old shingles removed",q.toFixed(1)+" squares at "+money(P.extraLayerPerSq),q*P.extraLayerPerSq,1);
-  if(P.underlay[S.underlay].perSq)add(P.underlay[S.underlay].name,q.toFixed(1)+" squares at "+money(P.underlay[S.underlay].perSq),q*P.underlay[S.underlay].perSq,3);
-  if(P.barrier[S.barrier].perSq)add(P.barrier[S.barrier].name,q.toFixed(1)+" squares at "+money(P.barrier[S.barrier].perSq),q*P.barrier[S.barrier].perSq,3);
-  if(P.vent[S.vent].perFt)add(P.vent[S.vent].name,"About "+m.ridgeFt+" feet of ridge at "+money(P.vent[S.vent].perFt)+" a foot",m.ridgeFt*P.vent[S.vent].perFt,3);
-  if(P.gutters[S.gutters].perFt)add(P.gutters[S.gutters].name,"About "+m.eaveFt+" feet at "+money(P.gutters[S.gutters].perFt)+" a foot",m.eaveFt*P.gutters[S.gutters].perFt,3);
-  if(S.skylights)add("Skylight flashing",S.skylights+" at "+money(P.skylightEach)+" each",S.skylights*P.skylightEach,3);
-  if(S.chimneys)add("Chimney flashing",S.chimneys+" at "+money(P.chimneyEach)+" each",S.chimneys*P.chimneyEach,3);
-  if(P.warranty[S.warranty].perSq)add(P.warranty[S.warranty].name+" warranty",q.toFixed(1)+" squares at "+money(P.warranty[S.warranty].perSq),q*P.warranty[S.warranty].perSq,3);
-  var total=rows.reduce(function(a,r){return a+r.amount},0);
-  return {m:m,rows:rows,total:total,monthly:payment(total,S.term),deposit:Math.round(total*P.depositRate)};
+  var P=PRICING,q=m.squares,addons=[],extra=0;
+  if(P.gutters[S.gutters].perFt){extra+=m.eaveFt*P.gutters[S.gutters].perFt;addons.push(P.gutters[S.gutters].name)}
+  if(S.skylights){extra+=S.skylights*P.skylightEach;addons.push("New flashing on "+S.skylights+" skylight"+(S.skylights>1?"s":""))}
+  if(S.chimneys){extra+=S.chimneys*P.chimneyEach;addons.push("New flashing on "+S.chimneys+" chimney"+(S.chimneys>1?"s":""))}
+  if(S.layers>1)addons.push("Second layer of old shingles removed");
+  var perSqExtra=P.steepPerSq[S.pitch]+(S.layers>1?P.extraLayerPerSq:0),r=m.source==="outline"&&S.adj===0?P.range.measured:P.range.estimated,all={};
+  Object.keys(P.packages).forEach(function(k){var t=Math.round(q*(P.packages[k].perSq+perSqExtra)+extra),lo=t*(1-r),hi=t*(1+r);
+    all[k]={total:t,low:lo,high:hi,mLow:Math.floor(payment(lo)),mHigh:Math.ceil(payment(hi))}});
+  var me=all[S.pkg];
+  return {m:m,pkg:S.pkg,all:all,total:me.total,low:me.low,high:me.high,mLow:me.mLow,mHigh:me.mHigh,addons:addons,spread:r};
 }
 window.__roofQuote=quote; window.__roofState=S; // used by the automated checks
 
@@ -343,18 +391,17 @@ function save(){try{if(S.signed||S.booked)localStorage.removeItem(LS);else local
 function applySnapshot(o){
   if(!o)return false;
   SAVE_KEYS.forEach(function(k){if(o[k]!=null&&typeof o[k]===typeof S[k])S[k]=o[k]});
-  if(!PITCH[S.pitch])S.pitch="medium";if(!SHAPE[S.shape])S.shape="average";if(!PRICING.lines[S.line])S.line="hdz";
-  if(!COLORS[S.color])S.color=0;if(!TRIM[S.trim])S.trim=0;if(PRICING.finance.terms.indexOf(S.term)<0)S.term=120;
-  ["underlay","barrier","vent","gutters","warranty"].forEach(function(k){if(!PRICING[k][S[k]])S[k]=Object.keys(PRICING[k])[0]});
+  if(!PITCH[S.pitch])S.pitch="medium";if(!SHAPE[S.shape])S.shape="average";if(!PRICING.packages[S.pkg])S.pkg="golden";
+  if(!COLORS[S.color])S.color=0;if(!TRIM[S.trim])S.trim=0;if(!PRICING.gutters[S.gutters])S.gutters="none";
   if(["auto","outline","living"].indexOf(S.sizeMode)<0)S.sizeMode="auto";S.adj=Math.max(-30,Math.min(30,Math.round((S.adj||0)/5)*5));
   S.layers=S.layers>1?2:1;S.stories=S.stories>=2?2:1;S.skylights=Math.max(0,Math.min(4,Math.round(S.skylights)||0));S.chimneys=Math.max(0,Math.min(2,Math.round(S.chimneys)||0));
   S.home=null;S.manual=null;
   if(o.addr&&H){for(var i=0;i<H.length;i++)if(H[i][0]+"|"+H[i][1]===o.addr){S.home=H[i];break}}
   else if(o.sqft>=400&&o.sqft<=12000)S.manual={sqft:+o.sqft};
   if(!measure()){S.step=0;S.max=0;return false}
-  S.step=Math.max(0,Math.min(5,Math.round(S.step)||0));S.max=Math.min(5,Math.max(+o.max||0,S.step));return true;
+  S.step=Math.max(0,Math.min(LAST,Math.round(S.step)||0));S.max=Math.min(LAST,Math.max(+o.max||0,S.step));return true;
 }
-function shareLink(){var o=snapshot();o.step=4;o.max=4;var q=Object.keys(o).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(o[k])}).join("&");return location.origin+location.pathname+"?"+q}
+function shareLink(){var o=snapshot();o.step=LAST;o.max=LAST;var q=Object.keys(o).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(o[k])}).join("&");return location.origin+location.pathname+"?"+q}
 function fromQuery(){
   if(!location.search||location.search.length<2)return null;var o={};
   location.search.slice(1).split("&").forEach(function(p){var kv=p.split("=");if(kv.length!==2)return;var k,v;try{k=decodeURIComponent(kv[0]);v=decodeURIComponent(kv[1])}catch(e){return}o[k]=(typeof S[k]==="number"||k==="max"||k==="sqft")?+v:v});
@@ -453,7 +500,7 @@ function houseThumb(){ // a copy of the stage picture for the proposal, with its
 }
 /* ---------- cutaway: every layer of the roof, peeled back from left to right ---------- */
 function drawLayers(){
-  var s=$("layers");s.textContent="";var base=COLORS[S.color][1],P=PRICING,full=S.barrier==="full",rv=S.vent==="ridge",prem=S.underlay==="prem";
+  var s=$("layers");s.textContent="";var base=COLORS[S.color][1],P=PRICING,full=false,rv=true,prem=PRICING.packages[S.pkg].premium;
   var defs=svg("defs",{});shinglePattern(defs,"sh3",base,S.line!=="hdz");
   var wood=svg("pattern",{id:"wood",width:160,height:80,patternUnits:"userSpaceOnUse"});wood.appendChild(svg("rect",{width:160,height:80,fill:"#d9b98a"}));
   wood.appendChild(svg("path",{d:"M0 20 Q40 10 80 22 T160 18 M0 52 Q50 44 90 56 T160 50 M0 70 Q60 64 160 72",fill:"none",stroke:"#c39f6b","stroke-width":2}));wood.appendChild(svg("rect",{x:0,y:0,width:160,height:80,fill:"none",stroke:"#b8935f","stroke-width":2}));defs.appendChild(wood);s.appendChild(defs);
@@ -461,7 +508,7 @@ function drawLayers(){
   var W=560,Hh=300,add=function(tag,at){var e=svg(tag,at);g.appendChild(e);return e};
   add("rect",{x:8,y:10,width:W,height:Hh,fill:"#000",opacity:.12});
   add("rect",{x:0,y:0,width:W,height:Hh,fill:"url(#wood)"});                                   // wood deck
-  add("rect",{x:0,y:full?0:Hh-64,width:455,height:full?Hh:64,fill:"#2f3337"});                // leak barrier
+  add("rect",{x:0,y:Hh-64,width:455,height:64,fill:prem?"#3b4d63":"#2f3337"});                // leak barrier
   add("rect",{x:0,y:0,width:330,height:Hh,fill:prem?"#b9c7d6":"#8c949b"});                    // underlayment
   for(var y=50;y<Hh;y+=50)add("line",{x1:0,x2:330,y1:y,y2:y,stroke:"#00000022","stroke-width":2});
   add("rect",{x:0,y:Hh-26,width:215,height:26,fill:tone(base,-.35)});                         // starter strip
@@ -474,7 +521,7 @@ function drawLayers(){
   var badge=function(n,x,y,ring){var c=svg("g",{});c.appendChild(svg("circle",{cx:x,cy:y,r:15,fill:"#fc8104",stroke:ring?"#fff":"none","stroke-width":3}));var t=svg("text",{x:x,y:y+6,"text-anchor":"middle","font-size":17,"font-weight":800,fill:"#17191b"});t.textContent=n;c.appendChild(t);s.appendChild(c)};
   var at=function(lx,ly){return [170+lx-.2867*ly,56+ly]};
   [[1,100,150],[2,268,150],[3,392,full?150:268],[4,505,150],[5,400,-8],[6,300,305]].forEach(function(d){var p=at(d[1],d[2]);badge(d[0],p[0],p[1],true)});
-  var rows=[[1,P.lines[S.line].name.replace("GAF ",""),COLORS[S.color][0]+" shingles"],[2,prem?"Deck-Armor underlayment":"FeltBuster underlayment",prem?"Premium, breathable":"Synthetic, under every shingle"],[3,"Leak barrier",full?"Over the whole deck":"At eaves, valleys and pipes"],[4,"Wood deck","Checked once the old roof is off"],[5,rv?"Ridge vent":"Ridge cap",rv?"Lets attic heat out at the peak":"Covers the peak"],[6,"Drip edge",TRIM[S.trim][0]+" metal at the roof's edge"]];
+  var rows=[[1,P.lines[S.line].name.replace("GAF ",""),COLORS[S.color][0]+" shingles"],[2,prem?"Premium underlayment":"Synthetic underlayment",prem?"Breathable, under every shingle":"Under every shingle"],[3,prem?"Premium leak barrier":"Leak barrier","At eaves, valleys and pipes"],[4,"Wood deck","Checked once the old roof is off"],[5,"Ridge vent","Lets attic heat out at the peak"],[6,"Drip edge",TRIM[S.trim][0]+" metal at the roof's edge"]];
   rows.forEach(function(r,i){var x=40+(i%2)*380,y=428+Math.floor(i/2)*48;badge(r[0],x,y,false);
     var a=svg("text",{x:x+25,y:y+1,"font-size":20,"font-weight":700,fill:"#17191b"});a.textContent=r[1];s.appendChild(a);
     var b=svg("text",{x:x+25,y:y+21,"font-size":15.5,fill:"#5b6369"});b.textContent=r[2];s.appendChild(b)});
@@ -546,20 +593,23 @@ function upcoming(kind){ // install weeks start two weeks out; call days are the
 }
 
 /* ---------- steps ---------- */
+function startOver(parent){var w=el("p",null,"");w.style.margin="22px 0 0";var b=el("button","linkbtn","Start over with a different address");b.type="button";b.id="restart";b.addEventListener("click",restart);w.appendChild(b);parent.appendChild(w)}
+function roofWords(m){return "about "+Math.round(m.squares)+" squares, "+PITCH[S.pitch].name.toLowerCase()+" pitch, "+(S.stories>=2?"two stories":"one story")}
+
 function stepAddress(p){
-  p.appendChild(el("h1",null,"Design your new roof and see your price today"));
-  p.appendChild(el("p","lead","Pick your shingle, color and protection, watch it go on the house, and get a written proposal. It takes about five minutes and nobody has to come out first."));
+  p.appendChild(el("h1",null,"See your new roof and your price"));
+  p.appendChild(el("p","lead","Enter your address, pick a package, and get your price range. About two minutes, and nobody has to come out first."));
   var f=el("div","find"),inp=document.createElement("input"),ul=document.createElement("ul"),act=-1;
-  inp.type="search";inp.id="addr";inp.autocomplete="off";inp.placeholder="Start typing your street address";inp.setAttribute("aria-label","Your street address");
+  inp.type="search";inp.id="addr";inp.autocomplete="off";inp.placeholder="Your street address";inp.setAttribute("aria-label","Your street address");inp.setAttribute("enterkeyhint","search");
   if(S.home)inp.value=S.home[0];
   f.appendChild(inp);f.appendChild(ul);p.appendChild(f);
-  var mark=function(){[].forEach.call(ul.querySelectorAll("button"),function(b,i){b.classList.toggle("act",i===act)})};
-  var show=function(){var q=inp.value.trim().toUpperCase().replace(/\s+/g," ");ul.textContent="";act=-1;if(q.length<2){ul.classList.remove("open");return}
+  var mark=function(){[].forEach.call(ul.querySelectorAll("button"),function(b,n){b.classList.toggle("act",n===act)})};
+  var show=function(){var q=inp.value.trim();ul.textContent="";act=-1;if(q.length<2){ul.classList.remove("open");return}
     if(!H){var w=document.createElement("li");w.appendChild(el("button",null,"Loading addresses…"));ul.appendChild(w);ul.classList.add("open");return}
     var out=findHomes(q,7);
     if(!out.length){var li0=document.createElement("li"),b0=el("button",null,"We don't have that address yet. Enter your home's size instead.");b0.type="button";b0.addEventListener("click",function(){man.classList.add("open");ul.classList.remove("open");$("m-sq").focus()});li0.appendChild(b0);ul.appendChild(li0)}
     out.forEach(function(h){var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.appendChild(el("span",null,h[0]));b.appendChild(el("small",null,CONFIG.town+" "+h[1]));
-      b.addEventListener("click",function(){S.home=h;S.manual=null;S.stories=h[4]>=2?2:1;S.sizeMode="auto";S.adj=0;S.max=0;go(1)});li.appendChild(b);ul.appendChild(li)});
+      b.addEventListener("click",function(){S.home=h;S.manual=null;S.stories=h[4]>=2?2:1;newRoof();S.max=0;go(1)});li.appendChild(b);ul.appendChild(li)});
     ul.classList.add("open")};
   stepAddress.refresh=show;
   inp.addEventListener("input",show);
@@ -572,192 +622,90 @@ function stepAddress(p){
   var l1=el("label","f","Heated square feet"),i1=document.createElement("input");i1.type="number";i1.min=400;i1.max=12000;i1.step=50;i1.id="m-sq";i1.placeholder="2,000";i1.value=S.manual?S.manual.sqft:"";l1.appendChild(i1);
   var l2=el("label","f","Floors above ground"),s2=document.createElement("select");s2.id="m-st";[["1","One"],["2","Two or more"]].forEach(function(o){var x=el("option",null,o[1]);x.value=o[0];s2.appendChild(x)});s2.value=String(S.stories>=2?2:1);l2.appendChild(s2);
   var mb=el("button","btn light","Use this size");mb.type="button";mb.id="m-go";
-  mb.addEventListener("click",function(){var v=+i1.value;if(!(v>=400&&v<=12000)){toast("Enter a size between 400 and 12,000 square feet");return}S.home=null;S.manual={sqft:v};S.stories=+s2.value;S.sizeMode="auto";S.adj=0;S.max=0;go(1)});
+  mb.addEventListener("click",function(){var v=+i1.value;if(!(v>=400&&v<=12000)){toast("Enter a size between 400 and 12,000 square feet");return}S.home=null;S.manual={sqft:v};S.stories=+s2.value;newRoof();S.max=0;go(1)});
   man.appendChild(l1);man.appendChild(l2);man.appendChild(mb);p.appendChild(man);
   lb.addEventListener("click",function(){man.classList.toggle("open")});
   if(S.manual)man.classList.add("open");
   var pr=el("div","proof");CONFIG.proof.forEach(function(x){var d=el("div");d.appendChild(el("b",null,x[0]));d.appendChild(document.createTextNode(x[1]));pr.appendChild(d)});p.appendChild(pr);
   p.appendChild(el("p","note plain","This demo knows the 15,000 detached homes in "+CONFIG.coverage+". Try \""+CONFIG.example+"\"."));
 }
-function stepRoof(p){
-  var m=measure();
-  p.appendChild(el("h2",null,S.home?"Here is "+S.home[0]:"Here is your roof"));
-  p.appendChild(el("p","lead","We sized your roof from "+(m.source==="outline"?"the building outline in state records":m.source==="capped"?"your home's square footage, because the outline on record looks too large":"your home's square footage")+". Check the answers below. They change how much material the roof needs."));
-  var f=el("div","facts");[[m.squares.toFixed(1),"roofing squares to order"],[num(m.area),"square feet of roof surface"],[num(m.footprint),"square feet under the roof"]].forEach(function(a){var d=el("div");d.appendChild(el("b",null,a[0]));d.appendChild(el("span",null,a[1]));f.appendChild(d)});p.appendChild(f);
+
+function roofEditor(p,m){ // the roof questions, kept out of the way unless the homeowner opens them
   var z=sizing();
   if(z.flag){
-    p.appendChild(el("p","note","The building outline on record covers "+num(z.outline)+" square feet. That is much more than a "+num(S.home[3])+" square foot "+(S.home[4]<=1?"one-story ":"")+"home usually has under its roof, so it may include a detached garage, carport or deck. We priced the house alone unless you tell us otherwise."));
-    var zs=sect(p,"What are we roofing?",null);
-    optGroup(zs,[{key:"living",name:"Just the house",desc:"About "+squaresFor("living")+" squares"},{key:"outline",name:"Everything inside the orange line",desc:"About "+squaresFor("outline")+" squares. Pick this if the garage or carport gets a new roof too."}],z.use,function(k){S.sizeMode=k;render()},"wide");
+    var zs=sect(p,"What are we roofing?","The building outline on record ("+num(z.outline)+" square feet) is much larger than a "+num(S.home[3])+" square foot home usually needs. It may include a detached garage, carport or deck.");
+    optGroup(zs,[{key:"living",name:"Just the house",desc:"About "+Math.round(+squaresFor("living"))+" squares"},{key:"outline",name:"Everything inside the orange line",desc:"About "+Math.round(+squaresFor("outline"))+" squares. Pick this if the garage or carport gets a new roof too."}],z.use,function(k){S.sizeMode=k;render()},"wide");
   }
-  if(S.home&&S.home[2]){var age=new Date().getFullYear()-S.home[2];if(age>=15)p.appendChild(el("p","note plain","Records show this home was built in "+S.home[2]+". If the roof has never been replaced, it is about "+age+" years old. Asphalt shingle roofs commonly last 20 to 30 years."))}
-  var a=sect(p,"How steep is it?","A steeper roof has more surface and takes more safety gear.");
-  optGroup(a,Object.keys(PITCH).map(function(k){return {key:k,name:PITCH[k].name,desc:PITCH[k].desc}}),S.pitch,function(k){S.pitch=k;setView("house");render()});
-  var b=sect(p,"How complicated is the shape?","More peaks and valleys mean more cut shingles.");
+  var a=sect(p,"How steep is it?",null);
+  optGroup(a,Object.keys(PITCH).map(function(k){return {key:k,name:PITCH[k].name,desc:PITCH[k].desc}}),S.pitch,function(k){S.pitch=k;render()});
+  var b=sect(p,"How complicated is the shape?",null);
   optGroup(b,Object.keys(SHAPE).map(function(k){return {key:k,name:SHAPE[k].name,desc:SHAPE[k].desc}}),S.shape,function(k){S.shape=k;render()});
   var c=sect(p,"How many floors?",null);
-  optGroup(c,[{key:1,name:"One story"},{key:2,name:"Two stories or more"}],S.stories>=2?2:1,function(k){S.stories=k;setView("house");render()});
-  var d=sect(p,"Layers of old shingles","If a past roofer went over the old roof, there are two layers to remove. Not sure? Leave it at one and we will confirm.");
+  optGroup(c,[{key:1,name:"One story"},{key:2,name:"Two stories or more"}],S.stories>=2?2:1,function(k){S.stories=k;render()});
+  var d=sect(p,"Layers of old shingles","Not sure? Leave it at one and we will confirm.");
   optGroup(d,[{key:1,name:"One layer"},{key:2,name:"Two layers"}],S.layers,function(k){S.layers=k;render()});
-  var zz=sect(p,"Does the size look right?","If you know your roof is bigger or smaller than this, nudge it. We confirm with a measurement report either way.");
-  var ac=el("div","count"),am=el("button",null,"\u2212"),ap=el("button",null,"+"),av=el("b",null,S.adj===0?"As estimated":(S.adj>0?"+":"\u2212")+Math.abs(S.adj)+"%");
+  var zz=sect(p,"Does the size look right?","If you know your roof is bigger or smaller, nudge it.");
+  var ac=el("div","count"),am=el("button",null,"−"),ap=el("button",null,"+"),av=el("b",null,S.adj===0?"As estimated":(S.adj>0?"+":"−")+Math.abs(S.adj)+"%");
   am.type=ap.type="button";am.id="adj-minus";ap.id="adj-plus";am.setAttribute("data-fk","adj:minus");ap.setAttribute("data-fk","adj:plus");am.setAttribute("aria-label","Make the roof smaller");ap.setAttribute("aria-label","Make the roof bigger");av.style.minWidth="118px";
   am.addEventListener("click",function(){if(S.adj>-30){S.adj-=5;render()}});ap.addEventListener("click",function(){if(S.adj<30){S.adj+=5;render()}});
   ac.appendChild(am);ac.appendChild(av);ac.appendChild(ap);ac.appendChild(el("span",null,m.squares.toFixed(1)+" squares"));zz.appendChild(ac);
-  p.appendChild(el("p","note","Before any material is ordered we confirm these numbers with a measurement report. If the real size is different, your price is corrected at the same rate per square and you approve it first."));
-  p.appendChild(el("p","note plain","Had hail or wind damage? Your insurance may pay for the roof. Call "+CONFIG.phone+" for a free inspection before you buy."));
 }
-function stepShingle(p){
-  p.appendChild(el("h2",null,"Choose your shingle"));
-  p.appendChild(el("p","lead","All three are GAF architectural shingles installed by Panda, a GAF Master Elite contractor. Tap one and watch the house change."));
-  var box=el("div","lines");box.setAttribute("role","group");
-  Object.keys(PRICING.lines).forEach(function(k){var L=PRICING.lines[k],b=el("button","opt line");b.type="button";b.setAttribute("data-fk","line:"+k);b.setAttribute("aria-pressed",k===S.line?"true":"false");
-    b.appendChild(el("span","tier",L.tier));b.appendChild(el("b",null,L.name));
-    var q0=S.line;S.line=k;var qq=quote();S.line=q0;b.appendChild(el("em",null,money(qq.total)+" or "+money(qq.monthly)+" a month"));
-    var ul=document.createElement("ul");L.points.forEach(function(x){ul.appendChild(el("li",null,x))});b.appendChild(ul);
-    b.addEventListener("click",function(){S.line=k;setView("house");render()});box.appendChild(b)});
-  p.appendChild(box);
-  var c=sect(p,"Color","Every color comes in all three shingles at the same price.");
-  var sw=el("div","swatches");sw.setAttribute("role","group");
-  COLORS.forEach(function(col,i){var b=el("button","sw");b.type="button";b.setAttribute("aria-pressed",i===S.color?"true":"false");var sq=svg("svg",{viewBox:"0 0 132 52",preserveAspectRatio:"xMidYMid slice","aria-hidden":"true"}),df=svg("defs",{});shinglePattern(df,"swp"+i,col[1],S.line!=="hdz");sq.appendChild(df);sq.appendChild(svg("rect",{width:132,height:52,fill:"url(#swp"+i+")"}));
-    b.setAttribute("data-fk","sw:"+i);b.appendChild(sq);b.appendChild(document.createTextNode(col[0]));b.addEventListener("click",function(){S.color=i;render()});sw.appendChild(b)});
-  c.appendChild(sw);
-  var t=sect(p,"Drip edge and gutter color","The metal trim along the roof's edge.");
-  optGroup(t,TRIM.map(function(x,i){return {key:i,name:x[0]}}),S.trim,function(k){S.trim=k;setView("house");render()});
-}
-function stepSystem(p){
-  var P=PRICING,m=measure();
-  p.appendChild(el("h2",null,"Build the rest of your roof"));
-  p.appendChild(el("p","lead","Shingles are the part you see. These choices are what keeps water out and how long the roof is covered. The cutaway shows each layer as you choose."));
-  var mk=function(title,sub,table,cur,set,unit,view){var s=sect(p,title,sub);
-    optGroup(s,Object.keys(table).map(function(k){var o=table[k],amt=unit==="sq"?o.perSq*m.squares:unit==="ridge"?o.perFt*m.ridgeFt:o.perFt*m.eaveFt;return {key:k,name:o.name,desc:o.desc,price:amt?"+ "+money(amt):0}}),cur,function(k){set(k);if(view)setView(view);render()},"wide")};
-  mk("Underlayment","The sheet between the wood deck and the shingles.",P.underlay,S.underlay,function(k){S.underlay=k},"sq","layers");
-  mk("Leak barrier","A stick-on waterproof membrane.",P.barrier,S.barrier,function(k){S.barrier=k},"sq","layers");
-  mk("Attic ventilation","A cooler, drier attic helps shingles last.",P.vent,S.vent,function(k){S.vent=k},"ridge","layers");
-  mk("Warranty","Panda can register all three because it is a GAF Master Elite contractor. See GAF's warranty documents for full terms.",P.warranty,S.warranty,function(k){S.warranty=k},"sq");
-  mk("Gutters","Often replaced with the roof while the crew is there.",P.gutters,S.gutters,function(k){S.gutters=k},"eave","house");
-  var s=sect(p,"Skylights and chimneys","Each one gets new flashing so it doesn't leak. Skylights "+money(P.skylightEach)+" each, chimneys "+money(P.chimneyEach)+" each.");
+function customizer(p){ // optional extras; no line prices, the package ranges simply update
+  var P=PRICING;
+  var t=sect(p,"Drip edge and gutter color",null);
+  optGroup(t,TRIM.map(function(x,n){return {key:n,name:x[0]}}),S.trim,function(k){S.trim=k;setView("house");render()});
+  var g=sect(p,"Gutters","Often replaced with the roof while the crew is there.");
+  optGroup(g,Object.keys(P.gutters).map(function(k){return {key:k,name:P.gutters[k].name}}),S.gutters,function(k){S.gutters=k;setView("house");render()});
+  var sk=sect(p,"Skylights and chimneys","Each one gets new flashing so it doesn't leak.");
   var row=el("div","row");row.style.cssText="display:flex;gap:28px;flex-wrap:wrap";
   [["skylights","Skylights",4],["chimneys","Chimneys",2]].forEach(function(a){var w=el("div"),c=el("div","count");w.appendChild(el("div",null,a[1]));
     var mi=el("button",null,"−"),pl=el("button",null,"+"),v=el("b",null,String(S[a[0]]));mi.type=pl.type="button";mi.setAttribute("aria-label","Fewer "+a[1].toLowerCase());pl.setAttribute("aria-label","More "+a[1].toLowerCase());pl.id="plus-"+a[0];pl.setAttribute("data-fk","plus:"+a[0]);mi.setAttribute("data-fk","minus:"+a[0]);
     mi.addEventListener("click",function(){if(S[a[0]]>0){S[a[0]]--;setView("house");render()}});pl.addEventListener("click",function(){if(S[a[0]]<a[2]){S[a[0]]++;setView("house");render()}});
     c.appendChild(mi);c.appendChild(v);c.appendChild(pl);w.appendChild(c);row.appendChild(w)});
-  s.appendChild(row);
+  sk.appendChild(row);
 }
-function proposalTable(q,editable){
-  var t=el("table","prop"),P=PRICING;
-  q.rows.forEach(function(r){var tr=document.createElement("tr"),td=document.createElement("td");td.appendChild(document.createTextNode(r.label));
-    if(editable){var cb=el("button","chg","Change");cb.type="button";cb.setAttribute("aria-label","Change "+r.label);cb.addEventListener("click",function(){go(r.step)});td.appendChild(cb)}
-    td.appendChild(el("small",null,r.detail));tr.appendChild(td);tr.appendChild(el("td",null,money(r.amount)));t.appendChild(tr)});
-  var w=P.warranty[S.warranty];if(!w.perSq){var tr0=document.createElement("tr"),td0=document.createElement("td");td0.appendChild(document.createTextNode(w.name+" warranty"));td0.appendChild(el("small",null,w.desc));tr0.appendChild(td0);tr0.appendChild(el("td",null,"Included"));t.appendChild(tr0)}
-  var tr=document.createElement("tr");tr.className="tot";tr.appendChild(el("td",null,"Your price"));tr.appendChild(el("td",null,money(q.total)));t.appendChild(tr);
-  return t;
+function includesBox(parent){var bx=el("div","box");bx.appendChild(el("h3",null,"Every package includes"));var ul=document.createElement("ul");PRICING.everyPackage.forEach(function(x){ul.appendChild(el("li",null,x))});bx.appendChild(ul);parent.appendChild(bx)}
+
+function stepPackage(p){
+  var q=quote(),m=q.m,P=PRICING;
+  p.appendChild(el("h2",null,"Pick your package"));
+  var rl=el("p","roofline");rl.appendChild(el("span",null,(S.home?S.home[0]:"Your roof")+": "+roofWords(m)+"."));
+  var eb=el("button","linkbtn",S.editRoof?"Done":"Not right? Edit");eb.type="button";eb.id="edit-roof";eb.setAttribute("data-fk","editroof");eb.setAttribute("aria-expanded",S.editRoof?"true":"false");eb.addEventListener("click",function(){S.editRoof=!S.editRoof;if(S.editRoof)setView("above");render()});rl.appendChild(eb);p.appendChild(rl);
+  if(m.flag&&!S.editRoof)p.appendChild(el("p","note","We priced the house alone. The outline on record looks like it includes a garage, carport or deck. Tap Edit if that should be roofed too."));
+  if(S.editRoof)roofEditor(p,m);
+  var box=el("div","pks");box.setAttribute("role","group");box.setAttribute("aria-label","Packages");
+  Object.keys(P.packages).forEach(function(k){var K=P.packages[k],r=q.all[k],card=el("div","pk"+(K.featured?" feat":"")+(k===S.pkg?" on":""));
+    if(K.featured)card.appendChild(el("div","rib","Most homeowners choose"));
+    var b=el("button","pkbtn");b.type="button";b.id="pk-"+k;b.setAttribute("data-fk","pk:"+k);b.setAttribute("aria-pressed",k===S.pkg?"true":"false");
+    b.appendChild(el("span","nm",K.name));b.appendChild(el("span","tg",K.tag));b.appendChild(el("span","pr",rangeText(r)));b.appendChild(el("span","mo",monthText(r)));
+    var ul=document.createElement("ul");K.points.forEach(function(x){ul.appendChild(el("li",null,x))});b.appendChild(ul);
+    b.addEventListener("click",function(){S.pkg=k;render()});card.appendChild(b);card.appendChild(el("span","pick"));
+    var ins=el("button","linkbtn inside","See what's inside");ins.type="button";ins.setAttribute("aria-label","See what's inside "+K.name);ins.addEventListener("click",function(){S.pkg=k;setView("layers");render();if(window.matchMedia&&window.matchMedia("(max-width:900px)").matches)window.scrollTo(0,0)});card.appendChild(ins);
+    box.appendChild(card)});
+  p.appendChild(box);
+  var c=sect(p,"Shingle color","Same price in every color. Tap one and watch the house change.");
+  var sw=el("div","swatches");sw.setAttribute("role","group");
+  COLORS.forEach(function(col,n){var b=el("button","sw");b.type="button";b.setAttribute("aria-pressed",n===S.color?"true":"false");
+    var sq=svg("svg",{viewBox:"0 0 132 52",preserveAspectRatio:"xMidYMid slice","aria-hidden":"true"}),df=svg("defs",{});shinglePattern(df,"swp"+n,col[1],false);sq.appendChild(df);sq.appendChild(svg("rect",{width:132,height:52,fill:"url(#swp"+n+")"}));
+    b.setAttribute("data-fk","sw:"+n);b.appendChild(sq);b.appendChild(document.createTextNode(col[0]));b.addEventListener("click",function(){S.color=n;setView("house");render()});sw.appendChild(b)});
+  c.appendChild(sw);
+  var cu=el("button","linkbtn more",S.custom?"Hide the extras":"Customize: gutters, skylights and trim color (optional)");cu.type="button";cu.id="customize";cu.setAttribute("data-fk","custom");cu.setAttribute("aria-expanded",S.custom?"true":"false");cu.addEventListener("click",function(){S.custom=!S.custom;render()});p.appendChild(cu);
+  if(S.custom)customizer(p);
+  includesBox(p);
+  p.appendChild(el("p","note plain","Ranges are tight on purpose. We confirm your measurement on a quick call and lock in your exact price before anything is ordered."));
+  startOver(p);
 }
-function proposalText(q){
-  var a=["Panda Exteriors roof proposal (demo, sample prices)",S.home?where():"Home size entered by hand",""];
-  q.rows.forEach(function(r){a.push(r.label+": "+money(r.amount))});
-  a.push("Total: "+money(q.total));a.push("About "+money(q.monthly)+" a month on a sample "+S.term+"-month loan at "+PRICING.finance.apr+"% APR");return a.join("\n");
+
+function whatsIncluded(parent,q){
+  var P=PRICING,K=P.packages[S.pkg],bx=el("div","box one");bx.id="included";
+  bx.appendChild(el("h3",null,K.name+" includes"));var ul=document.createElement("ul");
+  K.full.concat(["Shingle color: "+COLORS[S.color][0]]).concat(P.everyPackage).concat(q.addons).forEach(function(x){ul.appendChild(el("li",null,x))});bx.appendChild(ul);
+  var h=el("h3",null,"What could change your price");h.style.marginTop="16px";bx.appendChild(h);
+  var a=el("p",null,"Your confirmed measurement. The range covers small differences between this estimate and the final report.");a.style.cssText="margin:0 0 8px;font-size:15px";bx.appendChild(a);
+  var b=el("p",null,"Rotten wood under the old shingles. Nobody can see it until the old roof is off. Extra sheets beyond the first "+P.deckingIncludedSheets+" are "+money(P.deckingPerSheet)+" each, and we send photos before replacing any.");b.style.cssText="margin:0;font-size:15px";bx.appendChild(b);
+  parent.appendChild(bx);
 }
-function stepProposal(p){
-  var q=quote(),P=PRICING;
-  p.appendChild(el("h2",null,"Your roof, in writing"));
-  p.appendChild(el("p","lead",where()+". "+q.m.squares.toFixed(1)+" squares, "+PITCH[S.pitch].name.toLowerCase()+" pitch, "+(S.stories>=2?"two stories":"one story")+"."));
-  var card=el("div","roofcard");card.appendChild(houseThumb());var dlx=document.createElement("dl");
-  [["Shingle",P.lines[S.line].name],["Color",COLORS[S.color][0]],["Underlayment",P.underlay[S.underlay].name],["Leak barrier",S.barrier==="full"?"Whole roof deck":"Eaves, valleys and pipes"],["Ventilation",P.vent[S.vent].name],["Gutters",P.gutters[S.gutters].name],["Warranty",P.warranty[S.warranty].name]].forEach(function(x){dlx.appendChild(el("dt",null,x[0]));dlx.appendChild(el("dd",null,x[1]))});
-  card.appendChild(dlx);p.appendChild(card);
-  p.appendChild(proposalTable(q,true));
-  var tm=el("div","terms");tm.setAttribute("role","group");tm.setAttribute("aria-label","Loan length");
-  tm.appendChild(document.createTextNode("Or about "));var mb=el("b",null,money(q.monthly)+" a month");mb.style.color="var(--ink)";mb.id="monthly";tm.appendChild(mb);tm.appendChild(document.createTextNode(" over"));
-  P.finance.terms.forEach(function(n){var b=el("button",null,(n/12)+" years");b.type="button";b.setAttribute("data-term",n);b.setAttribute("data-fk","term:"+n);b.setAttribute("aria-pressed",n===S.term?"true":"false");b.addEventListener("click",function(){S.term=n;render()});tm.appendChild(b)});
-  p.appendChild(tm);
-  var fine=el("p",null,"Sample loan at "+P.finance.apr+"% APR through Service Finance. This price is held until "+(function(){var d=new Date();d.setDate(d.getDate()+CONFIG.priceHoldDays);return d.toLocaleDateString("en-US",{month:"long",day:"numeric"})})()+".");fine.style.cssText="margin:6px 0 0;font-size:14px;color:var(--muted)";p.appendChild(fine);
-  var acts=el("div","acts");
-  var b1=el("button","btn outline","Book a video walkthrough instead");b1.type="button";b1.id="to-call";b1.addEventListener("click",function(){S.call=true;render();window.scrollTo(0,0)});acts.appendChild(b1);
-  var b2=el("button","btn light","Copy a link to this roof");b2.type="button";b2.id="share";b2.addEventListener("click",function(){copy(shareLink(),"Link copied")});acts.appendChild(b2);
-  var b3=el("button","btn light","Copy as text");b3.type="button";b3.addEventListener("click",function(){copy(proposalText(q),"Proposal copied")});acts.appendChild(b3);
-  var b5=el("button","btn light","Save as PDF");b5.type="button";b5.id="pdf";b5.addEventListener("click",savePdf);acts.appendChild(b5);
-  var b4=el("button","btn light","Print");b4.type="button";b4.id="print";b4.addEventListener("click",function(){try{window.print()}catch(e){toast("Printing isn't available here")}});acts.appendChild(b4);
-  clearTimeout(pdfT);pdfT=setTimeout(function(){buildPdf().catch(function(){})},400); // get the PDF ready before it is asked for, so a phone can open its share sheet straight from the tap
-  p.appendChild(acts);
-  var s=sect(p,"What could change this price","Two things, and both need your approval first.");
-  var ul=document.createElement("ul");ul.style.cssText="margin:0;padding-left:20px;max-width:62ch";
-  ["Rotten wood under the old shingles. Nobody can see it until the old roof is off. The first "+P.deckingIncludedSheets+" sheets of new decking are included. More than that is "+money(P.deckingPerSheet)+" a sheet, and we send photos before replacing any.","The confirmed measurement. If the measurement report differs from this estimate, the price moves at the same rate per square, up or down."].forEach(function(x){ul.appendChild(el("li",null,x))});s.appendChild(ul);
-  p.appendChild(el("p","note","These are sample prices for this demo, not Panda's price list."));
-}
-/* ---------- the proposal as a real PDF file ----------
-   Phones often ignore a page's print command, so the page builds the PDF itself.
-   On a phone it opens the share sheet (Save to Files, Messages, Mail); on a computer it downloads. */
-function pdfKey(){return JSON.stringify(snapshot())}
-function pdfName(){return "Panda-roof-proposal"+(S.home?"-"+S.home[0].replace(/[^A-Za-z0-9]+/g,"-"):"")+".pdf"}
-function loadPdfLib(){
-  if(window.jspdf)return Promise.resolve();
-  if(!pdfLib)pdfLib=new Promise(function(res,rej){var sc=document.createElement("script");sc.src="jspdf.umd.min.js";sc.onload=function(){res()};sc.onerror=function(){pdfLib=null;rej(new Error("library"))};document.head.appendChild(sc)});
-  return pdfLib;
-}
-function imgData(src){return new Promise(function(res){var im=new Image();im.onload=function(){try{var c=document.createElement("canvas");c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext("2d").drawImage(im,0,0);res(c.toDataURL("image/png"))}catch(e){res(null)}};im.onerror=function(){res(null)};im.src=src})}
-function housePng(){ // the configured house, drawn to a picture for the PDF
-  return new Promise(function(res){try{
-    var t=houseThumb();t.setAttribute("xmlns","http://www.w3.org/2000/svg");t.setAttribute("width",960);t.setAttribute("height",600);
-    var im=new Image();im.onload=function(){try{var c=document.createElement("canvas");c.width=960;c.height=600;var x=c.getContext("2d"),g=x.createLinearGradient(0,0,0,600);g.addColorStop(0,"#cfe3f1");g.addColorStop(.72,"#f2f6f8");g.addColorStop(.72,"#d5dfcd");g.addColorStop(1,"#cfd9c8");x.fillStyle=g;x.fillRect(0,0,960,600);x.drawImage(im,0,0,960,600);res(c.toDataURL("image/jpeg",.9))}catch(e){res(null)}};
-    im.onerror=function(){res(null)};im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(new XMLSerializer().serializeToString(t));
-  }catch(e){res(null)}});
-}
-function buildPdf(){
-  var key=pdfKey();if(pdfCache&&pdfCache.key===key)return Promise.resolve(pdfCache.blob);
-  var q=quote(),P=PRICING;if(!q)return Promise.reject(new Error("no roof"));
-  return loadPdfLib().then(function(){return Promise.all([housePng(),logoData?logoData:imgData("panda-logo.png")])}).then(function(r){
-    logoData=r[1];
-    var doc=new window.jspdf.jsPDF({unit:"pt",format:"letter"}),L=48,R=564,y=44,ink=[23,25,27],mut=[91,99,105];
-    var txt=function(t,x,yy,o){o=o||{};doc.setFont("helvetica",o.bold?"bold":"normal");doc.setFontSize(o.size||10.5);doc.setTextColor.apply(doc,o.muted?mut:ink);doc.text(t,x,yy,o.right?{align:"right"}:undefined)};
-    var room=function(h){if(y+h>744){doc.addPage();y=56}};
-    if(r[1])doc.addImage(r[1],"PNG",L,y-8,38,41.6);
-    txt("Panda Exteriors",L+48,y+10,{bold:true,size:16});txt("Roof proposal",L+48,y+26,{muted:true,size:11});
-    txt(CONFIG.phone,R,y+10,{right:true,bold:true});txt(new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}),R,y+26,{right:true,muted:true});
-    y+=62;txt(where(),L,y,{bold:true,size:14});y+=16;
-    txt(q.m.squares.toFixed(1)+" squares, "+PITCH[S.pitch].name.toLowerCase()+" pitch, "+(S.stories>=2?"two stories":"one story"),L,y,{muted:true});y+=16;
-    var top=y,specs=[["Shingle",P.lines[S.line].name],["Color",COLORS[S.color][0]],["Underlayment",P.underlay[S.underlay].name],["Leak barrier",S.barrier==="full"?"Whole roof deck":"Eaves, valleys and pipes"],["Ventilation",P.vent[S.vent].name],["Gutters",P.gutters[S.gutters].name],["Warranty",P.warranty[S.warranty].name]];
-    doc.setFillColor(233,236,238);doc.roundedRect(L,top,R-L,140,8,8,"F");
-    if(r[0])doc.addImage(r[0],"JPEG",L+10,top+10,192,120);
-    specs.forEach(function(x,i){txt(x[0],L+218,top+24+i*16.5,{muted:true,size:10});txt(x[1],L+300,top+24+i*16.5,{bold:true,size:10})});
-    y=top+164;
-    var rowsP=q.rows.map(function(x){return [x.label,x.detail,money(x.amount)]}),w=P.warranty[S.warranty];if(!w.perSq)rowsP.push([w.name+" warranty",w.desc,"Included"]);
-    rowsP.forEach(function(x){doc.setFont("helvetica","normal");doc.setFontSize(9);var lines=doc.splitTextToSize(x[1],400);room(22+lines.length*11.5);
-      txt(x[0],L,y,{bold:true});txt(x[2],R,y,{right:true,bold:true});y+=13;lines.forEach(function(ln){txt(ln,L,y,{muted:true,size:9});y+=11.5});
-      y+=3;doc.setDrawColor(211,216,220);doc.setLineWidth(.7);doc.line(L,y,R,y);y+=15});
-    room(64);y+=6;txt("Your price",L,y,{bold:true,size:17});txt(money(q.total),R,y,{right:true,bold:true,size:17});y+=20;
-    var hold=new Date();hold.setDate(hold.getDate()+CONFIG.priceHoldDays);
-    txt("Or about "+money(q.monthly)+" a month over "+(S.term/12)+" years on a sample loan at "+P.finance.apr+"% APR through Service Finance.",L,y,{muted:true,size:10});y+=13;
-    txt("This price is held until "+hold.toLocaleDateString("en-US",{month:"long",day:"numeric"})+".",L,y,{muted:true,size:10});y+=26;
-    room(120);txt("What could change this price",L,y,{bold:true,size:12});y+=15;
-    ["Rotten wood under the old shingles. Nobody can see it until the old roof is off. The first "+P.deckingIncludedSheets+" sheets of new decking are included. More than that is "+money(P.deckingPerSheet)+" a sheet, and we send photos before replacing any.","The confirmed measurement. If the measurement report differs from this estimate, the price moves at the same rate per square, up or down."].forEach(function(t,i){doc.setFont("helvetica","normal");doc.setFontSize(10);doc.splitTextToSize((i+1)+". "+t,R-L).forEach(function(ln){txt(ln,L,y,{size:10});y+=13});y+=4});
-    y+=8;room(30);txt("Demo with sample prices. This is not Panda's price list and nothing has been signed or charged.",L,y,{muted:true,size:9});
-    var blob=doc.output("blob");pdfCache={key:key,blob:blob};return blob;
-  });
-}
-function givePdf(blob){
-  var name=pdfName(),file=null;try{file=new File([blob],name,{type:"application/pdf"})}catch(e){}
-  var touch=false;try{touch=window.matchMedia("(pointer:coarse)").matches}catch(e){}
-  var dl=function(){try{var u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},60000);toast("Proposal saved as a PDF")}catch(e){toast("This browser blocked the download. Try Print instead.")}};
-  if(touch&&file&&navigator.canShare&&navigator.canShare({files:[file]})){
-    navigator.share({files:[file],title:"Panda roof proposal"}).catch(function(err){if(err&&err.name==="AbortError")return;if(err&&err.name==="NotAllowedError"){toast("Your PDF is ready. Tap Save as PDF again.");return}dl()});
-  }else dl();
-}
-function savePdf(){
-  if(pdfCache&&pdfCache.key===pdfKey()){givePdf(pdfCache.blob);return}
-  toast("Getting your PDF ready\u2026");
-  buildPdf().then(givePdf,function(){toast("Couldn't build the PDF here. Try Print instead.")});
-}
-function stepSign(p){
-  var q=quote(),P=PRICING;
-  p.appendChild(el("h2",null,"Reserve your roof"));
-  p.appendChild(el("p","lead","Sign to hold this price and get on the install schedule. "+money(q.total)+" for "+P.lines[S.line].name+" in "+COLORS[S.color][0]+"."));
-  var s1=sect(p,"Who is the homeowner?",null);contactFields(s1);
-  var s0=sect(p,"When would you like it installed?","Pick the week that suits you. We confirm the exact day by phone.");
-  var lw=el("label","f","Preferred week"),sel=document.createElement("select");sel.id="f-week";sel.style.maxWidth="320px";upcoming("weeks").forEach(function(w){var o=el("option",null,w);o.value=w;sel.appendChild(o)});
-  if(S.week)sel.value=S.week;S.week=sel.value;sel.addEventListener("change",function(){S.week=sel.value});lw.appendChild(sel);s0.appendChild(lw);
-  var s2=sect(p,"How would you like to pay?","Nothing is charged in this demo.");
-  optGroup(s2,[{key:"finance",name:"Finance it",desc:"About "+money(q.monthly)+" a month over "+(S.term/12)+" years on the sample loan. No money today."},{key:"deposit",name:"Pay a "+Math.round(P.depositRate*100)+"% deposit",desc:money(q.deposit)+" today, the rest when the roof is done."}],S.pay,function(k){S.pay=k;render()},"wide");
-  var s3=sect(p,"Sign",S.sigMode==="draw"?"Sign in the box with your finger or mouse.":"Type your name to sign.");
+function signaturePad(s3){
   if(S.sigMode==="draw"){
     var pd=el("div","pad"),cv=document.createElement("canvas");cv.id="sigpad";cv.width=1120;cv.height=260;cv.setAttribute("role","img");cv.setAttribute("aria-label","Signature box");pd.appendChild(cv);
     var hint=el("div","hint","Sign here");if(S.sigInk>60)hint.style.display="none";pd.appendChild(hint);
@@ -776,43 +724,152 @@ function stepSign(p){
     var sb=el("div","sigbox",S.sig);sb.id="sigbox";s3.appendChild(sb);
   }
   var sm=el("p",null,"");sm.style.margin="8px 0 0";var smb=el("button","linkbtn",S.sigMode==="draw"?"Type my name instead":"Draw my signature instead");smb.type="button";smb.id="sigmode";smb.addEventListener("click",function(){S.sigMode=S.sigMode==="draw"?"type":"draw";if(S.sigMode==="type"&&!S.sig)S.sig=S.name;render()});sm.appendChild(smb);s3.appendChild(sm);
+}
+function reserveForm(p){
+  var f=el("div","form");f.id="form";
+  var s1=sect(f,"Reserve this roof","Hold your install week and this price range. No payment today. We confirm your measurement on a quick call, and you approve the exact price before anything is ordered.");contactFields(s1);
+  var s0=sect(f,"When would you like it installed?",null);
+  var lw=el("label","f","Preferred week"),sel=document.createElement("select");sel.id="f-week";sel.style.maxWidth="320px";upcoming("weeks").forEach(function(w){var o=el("option",null,w);o.value=w;sel.appendChild(o)});
+  if(S.week)sel.value=S.week;S.week=sel.value;sel.addEventListener("change",function(){S.week=sel.value});lw.appendChild(sel);s0.appendChild(lw);
+  var s3=sect(f,"Sign to reserve",S.sigMode==="draw"?"Sign in the box with your finger or mouse.":"Type your name to sign.");signaturePad(s3);
   var ck=el("label","chk"),cb=document.createElement("input");cb.type="checkbox";cb.id="f-agree";cb.checked=S.agree;cb.addEventListener("change",function(){S.agree=cb.checked});
-  ck.appendChild(cb);ck.appendChild(el("span",null,"I have read the proposal, including what could change the price, and I want Panda Exteriors to replace my roof as described."));s3.appendChild(ck);
-  var e=el("div","err");e.id="err";e.setAttribute("role","alert");s3.appendChild(e);
-  var alt=el("p",null,"");alt.style.margin="6px 0 0";var ab=el("button","linkbtn","Not ready? Book a video walkthrough instead");ab.type="button";ab.addEventListener("click",function(){S.call=true;render();window.scrollTo(0,0)});alt.appendChild(ab);p.appendChild(alt);
-  p.appendChild(el("p","note","Demo only. This does not create a contract and no card is charged. The live version would show Panda's full Maryland home improvement agreement here, with its license number, start and finish dates and your right to cancel, and collect a real e-signature."));
+  ck.appendChild(cb);ck.appendChild(el("span",null,"Hold my install week and contact me to confirm my measurement and exact price."));s3.appendChild(ck);
+  var e=el("div","err");e.id="err";e.setAttribute("role","alert");f.appendChild(e);
+  var go2=el("button","btn go","Reserve my roof");go2.type="button";go2.id="submit";go2.addEventListener("click",function(){
+    var bad=contactError()||((S.sigMode==="draw"?S.sigInk<=60:S.sig.trim().length<3)?(S.sigMode==="draw"?"Sign in the signature box.":"Type your name in the signature box."):!S.agree?"Tick the box so we can hold your week.":"");
+    e.textContent=bad;if(bad)return;S.order="PX-"+String(Date.now()).slice(-6);S.signed=true;render();setView("house");window.scrollTo(0,0)});f.appendChild(go2);
+  f.appendChild(el("p","note","Demo only. Nothing is reserved, signed or charged. The live version would create the job in Panda's CRM and send Panda's Maryland home improvement agreement for signature once the exact price is confirmed."));
+  p.appendChild(f);
 }
-function stepCall(p){
-  var q=quote();
-  p.appendChild(el("h2",null,"Book a video walkthrough"));
-  p.appendChild(el("p","lead","Fifteen minutes on video with a Panda roof specialist. We pull up this exact roof, answer your questions and adjust anything with you. No one comes to the house."));
-  var s1=sect(p,"Pick a day",null),d=el("div","slots");d.setAttribute("role","group");d.id="days";
-  upcoming("days").forEach(function(x){var b=el("button",null,x);b.type="button";b.setAttribute("aria-pressed",S.callDay===x?"true":"false");b.addEventListener("click",function(){S.callDay=x;render()});d.appendChild(b)});s1.appendChild(d);
-  var s2=sect(p,"Pick a time",null),t=el("div","slots");t.setAttribute("role","group");t.id="times";
-  ["9:00 AM","10:30 AM","12:00 PM","2:00 PM","4:30 PM","6:00 PM","7:30 PM"].forEach(function(x){var b=el("button",null,x);b.type="button";b.setAttribute("aria-pressed",S.callTime===x?"true":"false");b.addEventListener("click",function(){S.callTime=x;render()});t.appendChild(b)});s2.appendChild(t);
-  var s3=sect(p,"Where should we send the link?",null);contactFields(s3);
-  var e=el("div","err");e.id="err";e.setAttribute("role","alert");s3.appendChild(e);
-  p.appendChild(el("p","note","Demo only. Nothing is booked or sent. The live version would put this on a specialist's calendar and attach your roof ("+money(q.total)+") to the appointment."));
+function callForm(p){
+  var f=el("div","form");f.id="form";
+  var s1=sect(f,"Book a video walkthrough","Fifteen minutes on video with a Panda roof specialist. We confirm your measurement, answer questions and lock in your exact price. No pressure and no cost."),d=el("div","slots");d.setAttribute("role","group");d.id="days";
+  upcoming("days").forEach(function(x,n){var b=el("button",null,x);b.type="button";b.setAttribute("data-fk","day:"+n);b.setAttribute("aria-pressed",S.callDay===x?"true":"false");b.addEventListener("click",function(){S.callDay=x;render()});d.appendChild(b)});s1.appendChild(d);
+  var s2=sect(f,"Pick a time",null),t=el("div","slots");t.setAttribute("role","group");t.id="times";
+  ["9:00 AM","10:30 AM","12:00 PM","2:00 PM","4:30 PM","6:00 PM","7:30 PM"].forEach(function(x,n){var b=el("button",null,x);b.type="button";b.setAttribute("data-fk","time:"+n);b.setAttribute("aria-pressed",S.callTime===x?"true":"false");b.addEventListener("click",function(){S.callTime=x;render()});t.appendChild(b)});s2.appendChild(t);
+  var s3=sect(f,"Where should we send the link?",null);contactFields(s3);
+  var e=el("div","err");e.id="err";e.setAttribute("role","alert");f.appendChild(e);
+  var go2=el("button","btn go","Book this call");go2.type="button";go2.id="submit";go2.addEventListener("click",function(){
+    var bad=!S.callDay?"Pick a day for your call.":!S.callTime?"Pick a time for your call.":contactError();e.textContent=bad;if(bad)return;S.booked=true;render();setView("house");window.scrollTo(0,0)});f.appendChild(go2);
+  f.appendChild(el("p","note","Demo only. Nothing is booked or sent. The live version would put this on a specialist's calendar with your roof and package attached."));
+  p.appendChild(f);
 }
+function holdDate(){var d=new Date();d.setDate(d.getDate()+CONFIG.priceHoldDays);return d.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}
+function stepBook(p){
+  var q=quote(),P=PRICING,K=P.packages[S.pkg];
+  p.appendChild(el("h2",null,"Your price"));
+  p.appendChild(el("p","lead",where()+", "+roofWords(q.m)+"."));
+  var pc=el("div","pricecard");pc.appendChild(el("div","nm",K.name+" in "+COLORS[S.color][0]));
+  var pr=el("div","pr",rangeText(q));pr.id="price";pc.appendChild(pr);var mo=el("div","mo",monthText(q));mo.id="monthly";pc.appendChild(mo);
+  pc.appendChild(el("div","fine","Held until "+holdDate()+". Monthly amounts are a sample "+(P.finance.months/12)+" year loan at "+P.finance.apr+"% APR through Service Finance, subject to credit approval."));
+  var ib=el("button","linkbtn",S.inc?"Hide what's included":"See what's included");ib.type="button";ib.id="see-inc";ib.setAttribute("data-fk","inc");ib.setAttribute("aria-expanded",S.inc?"true":"false");ib.addEventListener("click",function(){S.inc=!S.inc;render()});pc.appendChild(ib);p.appendChild(pc);
+  if(S.inc)whatsIncluded(p,q);
+  var cta=el("div","cta");
+  var r1=el("button","btn go","Reserve this roof");r1.type="button";r1.id="cta-reserve";r1.setAttribute("data-fk","cta:reserve");r1.setAttribute("aria-pressed",S.book==="reserve"?"true":"false");
+  var r2=el("button","btn dark","Book a video walkthrough");r2.type="button";r2.id="cta-call";r2.setAttribute("data-fk","cta:call");r2.setAttribute("aria-pressed",S.book==="call"?"true":"false");
+  var open=function(kind){return function(){S.book=kind;render();var fm=$("form");if(fm)try{fm.scrollIntoView({block:"start"})}catch(e){}}};
+  r1.addEventListener("click",open("reserve"));r2.addEventListener("click",open("call"));cta.appendChild(r1);cta.appendChild(r2);p.appendChild(cta);
+  var sub=el("div","sub");
+  var b5=el("button","linkbtn","Save as PDF");b5.type="button";b5.id="pdf";b5.addEventListener("click",savePdf);sub.appendChild(b5);
+  var b2=el("button","linkbtn","Copy a link to this roof");b2.type="button";b2.id="share";b2.addEventListener("click",function(){copy(shareLink(),"Link copied")});sub.appendChild(b2);
+  var b3=el("button","linkbtn","Change package");b3.type="button";b3.addEventListener("click",function(){go(1)});sub.appendChild(b3);
+  p.appendChild(sub);
+  clearTimeout(pdfT);pdfT=setTimeout(function(){buildPdf().catch(function(){})},400); // ready before it is asked for, so a phone can open its share sheet straight from the tap
+  if(S.book==="reserve")reserveForm(p);else if(S.book==="call")callForm(p);
+  else p.appendChild(el("p","note","These are placeholder prices for this demo, not Panda's price list."));
+}
+
+/* ---------- the estimate as a real PDF file, laid out like Panda's three package estimate ---------- */
+function pdfKey(){return JSON.stringify(snapshot())}
+function pdfName(){return "Panda-Roof-Estimate"+(S.home?"-"+S.home[0].replace(/[^A-Za-z0-9]+/g,"-"):"")+".pdf"}
+function loadPdfLib(){
+  if(window.jspdf)return Promise.resolve();
+  if(!pdfLib)pdfLib=new Promise(function(res,rej){var sc=document.createElement("script");sc.src="jspdf.umd.min.js";sc.onload=function(){res()};sc.onerror=function(){pdfLib=null;rej(new Error("library"))};document.head.appendChild(sc)});
+  return pdfLib;
+}
+function imgData(src){return new Promise(function(res){var im=new Image();im.onload=function(){try{var c=document.createElement("canvas");c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext("2d").drawImage(im,0,0);res(c.toDataURL("image/png"))}catch(e){res(null)}};im.onerror=function(){res(null)};im.src=src})}
+function buildPdf(){
+  var key=pdfKey();if(pdfCache&&pdfCache.key===key)return Promise.resolve(pdfCache.blob);
+  var q=quote(),P=PRICING;if(!q)return Promise.reject(new Error("no roof"));
+  return loadPdfLib().then(function(){return logoData?logoData:imgData("panda-logo.png")}).then(function(logo){
+    logoData=logo;
+    var doc=new window.jspdf.jsPDF({unit:"pt",format:"letter"}),L=40,R=572,W=R-L,y=40,ink=[23,25,27],mut=[91,99,105],wht=[255,255,255];
+    var txt=function(t,x,yy,o){o=o||{};doc.setFont("helvetica",o.bold?"bold":"normal");doc.setFontSize(o.size||10);doc.setTextColor.apply(doc,o.color||(o.muted?mut:ink));doc.text(t,x,yy,o.right?{align:"right"}:o.center?{align:"center"}:undefined)};
+    var wrap=function(t,w,size,bold){doc.setFont("helvetica",bold?"bold":"normal");doc.setFontSize(size);return doc.splitTextToSize(t,w)};
+    doc.setFillColor(246,245,241);doc.rect(0,0,612,792,"F");
+    if(logo)doc.addImage(logo,"PNG",L,y-6,30,32.8);
+    txt("Panda Exteriors",L+38,y+15,{bold:true,size:13});txt(CONFIG.phone,R,y+8,{right:true,size:9});txt(new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}),R,y+21,{right:true,size:9,muted:true});
+    y+=58;txt("YOUR VIRTUAL ROOF ESTIMATE",L,y,{bold:true,size:8.5,color:[47,125,79]});y+=26;
+    txt(S.home?S.home[0]+", "+CONFIG.town:"Your home",L,y,{bold:true,size:23});y+=20;
+    var how=q.m.source==="outline"?"We measured your roof from aerial imagery and building records":"We sized your roof from your home's square footage";
+    wrap(how+": "+roofWords(q.m)+". Shingle color: "+COLORS[S.color][0]+". Pick the package that fits you and we'll confirm the exact number with you in a quick call.",430,10.5).forEach(function(ln){txt(ln,L,y,{size:10.5});y+=14.5});
+    y+=22;
+    /* three package cards, the featured one dark with a ribbon */
+    var keys=Object.keys(P.packages),gap=10,cw=(W-gap*2)/3,ch=186,top=y;
+    keys.forEach(function(k,n){var K=P.packages[k],r=q.all[k],x=L+n*(cw+gap),ft=!!K.featured,c=ft?wht:ink,yy=top;
+      if(ft){doc.setFillColor(47,125,79);doc.roundedRect(x,top-20,cw,30,8,8,"F");txt("MOST HOMEOWNERS CHOOSE",x+cw/2,top-7,{bold:true,size:7.5,color:wht,center:true})}
+      doc.setFillColor.apply(doc,ft?[26,28,32]:wht);doc.setDrawColor(216,214,206);doc.setLineWidth(.8);doc.roundedRect(x,top,cw,ch,10,10,ft?"F":"FD");
+      if(k===S.pkg){doc.setDrawColor(252,129,4);doc.setLineWidth(2);doc.roundedRect(x,top,cw,ch,10,10,"S")}
+      yy+=24;txt(K.name,x+14,yy,{bold:true,size:13,color:c});yy+=14;txt(K.tag,x+14,yy,{size:8.5,color:ft?[201,206,210]:mut});
+      yy+=24;txt(rangeText(r).replace("About ",""),x+14,yy,{bold:true,size:16,color:c});yy+=14;txt(monthText(r),x+14,yy,{size:8.5,color:c});
+      yy+=12;doc.setDrawColor.apply(doc,ft?[80,84,90]:[216,214,206]);doc.setLineWidth(.6);doc.line(x+14,yy,x+cw-14,yy);yy+=15;
+      K.points.forEach(function(pt){wrap(pt,cw-40,8.8).forEach(function(ln,m){if(!m){doc.setFillColor.apply(doc,c);doc.circle(x+18,yy-3,1.3,"F")}txt(ln,x+26,yy,{size:8.8,color:c});yy+=11.5});yy+=1.5});
+      if(k===S.pkg)txt("Your pick",x+cw-14,top+ch-10,{right:true,bold:true,size:8,color:[252,129,4]})});
+    y=top+ch+16;
+    doc.setFillColor(255,255,255);doc.setDrawColor(216,214,206);doc.setLineWidth(.8);doc.roundedRect(L,y,W,92+(q.addons.length?18:0),10,10,"FD");
+    txt("Every package includes",L+18,y+22,{bold:true,size:11});
+    P.everyPackage.forEach(function(it,n){txt(it,L+18+(n%2)*(W/2-6),y+42+Math.floor(n/2)*17,{size:9})});
+    if(q.addons.length)txt("Your extras, in every range: "+q.addons.join(", "),L+18,y+96,{size:9,bold:true});
+    y+=92+(q.addons.length?18:0)+14;
+    doc.setFillColor(26,28,32);doc.roundedRect(L,y,W,128,10,10,"F");
+    txt("Like one of these? Here's the next step.",L+18,y+26,{bold:true,size:15,color:wht});
+    wrap("Book a 15 minute call. We'll confirm your measurement, answer questions and lock in your exact price. No pressure and no cost.",W-40,9.5).forEach(function(ln,m){txt(ln,L+18,y+44+m*13,{size:9.5,color:wht})});
+    doc.setFillColor(47,158,99);doc.roundedRect(L+18,y+76,222,28,6,6,"F");txt("Call or text to book your 15 minute call",L+129,y+94,{bold:true,size:9.5,color:wht,center:true});
+    doc.setDrawColor(90,94,100);doc.setLineWidth(.8);doc.roundedRect(L+250,y+76,110,28,6,6,"S");txt(CONFIG.phone,L+305,y+94,{bold:true,size:9.5,color:wht,center:true});
+    txt("Your Panda rep will also reach out within one business day.",L+18,y+118,{size:8,color:[185,192,197]});
+    y+=128+24;
+    txt("What could change your price",L,y,{bold:true,size:11});y+=16;
+    [["Your confirmed measurement.","Ranges cover small differences between this estimate and the final report."],["Rotten wood under the old shingles.","Nobody can see it until the old roof is off. Extra sheets beyond the first "+P.deckingIncludedSheets+" are "+money(P.deckingPerSheet)+" each, and we send photos before replacing any."]].forEach(function(pr){
+      doc.setFont("helvetica","bold");doc.setFontSize(9);var bw=doc.getTextWidth(pr[0]+" ");txt(pr[0],L,y,{bold:true,size:9});
+      var first=wrap(pr[1],W-bw,9),rest=first.length>1?wrap(pr[1].slice(first[0].length).trim(),W,9):[];txt(first[0],L+bw,y,{size:9});y+=12.5;rest.forEach(function(ln){txt(ln,L,y,{size:9});y+=12.5});y+=5});
+    y+=6;doc.setDrawColor(216,214,206);doc.setLineWidth(.6);doc.line(L,y,R,y);y+=15;
+    txt(CONFIG.footer.replace(/·/g,"|"),L,y,{bold:true,size:8.5});y+=12;
+    wrap("Prices held until "+holdDate()+". Monthly amounts are a sample "+(P.finance.months/12)+" year loan at "+P.finance.apr+"% APR through Service Finance, subject to credit approval. Demo with placeholder prices: nothing has been signed or charged.",W,7.5).forEach(function(ln){txt(ln,L,y,{size:7.5,muted:true});y+=10});
+    var blob=doc.output("blob");pdfCache={key:key,blob:blob,bottom:y};return blob;
+  });
+}
+function givePdf(blob){
+  var name=pdfName(),file=null;try{file=new File([blob],name,{type:"application/pdf"})}catch(e){}
+  var touch=false;try{touch=window.matchMedia("(pointer:coarse)").matches}catch(e){}
+  var dl=function(){try{var u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},60000);toast("Estimate saved as a PDF")}catch(e){toast("This browser blocked the download.")}};
+  if(touch&&file&&navigator.canShare&&navigator.canShare({files:[file]})){
+    navigator.share({files:[file],title:"Panda roof estimate"}).catch(function(err){if(err&&err.name==="AbortError")return;if(err&&err.name==="NotAllowedError"){toast("Your PDF is ready. Tap Save as PDF again.");return}dl()});
+  }else dl();
+}
+function savePdf(){
+  if(pdfCache&&pdfCache.key===pdfKey()){givePdf(pdfCache.blob);return}
+  toast("Getting your PDF ready…");
+  buildPdf().then(givePdf,function(){toast("Couldn't build the PDF here.")});
+}
+
 function stepDone(p){
-  var q=quote();p.classList.add("done");
+  var q=quote(),K=PRICING.packages[S.pkg],first=S.name.trim().split(" ")[0]||"neighbor";p.classList.add("done");
   if(S.booked){
-    p.appendChild(el("h1",null,"Your walkthrough is booked, "+(S.name.trim().split(" ")[0]||"neighbor")));
+    p.appendChild(el("h1",null,"Your walkthrough is booked, "+first));
     p.appendChild(el("p","lead",S.callDay+" at "+S.callTime+". In the live version a video link would be sent to "+(S.email||"you")+" and by text to "+(S.phone||"your phone")+"."));
-    p.appendChild(el("p","note plain","Your specialist will have this roof open when the call starts: "+PRICING.lines[S.line].name+" in "+COLORS[S.color][0]+", "+money(q.total)+"."));
   }else{
-    p.appendChild(el("h1",null,"You're on the schedule, "+(S.name.trim().split(" ")[0]||"neighbor")));
-    p.appendChild(el("p","lead","Reservation "+S.order+", "+S.week.toLowerCase()+". A copy of your signed proposal would be emailed to "+(S.email||"you")+" in the live version."));
+    p.appendChild(el("h1",null,"Your roof is reserved, "+first));
+    p.appendChild(el("p","lead","Reservation "+S.order+", "+S.week.toLowerCase()+". A copy would be emailed to "+(S.email||"you")+" in the live version."));
     if(S.sigMode==="draw"&&S.sigData){var si=document.createElement("img");si.className="signed";si.alt="Your signature";si.src=S.sigData;p.appendChild(si)}
     var ol=el("ol","next");
-    ["We order a measurement report for your roof and confirm the size, usually within one business day.","A Panda project manager calls to set your install day and answer questions.","Material is delivered and your roof goes on, most often in a single day.","A final walk-around, cleanup with magnets for nails, and your warranty is registered with GAF."].forEach(function(x){ol.appendChild(el("li",null,x))});p.appendChild(ol);
+    ["A Panda roof specialist calls within one business day to confirm your measurement and lock in your exact price.","You approve the price and sign the agreement. Nothing is ordered before that.","Material is delivered and your roof goes on, most often in a single day.","A final walk-around, cleanup with magnets for nails, and your warranty is registered with GAF."].forEach(function(x){ol.appendChild(el("li",null,x))});p.appendChild(ol);
   }
-  p.appendChild(proposalTable(q));
+  var pc=el("div","pricecard");pc.style.marginTop="18px";pc.appendChild(el("div","nm",K.name+" in "+COLORS[S.color][0]));pc.appendChild(el("div","pr",rangeText(q)));pc.appendChild(el("div","mo",monthText(q)));p.appendChild(pc);
   p.appendChild(el("p","note","This was a demo. Nothing was sent, signed or charged. In the live version this step would create the "+(S.booked?"appointment":"job")+" in Panda's CRM and notify the office."));
   var b=el("button","btn light","Start over");b.type="button";b.id="again";b.style.marginTop="18px";b.addEventListener("click",restart);p.appendChild(b);
 }
-function restart(){S.signed=false;S.booked=false;S.call=false;S.step=0;S.max=0;S.home=null;S.manual=null;S.sizeMode="auto";S.adj=0;S.sig="";S.sigData="";S.sigInk=0;S.agree=false;S.sigTouched=false;S.callDay="";S.callTime="";prevRoof=null;lastStep=0;try{localStorage.removeItem(LS)}catch(e){}setView("house");render();setHash();window.scrollTo(0,0)}
-$("restart").addEventListener("click",restart);
+function newRoof(){S.sizeMode="auto";S.adj=0;S.pitch="medium";S.shape="average";S.layers=1;S.gutters="none";S.skylights=0;S.chimneys=0;S.editRoof=false} // a different house starts from fresh roof answers
+function restart(){S.signed=false;S.booked=false;S.book="";S.inc=false;S.editRoof=false;S.custom=false;S.step=0;S.max=0;S.home=null;S.manual=null;newRoof();S.sig="";S.sigData="";S.sigInk=0;S.agree=false;S.sigTouched=false;S.callDay="";S.callTime="";prevRoof=null;lastStep=0;try{localStorage.removeItem(LS)}catch(e){}setView("house");render();setHash();window.scrollTo(0,0)}
 
 /* ---------- frame ---------- */
 function render(){
@@ -820,46 +877,33 @@ function render(){
   p.textContent="";p.className="panel";var fin=S.signed||S.booked;
   document.body.setAttribute("data-step",fin?"6":String(S.step));
   if(fin){stepDone(p)}
-  else if(S.call){stepCall(p)}
   else{
     var ol=el("ol","steps");STEPS.forEach(function(n,i){var li=el("li",i===S.step?"now":i<=S.max?"done":"");
       if(i!==S.step&&i<=S.max&&(i===0||quote())){var b=el("button",null,n);b.type="button";b.addEventListener("click",function(){go(i)});li.appendChild(b)}
       else{var sp=el("span",null,n);if(i===S.step)li.setAttribute("aria-current","step");li.appendChild(sp)}
       ol.appendChild(li)});p.appendChild(ol);
-    [stepAddress,stepRoof,stepShingle,stepSystem,stepProposal,stepSign][S.step](p);
+    [stepAddress,stepPackage,stepBook][S.step](p);
   }
   drawHouse();drawAbove();drawLayers();
-  var q=quote();
-  $("bar-price").textContent=q?money(q.total):"Your price";
-  $("bar-sub").textContent=q?"or about "+money(q.monthly)+" a month. Sample pricing.":"Enter your address to begin";
-  var goB=$("go"),back=$("back");
-  back.style.display=(S.step>0||S.call)&&!fin?"":"none";
-  goB.style.display=fin?"none":"";
-  goB.textContent=S.call?"Book this call":["Continue","Choose shingles","Build the rest","See my proposal","Reserve this roof","Sign and reserve"][S.step];
-  goB.disabled=S.step===0&&!q;
-  $("restart").hidden=!(S.step>0||fin);
+  var q=quote(),bar=$("bar"),goB=$("go"),back=$("back");
+  bar.hidden=!q||fin;                                   // no price bar until there is an address
+  if(q){$("bar-price").textContent=rangeText(q);$("bar-sub").textContent=PRICING.packages[S.pkg].name+". "+monthText(q)+"."}
+  back.style.display=S.step>0?"":"none";
+  goB.style.display=S.step===LAST?"none":"";
+  goB.textContent=S.step===0?"Pick a package":"See my price";
   if(fk){var keep=p.querySelector('[data-fk="'+fk+'"]');if(keep)try{keep.focus({preventScroll:true})}catch(e){}}
-  var dch=$("bar-delta");
-  if(q&&lastTotal!=null&&q.total!==lastTotal&&!fin){var df=q.total-lastTotal;dch.textContent=(df>0?"+ ":"\u2212 ")+money(Math.abs(df));dch.classList.add("on");clearTimeout(deltaT);deltaT=setTimeout(function(){dch.classList.remove("on")},1800)}
-  else if(!q||fin)dch.classList.remove("on");
-  lastTotal=q?q.total:null;
   save();
 }
 var lastStep=0;
 function setHash(){try{var h="#"+HASH[S.step];if(location.hash!==h)history.pushState(null,"",location.pathname+location.search+h)}catch(e){}}
 function go(n,quiet){
-  S.call=false;S.step=n;S.max=Math.max(S.max,n);render();
-  if(lastStep!==n){lastStep=n;setView(n===1?"above":n===3?"layers":"house");window.scrollTo(0,0);
+  S.step=n;S.max=Math.max(S.max,n);if(n!==LAST)S.book="";render();
+  if(lastStep!==n){lastStep=n;setView("house");window.scrollTo(0,0);
     if(!quiet){setHash();var hd=$("panel").querySelector("h1,h2");if(hd&&n>0){hd.tabIndex=-1;try{hd.focus({preventScroll:true})}catch(e){}}}}
 }
-window.addEventListener("popstate",function(){if(S.signed||S.booked)return;var i=HASH.indexOf(location.hash.slice(1));if(i<0)i=0;if(i<=S.max&&(i===0||quote())&&(i!==S.step||S.call))go(i,true)});
-$("go").addEventListener("click",function(){
-  var e,bad;
-  if(S.call){e=$("err");bad=!S.callDay?"Pick a day for your call.":!S.callTime?"Pick a time for your call.":contactError();e.textContent=bad;if(bad)return;S.booked=true;render();setView("house");window.scrollTo(0,0);return}
-  if(S.step===5){e=$("err");bad=contactError()||((S.sigMode==="draw"?S.sigInk<=60:S.sig.trim().length<3)?(S.sigMode==="draw"?"Sign in the signature box.":"Type your name in the signature box."):!S.agree?"Tick the box to confirm you have read the proposal.":"");e.textContent=bad;if(bad)return;S.order="PX-"+String(Date.now()).slice(-6);S.signed=true;render();setView("house");window.scrollTo(0,0);return}
-  if(S.step===0&&!quote())return;
-  go(S.step+1)});
-$("back").addEventListener("click",function(){if(S.call){S.call=false;render();window.scrollTo(0,0);return}if(S.step>0)go(S.step-1)});
+window.addEventListener("popstate",function(){if(S.signed||S.booked)return;var i=HASH.indexOf(location.hash.slice(1));if(i<0)i=0;if(i<=S.max&&(i===0||quote())&&i!==S.step)go(i,true)});
+$("go").addEventListener("click",function(){if(S.step===0&&!quote())return;if(S.step<LAST)go(S.step+1)});
+$("back").addEventListener("click",function(){if(S.step>0)go(S.step-1)});
 try{pendingRestore=fromQuery()||JSON.parse(localStorage.getItem(LS)||"null")}catch(e){pendingRestore=fromQuery()}
 render();
 fetch("homes.json").then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){H=d;
