@@ -360,7 +360,8 @@ body[data-look="photo"] .cut{display:flex;flex-direction:column;width:100%;min-h
    Every price below is a SAMPLE, not Panda's price list.
    ===================================================================== */
 var CONFIG={
-  town:"Laurel, MD", coverage:"Laurel ZIP codes 20707, 20708, 20723 and 20724", example:"13807 Brown Branch Rd",
+  towns:{"20707":"Laurel, MD","20708":"Laurel, MD","20723":"Laurel, MD","20724":"Laurel, MD","20650":"Leonardtown, MD"}, // ZIP code to town, for every ZIP in homes.json
+  coverage:"Laurel (ZIP codes 20707, 20708, 20723 and 20724) and Leonardtown (20650)", examples:["13807 Brown Branch Rd","41570 Coach Ct"],
   phone:"(877) 213-8536", priceHoldDays:30,
   proof:[["GAF Presidential Master Elite","Top 0.1% nationwide"],["1,500+ five star reviews","from homeowners"],["10,000+ projects","completed"]],
   footer:"GAF Presidential Master Elite (top 0.1% nationwide) · BBB A rated · 10,000+ projects completed"
@@ -410,19 +411,22 @@ function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=c
 function svg(tag,at){var e=document.createElementNS("http://www.w3.org/2000/svg",tag);for(var k in at)e.setAttribute(k,at[k]);return e}
 function money(n){return "$"+Math.round(n).toLocaleString("en-US")}
 function num(n){return Math.round(n).toLocaleString("en-US")}
-function where(){return S.home?S.home[0]+", "+CONFIG.town+" "+S.home[1]:"Your home"}
+function townOf(h){return CONFIG.towns[h[1]]||"MD"}
+function where(){return S.home?S.home[0]+", "+townOf(S.home)+" "+S.home[1]:"Your home"}
 $("phone").textContent=CONFIG.phone;$("phone").href="tel:+1"+CONFIG.phone.replace(/\D/g,"");
 
 /* ---------- measurements ---------- */
 /* How big is the roof?  Two sources: the building outline on record, and the home's living area times the
-   typical ratio for homes with that many floors.  TYPICAL is the middle home in this list, LIMIT is the 95th
-   percentile: an outline beyond it usually includes a detached garage, carport or deck, so it is not trusted by default. */
+   typical ratio for homes with that many floors in that town.  TYPICAL is the middle home in this list, LIMIT is the 95th
+   percentile: an outline beyond it usually includes a detached garage, carport or deck, so it is not trusted by default.
+   The plain TYPICAL and LIMIT are for Laurel and for homes typed in by size; RATIOS overrides them by town. */
 var TYPICAL={"1":1.31,"1.5":1.82,"2":1.60},LIMIT={"1":1.80,"1.5":2.61,"2":2.18};
+var RATIOS={"Leonardtown, MD":{typical:{"1":1.38,"1.5":1.62,"2":1.69},limit:{"1":1.96,"1.5":2.64,"2":2.44}}};
 function storyClass(n){return n<=1?"1":n<2?"1.5":"2"}
 function sizing(){
   var o={outline:0,living:0,per:0,flag:false,use:""},c;
-  if(S.home){c=storyClass(S.home[4]);o.outline=S.home[7]||0;o.per=S.home[8]||0;o.living=S.home[3]?S.home[3]/S.home[4]*TYPICAL[c]:0;
-    o.flag=!!(o.outline&&S.home[3]&&o.outline/(S.home[3]/S.home[4])>LIMIT[c])}
+  if(S.home){var R=RATIOS[townOf(S.home)]||{typical:TYPICAL,limit:LIMIT};c=storyClass(S.home[4]);o.outline=S.home[7]||0;o.per=S.home[8]||0;o.living=S.home[3]?S.home[3]/S.home[4]*R.typical[c]:0;
+    o.flag=!!(o.outline&&S.home[3]&&o.outline/(S.home[3]/S.home[4])>R.limit[c])}
   else if(S.manual){c=storyClass(S.stories);o.living=S.manual.sqft/S.stories*TYPICAL[c]}
   o.use=S.sizeMode==="outline"&&o.outline?"outline":S.sizeMode==="living"&&o.living?"living":o.outline&&!o.flag?"outline":o.living?"living":o.outline?"outline":"";
   return o;
@@ -711,7 +715,7 @@ function toks(t){return t.toUpperCase().replace(/[.,#']/g,"").split(/\s+/).filte
 function hit(qt,at,zip){ // every typed word must match the address in order; the last word may be unfinished
   var st=/^\d/.test(qt[0])?0:1,j,a,q,last;
   for(j=0;j<qt.length;j++){a=at[st+j];q=qt[j];last=j===qt.length-1;
-    if(!a){ // past the street: any town or state name is fine (people write "North Laurel" too), but a ZIP code has to be this home's
+    if(!a){ // past the street: any town or state name is fine (people write "North Laurel" or "Leonardtown, MD" too), but a ZIP code has to be this home's
       if(!/^\d/.test(q)||q.indexOf(zip)===0||(last&&zip.indexOf(q)===0))continue;
       return false}
     if(j<qt.length-1){if(a!==q)return false}
@@ -743,7 +747,7 @@ function stepAddress(p){
     if(!H){var w=document.createElement("li");w.appendChild(el("button",null,"Loading addresses…"));ul.appendChild(w);ul.classList.add("open");return}
     var out=findHomes(q,7);
     if(!out.length){var li0=document.createElement("li"),b0=el("button",null,"We don't have that address yet. Enter your home's size instead.");b0.type="button";b0.addEventListener("click",function(){man.classList.add("open");ul.classList.remove("open");$("m-sq").focus()});li0.appendChild(b0);ul.appendChild(li0)}
-    out.forEach(function(h){var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.appendChild(el("span",null,h[0]));b.appendChild(el("small",null,CONFIG.town+" "+h[1]));
+    out.forEach(function(h){var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.appendChild(el("span",null,h[0]));b.appendChild(el("small",null,townOf(h)+" "+h[1]));
       b.addEventListener("click",function(){S.home=h;S.manual=null;S.stories=h[4]>=2?2:1;newRoof();S.max=0;go(1)});li.appendChild(b);ul.appendChild(li)});
     ul.classList.add("open")};
   stepAddress.refresh=show;
@@ -762,7 +766,7 @@ function stepAddress(p){
   lb.addEventListener("click",function(){man.classList.toggle("open")});
   if(S.manual)man.classList.add("open");
   var pr=el("div","proof");CONFIG.proof.forEach(function(x){var d=el("div");d.appendChild(el("b",null,x[0]));d.appendChild(document.createTextNode(x[1]));pr.appendChild(d)});p.appendChild(pr);
-  p.appendChild(el("p","note plain","This demo knows the 15,000 detached homes in "+CONFIG.coverage+". Try \""+CONFIG.example+"\"."));
+  p.appendChild(el("p","note plain","This demo knows the 20,000 detached homes in "+CONFIG.coverage+". Try \""+CONFIG.examples.join("\" or \"")+"\"."));
 }
 
 function roofEditor(p,m){ // the roof questions, kept out of the way unless the homeowner opens them
@@ -938,7 +942,7 @@ function buildPdf(){
     if(logo)doc.addImage(logo,"PNG",L,y-6,30,32.8);
     txt("Panda Exteriors",L+38,y+15,{bold:true,size:13});txt(CONFIG.phone,R,y+8,{right:true,size:9});txt(new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}),R,y+21,{right:true,size:9,muted:true});
     y+=58;txt("YOUR VIRTUAL ROOF ESTIMATE",L,y,{bold:true,size:8.5,color:[47,125,79]});y+=26;
-    txt(S.home?S.home[0]+", "+CONFIG.town:"Your home",L,y,{bold:true,size:23});y+=20;
+    txt(S.home?S.home[0]+", "+townOf(S.home):"Your home",L,y,{bold:true,size:23});y+=20;
     var how=q.m.source==="outline"?"We measured your roof from aerial imagery and building records":"We sized your roof from your home's square footage";
     wrap(how+": "+roofWords(q.m)+". Shingle color: "+COLORS[S.color][0]+". Pick the package that fits you and we'll confirm the exact number with you in a quick call.",430,10.5).forEach(function(ln){txt(ln,L,y,{size:10.5});y+=14.5});
     y+=22;
